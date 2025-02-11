@@ -7,8 +7,8 @@ repos:
     rev: v5.0.2
     hooks:
      - id: reuse
-  # - repo: https://github.com/astral-sh/ruff-pre-commit
-  #   rev: v0.9.6
-  #   hooks:
-  #     - id: ruff
-  #     - id: ruff-format
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.9.6
+    hooks:
+      - id: ruff
+      - id: ruff-format

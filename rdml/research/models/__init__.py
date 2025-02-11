@@ -15,3 +15,13 @@ from .proxy_models import (
     # Project,
     ResearchResource,
 )
+
+__all__ = [
+    "Resource",
+    "RelatedResource",
+    "CreatorPerson",
+    "ContributorPerson",
+    "ContributionPosition",
+    "FileInfo",
+    "ResearchResource",
+]
