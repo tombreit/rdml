@@ -66,7 +66,7 @@ SPDX-License-Identifier: EUPL-1.2
 
 ## Involved parties
 
-- Inhouse: ResearchData administrators and ResearchData editors, implemented as LDAP-Groups; IT/Breitner
+- Inhouse: ResearchData administrators and ResearchData editors, implemented as LDAP-Groups
 - https://datacite.org/ -> to get a DOI and to push metadata
 
 ## DOIs
