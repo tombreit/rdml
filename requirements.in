@@ -1,0 +1,11 @@
+django==5.1.5
+django-environ
+django-crispy-forms
+crispy-bootstrap4
+django-auth-ldap
+django-auditlog
+django-htmx
+whitenoise
+requests
+pygments
+idutils

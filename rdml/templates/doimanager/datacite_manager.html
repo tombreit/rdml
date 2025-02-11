@@ -1,0 +1,138 @@
+{% extends '_base.html' %}
+
+{% load static %}
+
+{% block title %}
+    Manage DOI
+{% endblock %}
+
+{% block footer_backend_link %}
+    {{ project.get_proxyadmin_change_url }}
+{% endblock footer_backend_link %}
+
+
+{% block content %}
+
+<style>
+details summary { 
+  cursor: pointer;
+}
+details summary > * {
+  display: inline;
+}
+summary::marker {
+    list-style: none;
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    display: var(--fa-display, inline-block);
+    font-style: normal;
+    font-variant: normal;
+    line-height: 1;
+    text-rendering: auto;
+    list-style-type: none;
+}
+summary::marker {
+    content: "\f0a9";
+}
+details[open] summary::marker {
+    content: "\f0ab";
+}
+.doi-info {
+    text-align: center;
+}
+.doi-state {
+    text-align: center;
+    /* background: linear-gradient(white 40%, black 20%, white 40%); */
+    background: linear-gradient(0deg,white 40%, var(--secondary) 0%, var(--secondary) 60%, white 40%);
+    background-size: 100% 90px;
+}
+.doi-state code {
+    border-radius: 100%;
+    background-color: var(--gray);
+    color: white;
+    width: 90px;
+    height: 90px;
+    line-height: 90px;
+    text-align: center; 
+    display: inline-block;
+}
+.doi-state.active code {
+    background-color: var(--success);
+    color: white;
+}
+</style>
+
+<h1 class="h4">
+    DOI Management for Project:
+    <br>
+    {{ project.title_en }}
+    <a 
+        class="ml-4 btn btn-sm btn-outline-primary" 
+        href="{% url 'doiresolver:landing-page' pk_uuid=project.id %}"
+    >
+        <i class="fa-solid fa-globe"></i>
+        Landing page
+    </a>
+    <a 
+        class="btn btn-sm btn-outline-primary" 
+        href="{{ project.get_proxyadmin_change_url }}"
+    >
+        <i class="fa-solid fa-pen-to-square"></i>
+        Edit
+    </a>
+</h1>
+
+{% if errors %}
+    <div class="alert alert-danger">
+        <p><b>Unable to register or update DOI. Errors found:</b></p>
+        {{ errors|join:"<br>" }}
+    </div>
+{% else %}
+
+<hr>
+
+<div class="row doi-states">
+{% for state, transitions in datacite.DOI_TRANSITIONS.items %}
+    <div class="p-0 col">
+        <div class="
+            doi-state 
+            {% if datacite_doi_state == state %} active {% endif %}
+        ">
+            <code>{{ state }}</code>
+        </div>
+    </div>
+{% endfor %}
+</div>
+
+<div class="row doi-infos">
+    {% for state, transitions in datacite.DOI_TRANSITIONS.items %}
+
+        <div class="p-0 col doi-info">
+            <p>
+            {% if datacite_doi_state == state %}
+                {% if datacite_doi_state == 'unset' %}
+                    <span class="text-monospace">{{ doi }}</span>
+                    {% include 'doimanager/includes/transitions.html' %}
+                {% else %}
+                    <img src="{% static 'img/data-cite-logo.webp' %}" style="height: 1.2em;">
+                    <a 
+                        class="text-monospace"
+                        target="_blank"
+                        href="{{ datacite.get_datacite_doi_url }}"
+                    >
+                        {{ datacite.doi }}
+                    </a>
+                    {% include 'doimanager/includes/transitions.html' %}
+                {% endif %}
+            {% endif %}
+            </p>
+        </div>
+    {% endfor %}
+</div>
+
+{% include 'doimanager/includes/doi_states_descriptions.html' %}
+
+{# include 'doimanager/includes/metadata_compare.html' #}
+{# include 'doimanager/includes/doi_manage.html' with action=datacite.action #}
+{% endif %}
+{% endblock content %}

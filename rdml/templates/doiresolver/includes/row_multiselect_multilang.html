@@ -1,0 +1,38 @@
+<tr>
+    <th>{{ heading }}</th>
+    <td>
+        {% for obj in objects %}
+            <span class="badge badge-secondary">
+                {{ obj.name_en }}
+            </span>
+        {% endfor %}
+        {% comment %}
+        <table>
+            <tr>
+                <td class="border-0">
+                    <span style="font-family: monospace; font-size: medium;">EN:</span>
+                </td>
+                <td class="border-0">
+                    {% for obj in objects %}
+                        <span class="badge badge-light">
+                            {{ obj.name_en }}
+                        </span>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="font-family: monospace; font-size: medium;">DE:</span>
+                </td>
+                <td>
+                    {% for obj in objects %}
+                        <span class="badge badge-light">
+                            {{ obj.name_de }}
+                        </span>
+                    {% endfor %}
+                </td>
+            </tr>
+        </table>
+        {% endcomment %}
+    </td>
+</tr>

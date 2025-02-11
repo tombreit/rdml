@@ -1,0 +1,55 @@
+h1, .h1,
+h2, .h2,
+h3, .h3,
+h4, .h4,
+h5, .h5 {
+    color: $mpg-green;
+    font-family: "Merriweather", serif;
+    font-weight: 400;
+}
+
+
+.select2.select2-container {
+    width: auto !important;
+    max-width: 100%;
+}
+
+
+header {
+    padding-top: 15px;
+    margin-bottom: 2em;
+    background-color: $mpg-bg-gray;
+
+    .languageswitcher {
+        text-transform: uppercase;
+    }
+}
+
+.navbar-header {
+    display: block;
+    height: 60px;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-size: contain;
+    // background-image set inline via Django branding configuration
+    
+        strong { display: none; }
+}
+
+.navbar-brand {
+    text-transform: uppercase;
+    text-decoration: none;
+    color: $mpg-gray;
+}
+
+footer {
+    margin-top: 2em;
+    padding: 2em 0;
+    background-color: $mpg-green;
+    line-height: 4em;
+
+    img {
+        height: 4em;
+    }
+}

@@ -1,0 +1,40 @@
+<div class="mb-2 border rounded p-2">
+    <p>
+        <strong>
+            <i class="fa-solid fa-circle-arrow-right"></i> 
+            {% if action == "update" %}
+                Update DataCite Metadata
+            {% elif action == "register" %}
+                Register DataCite DOI
+            {% else %}
+                <i>Something weird happend. Call your IT.</i>
+            {% endif %}
+        </strong>
+    </p>
+    <div>
+        <button
+            class="btn btn-danger m-4"
+            type="button"
+            hx-trigger="click"
+            hx-get="{{ datacite.action_url }}"
+            hx-target="#datacite_response"
+            hx-swap="innerHTML"
+            >
+                {% if action == "update" %}
+                    Trigger Update for 
+                    <span class="text-monospace">
+                        {{ resource.dataciteresource.doi }}
+                    </span>
+                {% elif action == "register" %}
+                    Register DOI
+                    <span class="text-monospace">
+                        {{ datacite.datacite_doi }}
+                    </span>
+                {% else %}
+                    <i>Something weird happend. Call your IT.</i>
+                {% endif %}
+            </button>
+
+        <div id="datacite_response"></div>
+    </div>
+</div>

@@ -1,0 +1,95 @@
+{% extends '_base.html' %}
+
+{%  load static %}
+
+{% block title %}
+    DOIs
+{% endblock %}
+
+{% block extra_css %}
+
+.reveal { visibility: hidden; }
+tr:hover .reveal { visibility: visible; }
+
+{% endblock extra_css %}
+
+{% block content %}
+
+<div>
+    <h2 class="d-inline-block">
+        {{ organization_abbr }} Research metadata
+    </h2>
+
+    {% comment %}
+    <p class="text-muted d-inline-block ml-4" style="font-size: x-small;">
+        <i class="fa-solid fa-circle-question"></i> Only resources with an assigned DOI listed.
+    </p>
+    {% endcomment %}
+</div>
+
+{% if request.user.is_authenticated %}
+    {% if resources_suppressed_count %}
+        <div class="alert alert-warning">
+            Listing {{ resources_public.count }} of {{ resources_all_count }} resources. 
+            <br>
+            <a href="{% url 'admin:research_researchresource_changelist' %}?is_public__exact=0">
+                {{ resources_suppressed_count }} resources
+            </a> suppressed because they are marked as <code>not public</code>.
+        </div>
+    {% endif %}
+{% endif %}
+
+<table class="table table-hover" style="width: 100%;">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>
+                <abbr title="Organizational Unit">OU</abbr>
+            </th>
+            <th>
+                Resource type
+            </th>
+            <th>
+                <abbr title="Digital Object Identifier">DOI</abbr>
+            </th>
+            {# <th>Identifiers</th> #}
+        </tr>
+    </thead>
+{% for resource in resources_public %}
+    <tr>
+        <td>
+            <a class="d-block" href="{% url 'doiresolver:landing-page' pk_uuid=resource.id %}">
+                {{ resource.title_en }}
+            </a>
+            <code class="reveal text-muted small">{{ resource.slug }}</code>
+        </td>
+        <td>
+            {{ resource.organizational_unit }}
+        </td>
+        <td>
+            {{ resource.get_datacite_resource_type_general_display }}/{{ resource.datacite_resource_type }}
+        </td>
+        <td>
+            {% if resource.dataciteresource.doi %}
+                <span class="badge badge-light text-monospace">
+                    <img style="height: 1.2em;" src="{% static 'img/doi-logo.svg' %}">
+                    {{ resource.dataciteresource.doi }}
+                </span>
+            {% else %}
+                <i>n/a</i>
+            {% endif %}
+        </td>
+        {# <td>{% include 'doiresolver/includes/identifiers.html' %}</td> #}
+
+    </tr>
+{% empty %}
+    <tr>
+        <td>
+            <i>No public resource yet.</i>
+        </td>
+    </tr>
+{% endfor %}
+</table>
+
+
+{% endblock %}

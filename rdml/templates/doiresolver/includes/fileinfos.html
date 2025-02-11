@@ -1,0 +1,14 @@
+{% load static %}
+
+
+{% if fileinfos %}
+    <ol>
+    {% for fileinfo in fileinfos %}
+        <li class="mb-2">
+            <code>{{ fileinfo.filename }}</code>; {{ fileinfo.filetype }}; {{ fileinfo.filesize }}MB
+        </li>
+    {% endfor %}
+    </ol>
+{% else %}
+    <i>fileinfos not set.</i>
+{% endif %}

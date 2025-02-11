@@ -1,0 +1,14 @@
+.~*
+.ruff_cache/
+.parcel-cache/
+
+# Dependency directories
+node_modules/
+.venv/
+
+# Project paths
+.env*
+
+/data/
+/build/
+/rdml/static/dist/*

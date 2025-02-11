@@ -1,0 +1,52 @@
+{% extends '_base.html' %}
+
+{% load static %}
+
+{% block title %}
+    Dashboard
+{% endblock %}
+
+{% block footer_backend_link %}
+    {% url 'admin:index'  %}
+{% endblock footer_backend_link %}
+
+
+{% block content %}
+
+<style>
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: stretch;
+    justify-self: center;
+    gap: 2em;
+
+}
+.grid-item a {
+        display: block; 
+        line-height: 2em;
+        text-align: center;
+        font-size: larger;
+        padding: 1em;
+}
+</style>
+
+
+<div class="grid-container">
+{% for navitem in navitems %}
+    <div class="grid-item bg-primary rounded">
+        <a class="d-block text-white text-decoration-none" href="{{ navitem.url }}">
+            {{ navitem.title }}
+
+            {% if navitem.title == "Administration" %}
+                <br>
+                <span class="badge badge-pill badge-success">{{ research_resources_with_doi }} w/ DOI</span>
+
+                <span class="badge badge-pill badge-danger">{{ research_resources_without_doi }} w/o DOI</span>
+            {% endif %}
+        </a>
+    </div>
+{% endfor %}
+</div>
+
+{% endblock %}

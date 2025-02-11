@@ -1,0 +1,401 @@
+{% extends '_base.html' %}
+
+{% load static %}
+
+{% block title %}
+    Landing page
+{% endblock %}
+
+{% block meta_tags %}
+{% if resource.dataciteresource.doi %}
+<meta name="citation_doi" content="{{ resource.dataciteresource.doi }}">
+{% endif %}
+{% endblock meta_tags %}
+
+{% block footer_backend_link %}
+    {{ resource.get_proxyadmin_change_url }}
+{% endblock footer_backend_link %}
+
+
+{% block footer_resource_tools %}
+{% if request.user.is_authenticated %}
+<a
+    class="btn btn-sm btn-warning"
+    href="{{ resource.get_proxyadmin_change_url }}"
+>
+    <i class="fa-solid fa-pen-to-square"></i>
+    Edit resource
+</a>
+{% endif %}
+{% endblock footer_resource_tools %}
+
+{% block extra_css %}
+details {
+    margin-bottom: 0.5em;
+    border: 1px solid silver; 
+    border-radius: 5px; 
+    padding: 0.5em 1em;
+}
+
+summary {
+    font-size: larger;
+}
+{% endblock extra_css %}
+
+
+{% block extra_js %}
+<script>
+function fadeOut(elem) {
+    let opacity = 1; // Initial opacity
+    let interval = setInterval(function() {
+        if (opacity > 0) {
+            opacity -= 0.1;
+            elem.style.opacity = opacity;
+        } else {
+            clearInterval(interval); // Stop the interval when opacity reaches 0
+        }
+    }, 500);
+}
+
+document.getElementById('copy-doi').addEventListener('click', function() {
+    const copyDoiElement = document.getElementById('copy-doi');
+    const doiLink = copyDoiElement.getAttribute('data-href');
+    const doiCopySuccess = document.getElementById("copy-doi-status");
+
+    navigator.clipboard.writeText(doiLink).then(function() {
+        // alert('DOI link copied to clipboard: ' + doiLink);
+        doiCopySuccess.innerText = "Copied DOI link to clipboard";
+        fadeOut(doiCopySuccess);
+    }).catch(function(err) {
+        console.error('Could not copy text: ', err);
+    });
+});
+</script>
+{% endblock extra_js %}
+
+
+{% block content %}
+
+<table class="table" style="width: 100%;">
+    <tbody>
+        <tr>
+            <th style="width: 1%;" class="text-nowrap">
+                Project title
+            </th>
+            <td>
+                <h1 class="h3">
+                    {# <span style="font-family: monospace; font-size: medium;">EN:</span> #}
+                    {{ resource.title_en }}
+                </h1>
+                {% comment %}
+                {% if resource.title_de %}
+                    <hr>
+                    <h1 class="h3">
+                        <span style="font-family: monospace; font-size: medium;">DE:</span>
+                        {{ resource.title_de}}
+                    </h1>
+                {% endif %}
+                {% endcomment %}
+            </td>
+        </tr>
+        <tr>
+            <th style="width: 1%;" class="text-nowrap">
+                <abbr title="Public identifier/slug">ID</abbr>
+            </th>
+            <td>
+                <h1 class="h6">
+                    <span class="badge badge-pill badge-secondary text-monospace">
+                        {{ resource.slug }}
+                    </span>
+                </h1>
+            </td>
+        </tr>
+        <tr>
+            <th><abbr title="Digital Object Identifier">DOI</abbr></th>
+            <td>
+                {% if resource.dataciteresource.doi %}
+                <span
+                    id="copy-doi"
+                    title="Copy DOI link to clipboard"
+                    class="text-monospace"
+                    data-href="{{ resource.dataciteresource.get_doi_resolver_url }}"
+                >
+                    <img style="height: 1.2em;" src="{% static 'img/doi-logo.svg' %}">
+                    {{ resource.dataciteresource.doi }}
+                    <i class="fa-regular fa-copy"></i>
+                </span>
+                <span class="badge badge-pill badge-warning mx-2" title="DOI state">
+                    {{ resource.dataciteresource.get_datacite_doi_state|title }}
+                </span>
+                <span class="text-muted fade-out" id="copy-doi-status"></span>
+                {% else %}
+                    <i>Not registered yet</i>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th class="text-nowrap">Resource type</th>
+            <td>
+                <span class="badge badge-pill badge-secondary" title="Resource type">
+                    {{ resource.get_datacite_resource_type_general_display }}
+                    {% if resource.datacite_resource_type_general and resource.datacite_resource_type %} / {% endif %}
+                    {{ resource.datacite_resource_type }}
+                </span>
+            </td>
+        </tr>
+        {% if resource.dataciteresource.citation_snippet %}
+        <tr>
+            <th>Citation</th>
+            <td>
+                {{ resource.dataciteresource.citation_snippet|safe }}
+            </td>
+        </tr>
+        {% endif %}
+        <tr class="bg-info text-white bg-opacity-75">
+            <th>Website</th>
+            <td>
+            {% if resource.website %}
+                <i class="fa-solid fa-globe"></i>
+                <a class="text-white" href="{{ resource.website }}">{{ resource.website }}</a>
+            {% else %}
+                <i>n/a</i>
+            {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Timeframe</th>
+            <td>
+                {{ resource.date_start|date:"Y" }} – 
+                {% if resource.date_completed %}
+                    {{ resource.date_completed|date:"Y" }}
+                {% else %}
+                    <i class="text-muted">ongoing</i>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th class="text-nowrap">Organization</th>
+            <td>
+                
+                {% include 'doiresolver/includes/organization.html' with organization=resource.publisher %}
+                <i class="fa-solid fa-angle-right mx-2"></i>
+                {% include 'doiresolver/includes/organization.html' with organization=resource.organizational_unit %}
+            </td>
+        </tr>
+        <tr>
+            <th>People</th>
+            <td>
+                {% include 'doiresolver/includes/contributors.html' with type="creators" persons=resource.creatorperson_set.all %}
+            </td>
+        </tr>
+        <tr>
+            <th>Abstract</th>
+            <td>
+                {{ resource.abstract_en|linebreaks|default:"<i>n/a</i>" }}
+                {% comment %}
+                <table>
+                    <tr>
+                        <td class="border-0">
+                            <span class="d-inline" style="font-family: monospace; font-size: medium;">EN:</span>
+                        </td>
+                        <td class="border-0">
+                            <p class="d-inline">{{ resource.abstract_en }}</p>
+                        </td>
+                    </tr>
+                    {% if resource.abstract_de %}
+                    <tr>
+                        <td>
+                            <span class="d-inline" style="font-family: monospace; font-size: medium;">DE:</span>
+                        </td>
+                        <td>
+                            <p class="d-inline">{{ resource.abstract_de}}</p>
+                        </td>
+                    </tr>
+                    {% endif %}
+                </table>
+                {% endcomment %}
+            </td>
+        </tr>
+        {% include 'doiresolver/includes/row_multiselect_multilang.html' with heading="Keywords" objects=resource.keywords.all %}
+    </tbody>
+</table>
+
+
+{% if request.user.is_authenticated %}
+
+<div class="alert alert-warning">
+    <p>
+        Yellowish tinted information or function is displayed because you are logged in to the system.
+        <a href="{% url 'admin:logout' %}">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            Log out
+        </a> for the public view.
+    </p>
+
+
+<details>
+    <summary>Descriptions</summary>
+
+    <table class="table" style="width: 100%;">
+        <tbody>
+            <tr>
+                <th class="text-nowrap">Resource type</th>
+                <td>
+                    {{ resource.get_datacite_resource_type_general_display }}/{{ resource.datacite_resource_type }}
+                </td>
+            </tr>
+
+            {% comment %}
+            {% if resource.contributorperson_set.all %}
+            <tr>
+                <th>Contributors</th>
+                <td>
+                    {% include 'doiresolver/includes/contributors.html' with type="contributors" persons=resource.contributorperson_set.all %}
+                </td>
+            </tr>
+            {% endif %}
+            {% endcomment %}
+
+            <tr>
+                <th>Identifiers</th>
+                <td>
+                    {% include 'doiresolver/includes/identifiers.html' %}
+                </td>
+            </tr>
+
+            {% include 'doiresolver/includes/row_multiselect_multilang.html' with heading="Area of Research" objects=resource.cv_subject_areas.all %}
+            <tr>
+                <th>Contact</th>
+                <td>
+                    <i>501: Get contact persons</i>
+                    {% comment %}
+                    {% if resource.contact_persons %}
+                        <ol>
+                            {% for contact in resource.contact_persons.all %}
+                                <li>
+                                    {{ contact.last_name }}, {{ contact.first_name }}
+                                    {% if contact.email %} 
+                                    - <a href="mailto:{{ contact.email }}">mailto:{{ contact.email }}</a>
+                                    {% endif %}
+                                </li>
+                            {% endfor %}
+                        </ol>
+                    {% else %}
+                        <i>No contact persons set.</i>
+                    {% endif %}
+                    {% endcomment %}
+                </td>
+        </tbody>
+    </table>
+
+</details>
+
+
+<details>
+    <summary>Legal aspects</summary>
+
+    <table class="table" style="width: 100%;">
+        <tbody>
+            {% include 'doiresolver/includes/row_simplefield.html' with heading="Data Protection Concept" field=resource.data_protection_concept  %}
+            {% include 'doiresolver/includes/row_simplefield.html' with heading="Sensitive Information" field=resource.sensitive_information  %}
+            {% include 'doiresolver/includes/row_simplefield.html' with heading="Ethical approval" field=resource.ethical_approval %}
+
+            <tr>
+                <th>
+                    Funding
+                </th>
+                <td>
+                    Agencies: 
+                    {% for agency in resource.research_funding_agency.all %} 
+                        {{ agency }}
+                    {% endfor %}
+                    //
+                    Grant ID: {{ resource.research_funding_grant_id }}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Preregistration
+                </th>
+                <td>
+                    <a href="{{ resource.preregistration }}">{{ resource.preregistration }}</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</details>
+
+<details>
+    <summary>Geographic Area</summary>
+
+    <table class="table" style="width: 100%;">
+        <tbody>
+            {% include 'doiresolver/includes/row_m2m.html' with heading="Geographic Area" objs=resource.cv_geographic_areas.all %}
+            {% include 'doiresolver/includes/row_simplefield.html' with heading="Geographic Area (specified)" field=resource.geographic_area_specified %}
+        </tbody>
+    </table>
+</details>
+
+
+<details>
+    <summary>Methods</summary>
+
+    <table class="table" style="width: 100%;">
+        <tbody>
+            {% include 'doiresolver/includes/row_m2m.html' with heading="Time Dimension" objs=resource.cv_time_dimension.all %}
+            {% include 'doiresolver/includes/row_simplefield.html' with heading="Time Dimension (specified)" field=resource.time_dimension_specified %}
+
+            <tr>
+                <th>Data collection</th>
+                <td>
+                    Started {{ resource.data_collection_start_at|date:"Y-m"|default:"n/a" }} &rarr;
+                    Ended {{ resource.data_collection_end_at|date:"Y-m"|default:"n/a" }}
+                    {% if resource.data_collection_start_at and resource.data_collection_end_at %}
+                        ({{ resource.get_data_collection_duration_weeks }} weeks)
+                    {% endif %}
+                </td>
+            </tr>
+
+            {% include 'doiresolver/includes/row_simplefield.html' with heading="Population universe" field=resource.population_universe %}
+            {% include 'doiresolver/includes/row_m2m.html' with heading="Sampling Procedure" objs=resource.cv_sampling_procedure.all %}
+            {% include 'doiresolver/includes/row_simplefield.html' with heading="Sampling Procedure (specified)" field=resource.sampling_procedure_specified %}
+            {% include 'doiresolver/includes/row_m2m.html' with heading="Mode of Collection" objs=resource.cv_mode_of_collection.all %}
+            {% include 'doiresolver/includes/row_simplefield.html' with heading="Mode of Collection (specified)" field=resource.mode_of_collection_specified %}
+            {% include 'doiresolver/includes/row_simplefield.html' with heading="Sample size" field=resource.sample_size %}
+            {% include 'doiresolver/includes/row_simplefield.html' with heading="Sample size (specified)" field=resource.sample_size_specified %}
+        </tbody>
+    </table>
+</details>
+
+<details>
+    <summary>Archiving &amp; Access</summary>
+
+    <table class="table" style="width: 100%;">
+        <tbody>
+            {% include 'doiresolver/includes/row_simplefield.html' with heading="Availability" field=resource.archiving_access_availability %}
+            {% include 'doiresolver/includes/row_simplefield.html' with heading="Embargo (until)" field=resource.archiving_access_embargo_until %}
+            {% include 'doiresolver/includes/row_simplefield.html' with heading="License" field=resource.archiving_access_license %}
+            {% include 'doiresolver/includes/row_simplefield.html' with heading="Remarks" field=resource.archiving_access_remarks %}
+            {% include 'doiresolver/includes/row_simplefield.html' with heading="Publications" field=resource.archiving_access_publications %}
+            {% include 'doiresolver/includes/row_simplefield.html' with heading="Study documentation" field=resource.study_documentation %}
+
+            <tr>
+                <th>
+                    Data file descriptions
+                    <br>
+                    <i style="font-weight: normal;">Detailed data available in backend.</i>
+                </th>
+                <td>
+                    {% include 'doiresolver/includes/fileinfos.html' with fileinfos=resource.fileinfo_set.all %}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</details>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

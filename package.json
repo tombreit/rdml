@@ -1,0 +1,31 @@
+{
+  "name": "rdml",
+  "version": "0.2.0",
+  "config": {
+    "srcdir": "assets",
+    "distdir": "rdml/static/dist"
+  },
+  "devDependencies": {
+    "@fontsource/merriweather": "^4.5.14",
+    "@fortawesome/fontawesome-free": "^6.7.2",
+    "@parcel/transformer-sass": "^2.13.3",
+    "bootstrap": "4.6.2",
+    "htmx.org": "^2.0.4",
+    "jquery": "^3.7.1",
+    "npm-run-all": "^4.1.5",
+    "parcel": "^2.13.3",
+    "popper.js": "1.16.1",
+    "sass": "1.55.0"
+  },
+  "scripts": {
+    "parcel:js": "parcel build $npm_package_config_srcdir/js/app.js --dist-dir $npm_package_config_distdir/",
+    "parcel:scss": "parcel build $npm_package_config_srcdir/scss/app.scss --dist-dir $npm_package_config_distdir/",
+    "prebuild": "mkdir -p $npm_package_config_distdir",
+    "build": "npm-run-all parcel:*"
+  },
+  "repository": {
+    "url": "https://gitlab.gwdg.de/t.breitner/rdml"
+  },
+  "author": "Thomas Breitner",
+  "license": "ISC"
+}

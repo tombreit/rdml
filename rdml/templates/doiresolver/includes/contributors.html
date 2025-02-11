@@ -1,0 +1,75 @@
+{% load static %}
+
+
+{% if persons %}
+    <ul>
+    {% for person in persons %}
+        <li class="mb-2">
+            {{ person.person.last_name }}, {{ person.person.first_name }} 
+
+            <small>
+                {% if person.person.email %}
+                    <a 
+                        title="Email" 
+                        class="btn btn-sm btn-light" 
+                        href="mailto:{{ person.person.email }}"
+                    >
+                        <i class="fa-solid fa-envelope"></i>
+                        Email
+                    </a>
+                {% endif %}
+    
+                {% if person.person.cone_id %}
+                    <a 
+                        title="PuRE Publication Repository Person ID" 
+                        class="btn btn-sm btn-light" 
+                        href="https://pure.mpg.de/cone/persons/resource/{{ person.person.cone_id }}"
+                    >
+                        <img style="height: 1em;" src="{% static 'img/cone-logo.png' %}">
+                        PuRE
+                    </a>
+                {% endif %}
+    
+                {% if person.person.orcid_id %}
+                    <a 
+                        title="ORCID" 
+                        class="btn btn-sm btn-light" 
+                        href="{{ person.person.orcid_id }}"
+                    >
+                        <img style="height: 1.2em;" src="{% static 'img/orcid-logo.svg' %}">
+                        ORCID
+                    </a>
+                {% endif %}
+                {% if person.person.gnd_id %}
+                    <a 
+                        title="GND-ID" 
+                        class="btn btn-sm btn-light" 
+                        href="https://d-nb.info/gnd/{{ person.person.gnd_id }}"
+                    >
+                        <img style="height: 1.2em;" src="{% static 'img/gnd-logo.svg' %}">
+                        GND-ID
+                    </a>
+                {% endif %}
+                </small>
+
+            <span class="text-muted small d-block">
+            {% if type == "creators" %}
+                {{ person.contribution_position.name }}
+            {% elif type == "contributors" %}
+                {{ person.datacite_contributor_type }}
+            {% endif %}
+            </span>
+                
+            {% if person.person_organization %}
+                <span class="text-muted small d-block">
+                    {{ person.person_organization }}
+                </span>
+            {% endif %}
+
+            
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <i>persons not set.</i>
+{% endif %}

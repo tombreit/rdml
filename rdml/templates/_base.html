@@ -1,0 +1,92 @@
+{% load i18n static django_htmx %}
+
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>
+            {% block title %}
+                {{ self.title }}
+            {% endblock %}
+        </title>
+        {# <meta name="description" content="" /> #}
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        {# Global stylesheets #}
+        <link rel="stylesheet" type="text/css" href="{% static 'dist/app.css' %}">
+
+        {% block meta_tags %}
+        {% endblock meta_tags %}
+
+        <style>
+        {% block extra_css %}
+        {% endblock extra_css %}
+        </style>
+    </head>
+
+    <body 
+        class="{% block body_class %}{% endblock %}"
+        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+    >
+
+        {% include 'includes/_header.html' %}
+
+        <div class="container">
+            {% block content %}{% endblock content %}
+        </div>
+
+        <footer class="text-white small">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 col-md-4">
+                        <img src="{% get_media_prefix %}{{ branding_figurative_mark }}" alt="{{ branding_affiliation|default:'' }}">
+                        {{ branding_affiliation|default:'' }}
+                    </div>
+                    <div class="col-6 col-md-8 text-right">
+                        <span class="d-inline-block mr-4">
+                        {% if user.is_authenticated %}
+
+                            {% block footer_resource_tools %}
+                            {% endblock footer_resource_tools %}
+
+                            <a class="text-white mr-2" href="{% url 'dashboard:dashboard' %}">
+                                <i class="fa-solid fa-house"></i>
+                                Dashboard
+                            </a>
+                            
+                            <a class="text-white mr-2" href="
+                            {% block footer_backend_link %}
+                                {% url 'admin:research_researchresource_changelist' %}
+                            {% endblock footer_backend_link %}
+                            ">
+                                <i class="fa-solid fa-gear"></i>
+                                Backend
+                            </a>
+
+                            <a class="text-white" href="{% url 'admin:logout' %}">
+                                <i class="fa-solid fa-right-from-bracket"></i>
+                                Logout {{ request.user.username }}
+                            </a>
+                        {% else %}
+                            <a class="text-white" href="{% url 'admin:login' %}?next={% url 'admin:research_researchresource_changelist' %}">
+                                <i class="fa-solid fa-right-to-bracket"></i>
+                                Login
+                            </a>
+                        {% endif %}
+                        </span>
+                        &copy; {% now "Y" %}
+                    </div>
+                </div>
+            </div>
+        </footer>
+        
+
+        {# Global javascript #}
+        <script src="{% static 'dist/app.js' %}"></script>
+        {% django_htmx_script %}
+
+        {% block extra_js %}
+            {# Override this in templates to add extra javascript #}
+        {% endblock %}
+    </body>
+</html>

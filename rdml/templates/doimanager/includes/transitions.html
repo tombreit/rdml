@@ -1,0 +1,29 @@
+<br>
+{% for transition in transitions %}
+    <p>
+        {% comment %}
+        <button 
+            class="btn btn-primary" 
+            hx-trigger="click"
+            hx-target="#datacite_transition_response"
+            hx-swap="innerHTML"
+            hx-get="{% url 'doimanager:doi_transition' project_id=project.id transition_to=transition %}"
+        >
+
+            <span class="text-monospace">{{ transition }}</span>
+        </button>
+        {% endcomment %}
+
+        <a 
+            title="Move this DOI to state {{ transition }}"
+            class="btn btn-primary" 
+            href="{% url 'doimanager:datacite_manager' resource_id=project.id transition_to=transition %}"
+        >
+            <i class="fa-solid fa-gears"></i>
+            <i class="fa-solid fa-arrow-right"></i>
+            {{ transition }}
+        </a>
+    </p>
+{% endfor %}
+
+<div id="datacite_transition_response"></div>

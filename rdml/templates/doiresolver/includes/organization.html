@@ -1,0 +1,32 @@
+{% load static %}
+
+
+<span class="border border-primary rounded px-2 py-1">
+{% if organization.url %}
+    <a 
+        href="{{ organization.url }}"
+        {% if organization.abbr %} title="{{ organization.name }}" {% endif %}
+    >
+{% endif %}
+
+
+    {{ organization.name }}
+    {% if organization.abbr %}
+        ({{ organization.abbr }})
+    {% endif %}
+
+{% if organization.url %}
+    </a>
+{% endif %}
+
+{% if organization.ror_id %}
+<a 
+    title="Research Organization Registry (ROR) ID" 
+    class="badge badge-light ml-2" 
+    href="{{ organization.ror_id }}"
+    >
+    <img style="height: 1em;" src="{% static 'img/ror-logo.svg' %}">
+    ROR ID
+</a>
+{% endif %}
+</span>

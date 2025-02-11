@@ -1,0 +1,63 @@
+
+
+
+
+<details class="mb-2 border rounded p-2">
+    <summary>
+        <strong>
+            Preview metadata changes
+        </strong>
+    </summary>
+    <div class="row">
+        <div class="col-6">
+            <h2>Current local metadata</h2>
+            {{ datacite.rdml_metadata_flat }}
+        </div>
+        <div class="col-6">
+            <h2>Current DataCite metadata</h2>
+            {% if not project.dataciteresource.doi %}
+                <i>DOI not yet registered, no data available.</i>
+            {% endif %}
+            {{ datacite.datacite_metadata_flat }}
+        </div>
+    </div>
+
+    <h3>Diff</h3>
+    <style type="text/css">
+        table.diff {font-family:Courier; border:medium; font-size: smaller;}
+        .diff_header {background-color:#e0e0e0}
+        td.diff_header {text-align:right}
+        .diff_next {background-color:#c0c0c0}
+        .diff_add {background-color:#aaffaa}
+        .diff_chg {background-color:#ffff77}
+        .diff_sub {background-color:#ffaaaa}
+
+        .diff-container { max-width: 100%; overflow-y: scroll;}
+    </style>
+    
+    <div class="diff-container">
+    <table class="diff mb-2" summary="Legends">
+        <tr><th colspan="2"> Legends </th> </tr>
+        <tr>
+            <td>
+                <table border="" summary="Colors">
+                        <tr><th> Colors </th> </tr>
+                        <tr><td class="diff_add">&nbsp;Added&nbsp;</td></tr>
+                        <tr><td class="diff_chg">Changed</td> </tr>
+                        <tr><td class="diff_sub">Deleted</td> </tr>
+                </table>
+            </td>
+            <td>
+                <table border="" summary="Links">
+                    <tr><th colspan="2"> Links </th> </tr>
+                    <tr><td>(f)irst change</td> </tr>
+                    <tr><td>(n)ext change</td> </tr>
+                    <tr><td>(t)op</td> </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    
+    {{ datacite.metadata_diff|safe }}
+    </div>
+</details>

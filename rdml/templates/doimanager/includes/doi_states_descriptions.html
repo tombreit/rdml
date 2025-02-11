@@ -1,0 +1,51 @@
+<style>
+    .doi-descriptions code {
+        font-size: larger;
+        font-weight: bold;
+        display: block; 
+        text-align: center;
+    }
+</style>
+
+<details class="mb-2 border rounded p-2">
+    <summary>
+        <strong>
+            <i style="color: var(--info);" class="fa-solid fa-circle-info"></i>
+            DOI states descriptions
+        </strong>
+    </summary>
+
+    <div class="row doi-descriptions small pt-4">
+        <div class="col">
+            <code>unset</code>
+            <p>
+                DOI not set yet.
+            </p>
+        </div>
+        <div class="col">
+            <code>draft</code>
+            <p>
+                Draft state means the identifier can be deleted. They require only the identifier number in order to be created or saved. It is not necessary to enter a valid URL or valid metadata when creating a Draft. Drafts are known only to DOI Fabrica. You may use this state to reserve an identifier number within DOI Fabrica without other services or resolvers knowing about its existence. 
+                <br>
+                Draft state may be updated to either Registered or Findable. Registered and Findable DOIs may not be returned to the Draft state, which means that changing the state of a Draft is final. Drafts remain until the owner either deletes them or converts them to another state. 
+            </p>
+        </div>
+        <div class="col">
+            <code>registered</code>
+            <p>
+                Registered DOIs are registered with the global handle system, but they are not indexed in DataCite Commons and are no longer available via the Public API. This state maps to "is_active=false" in the DataCite Metadata Store.
+                <br>
+                Registered DOIs may be updated to Findable DOIs, at which point they will be indexed in DataCite Commons. Registered DOIs may not be returned to the Draft state.
+            </p>
+        </div>
+        <div class="col">
+            <code>findable</code>
+            <p>
+                Findable DOIs are registered with the global handle system just like Registered DOIs, but they are also indexed in DataCite Commons and therefore in the DataCite APIs. This state maps to "is_active=true" in the DataCite Metadata Store.
+                <br>
+                Findable DOIs may be updated to Registered DOIs. This means that they will no longer be indexed by DataCite Commons.
+            </p>
+        </div>
+    </div>
+
+</details>

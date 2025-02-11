@@ -1,0 +1,60 @@
+{% extends 'admin/change_form.html' %}
+
+
+{% block object-tools-items %}
+    {% if original.id %}
+        <li>
+        {% if original.dataciteresource.doi %}
+            <a 
+                class="btn-primary"
+                {% if original.is_public %}
+                    href="{% url 'doimanager:datacite_manager' original.id %}"
+                {% else %}
+                    href="#"
+                {% endif %}
+            >
+                &rarr; 
+                {% if original.is_public %}
+                    Update DOI 
+                {% else %}
+                    <s>Update DOI</s> (not public)
+                {% endif %}
+            </a>
+        {% else %}
+            <a 
+                class="btn-primary"
+                {% if original.is_public %}
+                    href="{% url 'doimanager:datacite_manager' original.id %}"
+                {% else %}
+                    href="#"
+                {% endif %}
+            >
+                &rarr; 
+                {% if original.is_public %}
+                    Register DOI 
+                {% else %}
+                    <s>Register DOI</s> (not public)
+                {% endif %}
+            </a>
+        {% endif %}
+        </li>
+        <li>
+            <a 
+                class="btn-primary"
+                {% if original.is_public %}
+                    href="{% url 'doiresolver:landing-page' pk_uuid=original.id %}"
+                {% else %}
+                    href="#"
+                {% endif %}
+            >
+                &rarr; 
+                {% if original.is_public %}
+                    Landing page 
+                {% else %}
+                    <s>Landing page</s> (not public)
+                {% endif %}
+            </a>
+        </li>
+    {% endif %}
+    {{ block.super }}
+{% endblock %}
