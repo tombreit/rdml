@@ -2,11 +2,10 @@
 #
 # SPDX-License-Identifier: EUPL-1.2
 
-import argparse
 import csv
 import json
 import pathlib
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from django.db import transaction
 from rdml.classification.models import GeographicArea
 
@@ -50,7 +49,7 @@ class Command(BaseCommand):
                     print(f"Prcocessing country_code {_country_code}")
                     # print(f"Currently processed country codes: {_country_codes_found}")
 
-                    if not _country_code in _country_codes_found:
+                    if _country_code not in _country_codes_found:
                         # To get country-wide elements: countries without subdivisions
                         country_only_dict = {
                             "country_code": _country_code,
@@ -71,4 +70,4 @@ class Command(BaseCommand):
                     geographic_area = GeographicArea.objects.create(**country_dict)
                     geographic_area.save()
 
-            self.stdout.write(self.style.SUCCESS(f"Successfully imported GeographicAreas"))
+            self.stdout.write(self.style.SUCCESS("Successfully imported GeographicAreas"))

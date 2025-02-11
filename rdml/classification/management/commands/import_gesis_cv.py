@@ -47,6 +47,5 @@ class Command(BaseCommand):
                 )
                 objs.append(obj)
 
-            from pprint import pprint
 
             self.stdout.write(self.style.SUCCESS(f"Imported csv data for {CVClass}"))

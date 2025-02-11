@@ -4,7 +4,6 @@
 
 import requests
 import requests.exceptions
-from django.conf import settings
 
 
 def get_citation_snippet(doi):
