@@ -148,11 +148,19 @@ The backup of the following paths results in a complete backup:
 
 ### Development
 
+Update Pyhton requirements:
+
+```bash
+make requirements
+```
+
 Generate static assets:
 
 ```bash
 npm install
 npm run build
+# or
+make assets
 ```
 
 ### Usage

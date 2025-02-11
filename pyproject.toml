@@ -1,0 +1,56 @@
+# SPDX-FileCopyrightText: 2025 Thomas Breitner
+#
+# SPDX-License-Identifier: CC0-1.0
+
+[project]
+name = "rdml"
+version = "0.1.0"
+description = "Web based research metadata managment tool & DOI manager & DOI landing pages generator"
+authors = [{name = "Thomas Breitner", email = "t.breitner@csl.mpg.de"},]
+license = {file = "LICENSE"}
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Framework :: Django",
+    "License :: OSI Approved :: European Union Public Licence 1.2 (EUPL 1.2)",
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "django==5.1.6",
+    "django-environ",
+    "django-crispy-forms",
+    "crispy-bootstrap4",
+    "django-auth-ldap",
+    "django-auditlog",
+    "django-htmx",
+    "whitenoise",
+    "requests",
+    "pygments",
+    "idutils",
+]
+
+[project.optional-dependencies]
+dev = [
+    "reuse",
+    "pre-commit",
+    "ruff",
+    "pip-tools",
+]
+
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["rdml/"]
+
+[project.urls]
+Homepage = "https://gitlab.gwdg.de/t.breitner/rdml"
+Documentation = "https://gitlab.gwdg.de/t.breitner/rdml/-/blob/main/README.md"
+Repository = "https://gitlab.gwdg.de/t.breitner/rdml"
+Issues = "https://gitlab.gwdg.de/t.breitner/rdml/-/issues"
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+extend-exclude = ["migrations"]

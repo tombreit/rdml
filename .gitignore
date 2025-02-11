@@ -1,6 +1,8 @@
 .~*
 .ruff_cache/
 .parcel-cache/
+*.egg-info/
+
 
 # Dependency directories
 node_modules/
