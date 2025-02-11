@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Thomas Breitner
+#
+# SPDX-License-Identifier: EUPL-1.2
+
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
@@ -7,13 +11,13 @@ from django.views.defaults import server_error
 
 
 urlpatterns = [
-    path('_500/', server_error),  # Forcefully raise 500 Internal Server Error
-    path('', RedirectView.as_view(url='resource/', permanent=False)),
-    path('admin/', admin.site.urls),
-    path('accounts/', include('rdml.accounts.urls')),
-    path('resource/', include('rdml.doiresolver.urls')),
-    path('doimanager/', include('rdml.doimanager.urls')),
-    path('dashboard/', include('rdml.dashboard.urls')),
+    path("_500/", server_error),  # Forcefully raise 500 Internal Server Error
+    path("", RedirectView.as_view(url="resource/", permanent=False)),
+    path("admin/", admin.site.urls),
+    path("accounts/", include("rdml.accounts.urls")),
+    path("resource/", include("rdml.doiresolver.urls")),
+    path("doimanager/", include("rdml.doimanager.urls")),
+    path("dashboard/", include("rdml.dashboard.urls")),
 ]
 
 if settings.DEBUG:

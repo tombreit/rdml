@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Thomas Breitner
+#
+# SPDX-License-Identifier: EUPL-1.2
+
 """Python API client wrapper for the DataCite Rest API.
 
 API documentation is available at
@@ -74,8 +78,9 @@ class DataCiteRESTClient(object):
             if prefix != self.prefix:
                 # Provided a DOI with the wrong prefix
                 raise ValueError(
-                    "Wrong DOI {0} prefix provided, it should be "
-                    "{1} as defined in the rest client".format(prefix, self.prefix)
+                    "Wrong DOI {0} prefix provided, it should be {1} as defined in the rest client".format(
+                        prefix, self.prefix
+                    )
                 )
         else:
             doi = "{prefix}/{doi}".format(prefix=self.prefix, doi=doi)

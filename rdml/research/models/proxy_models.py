@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Thomas Breitner
+#
+# SPDX-License-Identifier: EUPL-1.2
+
 from django.db import models
 from .base_models import Resource
 
@@ -23,7 +27,8 @@ from .base_models import Resource
 
 class ResearchResourceManager(models.Manager):
     def get_queryset(self):
-        return super().get_queryset()  #.exclude(resource_type=Resource.ResourceType.PROJECT)
+        return super().get_queryset()  # .exclude(resource_type=Resource.ResourceType.PROJECT)
+
 
 class ResearchResource(Resource):
     objects = ResearchResourceManager()

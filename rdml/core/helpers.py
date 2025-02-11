@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Thomas Breitner
+#
+# SPDX-License-Identifier: EUPL-1.2
+
 from django.utils.safestring import mark_safe
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
@@ -12,7 +16,7 @@ import difflib
 
 
 def json_html_highlighter(json_data):
-    formatter = HtmlFormatter(style='colorful')
+    formatter = HtmlFormatter(style="colorful")
     data_formatted = highlight(json_data, JsonLexer(), formatter)
     style = "<style>" + formatter.get_style_defs() + "</style><br>"
     return mark_safe(style + data_formatted)
@@ -36,15 +40,16 @@ def get_doi_from_url(doi_url: str, base_url: str) -> str:
 
 def get_countries_as_choices():
     from ..organization.countries import countries_dict
+
     country_choices = []
     valid_country_codes = ["en", "de"]
     for k, v in countries_dict.items():
-        if v['639-1'] in valid_country_codes:
+        if v["639-1"] in valid_country_codes:
             country_choices.append(tuple((f"{v['639-1']}", f"{v['639-1']} - {v['name']}")))
     return country_choices
 
 
-def flatten(dictionary, parent_key=False, separator='.', log=False):
+def flatten(dictionary, parent_key=False, separator=".", log=False):
     """
     Turn a nested dictionary into a flattened dictionary
     :param dictionary: The dictionary to flatten
@@ -57,25 +62,31 @@ def flatten(dictionary, parent_key=False, separator='.', log=False):
 
     items = []
     for key, value in dictionary.items():
-        if log: print('checking:',key)
+        if log:
+            print("checking:", key)
         new_key = str(parent_key) + separator + key if parent_key else key
         if isinstance(value, collections.abc.MutableMapping):
-            if log: print(new_key,': dict found')
+            if log:
+                print(new_key, ": dict found")
             if not value.items():
-                if log: print('Adding key-value pair:',new_key,None)
-                items.append((new_key,None))
+                if log:
+                    print("Adding key-value pair:", new_key, None)
+                items.append((new_key, None))
             else:
                 items.extend(flatten(value, new_key, separator).items())
         elif isinstance(value, list):
-            if log: print(new_key,': list found')
+            if log:
+                print(new_key, ": list found")
             if len(value):
                 for k, v in enumerate(value):
                     items.extend(flatten({str(k): v}, new_key).items())
             else:
-                if log: print('Adding key-value pair:',new_key,None)
-                items.append((new_key,None))
+                if log:
+                    print("Adding key-value pair:", new_key, None)
+                items.append((new_key, None))
         else:
-            if log: print('Adding key-value pair:',new_key,value)
+            if log:
+                print("Adding key-value pair:", new_key, value)
             items.append((new_key, value))
     return dict(items)
 
@@ -95,12 +106,15 @@ def humanized_flatten(jsons, html_highlighted=False):
 def diff_json_to_html(json1, json2):
     def _cleanup(str):
         return str.replace(",", "").replace("{", "").replace("}", "")
+
     json1 = _cleanup(json1)
     json2 = _cleanup(json2)
 
     table = difflib.HtmlDiff(wrapcolumn=80).make_table(
-        json1.split('\n'), json2.split('\n'),
-        context=True, numlines=0,
+        json1.split("\n"),
+        json2.split("\n"),
+        context=True,
+        numlines=0,
     )
 
     # from pathlib import Path

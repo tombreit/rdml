@@ -1,0 +1,24 @@
+# SPDX-FileCopyrightText: Thomas Breitner
+#
+# SPDX-License-Identifier: EUPL-1.2
+
+version = 1
+
+
+[[annotations]]
+SPDX-FileCopyrightText = "Thomas Breitner"
+SPDX-License-Identifier = "CC0-1.0"
+path = [
+    "package.json",
+    "package-lock.json",
+    "requirements*.txt",
+    "rdml/**/migrations/*.py",
+]
+
+
+[[annotations]]
+SPDX-FileCopyrightText = "Thomas Breitner"
+SPDX-License-Identifier = "EUPL-1.2"
+path = [
+    "rdml/templates/***/*.html",
+]

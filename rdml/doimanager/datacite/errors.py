@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Thomas Breitner
+#
+# SPDX-License-Identifier: EUPL-1.2
+
 """Errors for the DataCite API.
 
 MDS error responses will be converted into an exception from this module.

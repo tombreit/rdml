@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Thomas Breitner
+#
+# SPDX-License-Identifier: EUPL-1.2
+
 import urllib.parse
 from typing import NamedTuple
 
@@ -132,9 +136,7 @@ class DataCiteResource(TimeStampedBaseModel, UUIDBaseModel):
     citation_snippet = models.TextField(
         blank=True,
     )
-    datacite_history = models.JSONField(
-        blank=True, default=list, help_text="Collects API responses from DataCite."
-    )
+    datacite_history = models.JSONField(blank=True, default=list, help_text="Collects API responses from DataCite.")
 
     @property
     def get_datacite_doi_url(self):
@@ -159,9 +161,7 @@ class DataCiteResource(TimeStampedBaseModel, UUIDBaseModel):
     @property
     def get_datacite_doi_state(self):
         if self.doi:
-            datacite_doi_state, datacite_found = (
-                DataCiteRESTClient().get_datacite_doi_state(doi=self.doi)
-            )
+            datacite_doi_state, datacite_found = DataCiteRESTClient().get_datacite_doi_state(doi=self.doi)
             return datacite_doi_state
 
     def __str__(self):
@@ -170,8 +170,7 @@ class DataCiteResource(TimeStampedBaseModel, UUIDBaseModel):
     class Meta:
         constraints = [
             models.CheckConstraint(
-                check=Q(resource__isnull=False, doi=None)
-                | Q(resource__isnull=False, doi__isnull=False),
+                check=Q(resource__isnull=False, doi=None) | Q(resource__isnull=False, doi__isnull=False),
                 name="%(app_label)s_%(class)s_resource_and_doi_cannot_be_null",
             )
         ]
@@ -199,9 +198,7 @@ class DataCiteConfiguration(TimeStampedBaseModel, UUIDBaseModel):
         help_text="DataCite instance to use. This sets the DataCite Fabrica and API base URLs.",
     )
 
-    doi_prefix = models.CharField(
-        max_length=100, blank=False, default="10.12345", verbose_name="DOI Prefix"
-    )
+    doi_prefix = models.CharField(max_length=100, blank=False, default="10.12345", verbose_name="DOI Prefix")
     repo_id = models.CharField(
         max_length=100,
         blank=False,
@@ -209,9 +206,7 @@ class DataCiteConfiguration(TimeStampedBaseModel, UUIDBaseModel):
         verbose_name="Repository ID",
         help_text="The Repository ID is a unique identifier for each repository in DataCite. It must contain only upper case letters and numbers, and must start with the Member ID.",
     )
-    backend_password = models.CharField(
-        max_length=255, blank=False, default="datacite-secret"
-    )
+    backend_password = models.CharField(max_length=255, blank=False, default="datacite-secret")
 
     def get_datacite_env(self):
         # Defaults to datacite_instance == TEST
@@ -235,12 +230,7 @@ class DataCiteConfiguration(TimeStampedBaseModel, UUIDBaseModel):
 
     def save(self, *args, **kwargs):
         # TODO: Move to form layer and trigger a Django message
-        if (
-            not self.is_active
-            and not DataCiteConfiguration.objects.exclude(pk=self.pk)
-            .filter(is_active=True)
-            .exists()
-        ):
+        if not self.is_active and not DataCiteConfiguration.objects.exclude(pk=self.pk).filter(is_active=True).exists():
             raise ValidationError("At least one DataCiteConfiguration must be active")
         super().save(*args, **kwargs)
 

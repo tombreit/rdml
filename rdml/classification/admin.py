@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Thomas Breitner
+#
+# SPDX-License-Identifier: EUPL-1.2
+
 from django.contrib import admin
 
 from .models import (
@@ -13,27 +17,27 @@ from .models import (
     Filetype,
 )
 
+
 class ClassificationBaseAdmin(admin.ModelAdmin):
     list_display = [
         "code",
         "name_en",
         "name_de",
     ]
-    
-    search_fields =[
-        'name_en',
-        'name_de',
-        'definition',
+
+    search_fields = [
+        "name_en",
+        "name_de",
+        "definition",
     ]
 
-    prepopulated_fields = {
-        "slug": ("name_en", "name_de")
-    }
+    prepopulated_fields = {"slug": ("name_en", "name_de")}
 
     list_per_page = 999999
 
     class Meta:
         abstract = True
+
 
 class CVGesisBaseAdmin(ClassificationBaseAdmin):
     list_display = [
@@ -46,8 +50,8 @@ class CVGesisBaseAdmin(ClassificationBaseAdmin):
     ]
 
     @admin.display(
-        description='Code',
-        ordering='position',
+        description="Code",
+        ordering="position",
     )
     def get_code(self, obj):
         return obj.code
@@ -78,25 +82,31 @@ class CVGeographicAreaAdmin(admin.ModelAdmin):
 class CVSubjectAreaAdmin(ClassificationBaseAdmin):
     pass
 
+
 @admin.register(CVModeOfCollection)
 class CVModeOfCollectionAdmin(CVGesisBaseAdmin):
     pass
+
 
 @admin.register(CVSamplingProcedure)
 class CVSamplingProcedureAdmin(CVGesisBaseAdmin):
     pass
 
+
 @admin.register(CVTimeDimension)
 class CVTimeDimensionAdmin(CVGesisBaseAdmin):
     pass
+
 
 # @admin.register(CVDataProtectionConcept)
 # class CVDataProtectionConceptAdmin(ClassificationBaseAdmin):
 #     pass
 
+
 @admin.register(CVResearchFundingAgency)
 class CVResearchFundingAgencyAdmin(ClassificationBaseAdmin):
     pass
+
 
 @admin.register(CVClassificationKeyword)
 class CVClassificationKeywordAdmin(admin.ModelAdmin):
@@ -104,22 +114,22 @@ class CVClassificationKeywordAdmin(admin.ModelAdmin):
         "name_en",
         "name_de",
     ]
-    
-    search_fields =[
-        'name_en',
-        'name_de',
-        'definition',
+
+    search_fields = [
+        "name_en",
+        "name_de",
+        "definition",
     ]
 
-    prepopulated_fields = {
-        "slug": ("name_en",)
-    }
+    prepopulated_fields = {"slug": ("name_en",)}
 
     list_per_page = 999999
+
 
 @admin.register(CVArchivingAccessAvailability)
 class CVArchivingAccessAvailabilityAdmin(ClassificationBaseAdmin):
     pass
+
 
 @admin.register(Filetype)
 class FiletypeAdmin(admin.ModelAdmin):

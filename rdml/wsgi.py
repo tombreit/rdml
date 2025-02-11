@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Thomas Breitner
+#
+# SPDX-License-Identifier: EUPL-1.2
+
 """
 WSGI config for rdml project.
 
@@ -11,6 +15,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'rdml.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "rdml.settings")
 
 application = get_wsgi_application()

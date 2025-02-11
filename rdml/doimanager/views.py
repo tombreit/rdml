@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Thomas Breitner
+#
+# SPDX-License-Identifier: EUPL-1.2
+
 from django.conf import settings
 from django.views.decorators.http import require_GET
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -48,9 +52,7 @@ def datacite_manager(request, resource_id, transition_to=None):
         # Setting DOI to a new proposed DOI
         doi = None
 
-    datacite_doi_state, datacite_found = DataCiteRESTClient().get_datacite_doi_state(
-        doi=doi
-    )
+    datacite_doi_state, datacite_found = DataCiteRESTClient().get_datacite_doi_state(doi=doi)
     print(f"{datacite_doi_state=}; {transition_to=}")
 
     if datacite_found:
@@ -60,9 +62,7 @@ def datacite_manager(request, resource_id, transition_to=None):
         datacite.save()
 
     if transition_to and transition_to != datacite_doi_state:
-        print(
-            f"Transition DOI for '{project}' from '{datacite_doi_state}' to state '{transition_to}'"
-        )
+        print(f"Transition DOI for '{project}' from '{datacite_doi_state}' to state '{transition_to}'")
         # https://support.datacite.org/docs/api-create-dois
         # Possible actions:
         # publish - Triggers a state move from draft or registered to findable
@@ -123,9 +123,7 @@ def datacite_manager(request, resource_id, transition_to=None):
 
             # datacite_after_transition = DataCiteResource.objects.get(resource__id=resource_id)
             datacite.refresh_from_db()
-            datacite_doi_state, datacite_found = (
-                DataCiteRESTClient().get_datacite_doi_state(doi=doi)
-            )
+            datacite_doi_state, datacite_found = DataCiteRESTClient().get_datacite_doi_state(doi=doi)
             print(f"doi state after transition: {datacite_doi_state}")
 
             if sync_citation_snippet and datacite.doi:

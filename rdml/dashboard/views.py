@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Thomas Breitner
+#
+# SPDX-License-Identifier: EUPL-1.2
+
 from django.urls import reverse
 from django.template.response import TemplateResponse
 from django.contrib.auth.decorators import login_required
@@ -7,19 +11,18 @@ from ..research.models import ResearchResource
 
 @login_required
 def dashboard(request):
-
     navitems = [
         # {
         #     'url': reverse('admin:index'),
         #     'title': 'Backend',
         # },
         {
-            'url': reverse('admin:research_researchresource_changelist'),
-            'title': 'Administration',
+            "url": reverse("admin:research_researchresource_changelist"),
+            "title": "Administration",
         },
         {
-            'url': reverse('doiresolver:doi-list'),
-            'title': 'Landing pages',
+            "url": reverse("doiresolver:doi-list"),
+            "title": "Landing pages",
         },
     ]
 

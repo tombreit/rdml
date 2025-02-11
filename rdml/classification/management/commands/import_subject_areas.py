@@ -1,25 +1,30 @@
+# SPDX-FileCopyrightText: Thomas Breitner
+#
+# SPDX-License-Identifier: EUPL-1.2
+
 import csv
 from django.core.management.base import BaseCommand
 from django.utils.text import slugify
 
 from rdml.classification.models import CVSubjectArea
 
+
 class Command(BaseCommand):
-    help = 'CSV-Import: Populates SubjectArea model from CSV file data.'
+    help = "CSV-Import: Populates SubjectArea model from CSV file data."
 
     def add_arguments(self, parser):
-        parser.add_argument('file')
+        parser.add_argument("file")
 
     def handle(self, *args, **options):
-        file = options['file']
+        file = options["file"]
         print(f"{file=}")
 
         target_model = CVSubjectArea
 
         with open(file) as csv_file:
-            csv_reader = csv.DictReader(csv_file, delimiter=';')
+            csv_reader = csv.DictReader(csv_file, delimiter=";")
             for row in csv_reader:
-                print(f'\t{row["CODE"]}: {row["NAME_EN"]} - {row["NAME_DE"]}')
+                print(f"\t{row['CODE']}: {row['NAME_EN']} - {row['NAME_DE']}")
 
                 obj = target_model(
                     code=row["CODE"],

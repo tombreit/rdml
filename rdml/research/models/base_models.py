@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Thomas Breitner
+#
+# SPDX-License-Identifier: EUPL-1.2
+
 import uuid
 from django.db import models
 from django.urls import reverse
@@ -57,9 +61,7 @@ class ContributionBase(ResourceBaseModel):
         if self.contribution_start_date and self.contribution_end_date:
             if self.contribution_start_date > self.contribution_end_date:
                 msg = _("The start date cannot be earlier than the end date.")
-                raise ValidationError(
-                    {"contribution_start_date": msg, "contribution_end_date": msg}
-                )
+                raise ValidationError({"contribution_start_date": msg, "contribution_end_date": msg})
 
     class Meta:
         abstract = True
@@ -185,7 +187,6 @@ class FileInfo(ResourceBaseModel):
     class Meta:
         verbose_name = "File information"
         verbose_name_plural = "Files information"
-
 
 
 class RelatedResource(ResourceBaseModel):

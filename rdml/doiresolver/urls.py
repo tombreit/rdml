@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Thomas Breitner
+#
+# SPDX-License-Identifier: EUPL-1.2
+
 from django.urls import path
 from .views import (
     # DoiListView,
@@ -6,11 +10,11 @@ from .views import (
 )
 
 
-app_name = 'doiresolver'
+app_name = "doiresolver"
 
 urlpatterns = [
-    path('', landing_page_list, name="doi-list"),
-    path('<uuid:pk_uuid>/', landing_page, name="landing-page"),
-    path('<slug:identifier>/', landing_page, name="landing-page"),
+    path("", landing_page_list, name="doi-list"),
+    path("<uuid:pk_uuid>/", landing_page, name="landing-page"),
+    path("<slug:identifier>/", landing_page, name="landing-page"),
     # path('<str:identifier>/', landing_page, name="landing-page"),
 ]

@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Thomas Breitner
+#
+# SPDX-License-Identifier: EUPL-1.2
+
 import re
 
 from django.conf import settings
@@ -13,9 +17,7 @@ def validate_coneid(value):
     CONEID_REGEX = r"^persons\d{6}$"
     regex = re.compile(CONEID_REGEX, re.IGNORECASE)
     if not regex.match(value):
-        raise ValidationError(
-            'PuRe person CoNE ID does not match format "persons123456"'
-        )
+        raise ValidationError('PuRe person CoNE ID does not match format "persons123456"')
 
 
 def validate_orcid(value):
@@ -25,9 +27,7 @@ def validate_orcid(value):
     ORCID_REGEX = r"^https://orcid.org/\d{4}-\d{4}-\d{4}-\d{4}$"
     regex = re.compile(ORCID_REGEX, re.IGNORECASE)
     if not regex.match(value):
-        raise ValidationError(
-            'ORCID does not match format "https://orcid.org/xxxx-xxxx-xxxx-xxxx"'
-        )
+        raise ValidationError('ORCID does not match format "https://orcid.org/xxxx-xxxx-xxxx-xxxx"')
 
 
 class OrganizationBaseModel(TimeStampedBaseModel, UUIDBaseModel):
@@ -61,9 +61,7 @@ class Organization(OrganizationBaseModel):
 
     @classmethod
     def get_default_organization_pk(cls):
-        organization, _created = cls.objects.get_or_create(
-            name=f"{settings.INSTITUTION_FQDN}"
-        )
+        organization, _created = cls.objects.get_or_create(name=f"{settings.INSTITUTION_FQDN}")
         return organization.pk
 
     def __str__(self):
@@ -205,9 +203,7 @@ class Publisher(OrganizationBaseModel):
 
     @classmethod
     def get_default_publisher_pk(cls):
-        publisher, _created = cls.objects.get_or_create(
-            name_en=f"{settings.INSTITUTION_FQDN}"
-        )
+        publisher, _created = cls.objects.get_or_create(name_en=f"{settings.INSTITUTION_FQDN}")
         return publisher.pk
 
     def __str__(self):

@@ -1,13 +1,8 @@
-# -*- coding: utf-8 -*-
-#
-# This file is part of DataCite.
-#
 # Copyright (C) 2015-2018 CERN.
 # Copyright (C) 2018 Center for Open Science.
+# SPDX-FileCopyrightText: Thomas Breitner
 #
-# DataCite is free software; you can redistribute it and/or modify it
-# under the terms of the Revised BSD License; see LICENSE file for
-# more details.
+# SPDX-License-Identifier: EUPL-1.2
 
 """Module for making requests to the DataCite API."""
 
@@ -101,15 +96,11 @@ class DataCiteRequest(object):
 
     def post(self, url, body=None, params=None, headers=None):
         """Make a POST request."""
-        return self.request(
-            url, method="POST", body=body, params=params, headers=headers
-        )
+        return self.request(url, method="POST", body=body, params=params, headers=headers)
 
     def put(self, url, body=None, params=None, headers=None):
         """Make a PUT request."""
-        return self.request(
-            url, method="PUT", body=body, params=params, headers=headers
-        )
+        return self.request(url, method="PUT", body=body, params=params, headers=headers)
 
     def delete(self, url, params=None, headers=None):
         """Make a DELETE request."""

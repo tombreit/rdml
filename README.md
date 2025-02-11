@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: Thomas Breitner
+
+SPDX-License-Identifier: EUPL-1.2
+-->
+
 # rdml
 
 - Web based research metadata managment tool & DOI manager & DOI landing pages generator

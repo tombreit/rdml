@@ -1,8 +1,12 @@
+# SPDX-FileCopyrightText: Thomas Breitner
+#
+# SPDX-License-Identifier: EUPL-1.2
+
 import uuid
 from django.db import models
 
-class SingletonBaseModel(models.Model):
 
+class SingletonBaseModel(models.Model):
     def save(self, *args, **kwargs):
         self.pk = 1
         super().save(*args, **kwargs)

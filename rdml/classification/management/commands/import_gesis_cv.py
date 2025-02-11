@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Thomas Breitner
+#
+# SPDX-License-Identifier: EUPL-1.2
+
 import csv
 from django.core.management.base import BaseCommand
 from django.utils.text import slugify
@@ -6,16 +10,16 @@ from rdml.core.helpers import get_orderable_representation
 
 
 class Command(BaseCommand):
-    help = 'CSV-Import: Populates GESIS-compliant classifikation models from CSV file data.'
+    help = "CSV-Import: Populates GESIS-compliant classifikation models from CSV file data."
 
     def add_arguments(self, parser):
-        parser.add_argument('model', type=str, help='Django model classname')
-        parser.add_argument('file', type=str, help='CSV file. Expects column headers "code", "name_de", "name_en".')
+        parser.add_argument("model", type=str, help="Django model classname")
+        parser.add_argument("file", type=str, help='CSV file. Expects column headers "code", "name_de", "name_en".')
 
     def handle(self, *args, **options):
-        file = options['file']
-        target_model_name = options['model']
-        CVClass = apps.get_model(app_label='classification', model_name=target_model_name)
+        file = options["file"]
+        target_model_name = options["model"]
+        CVClass = apps.get_model(app_label="classification", model_name=target_model_name)
 
         print(f"Started importing data from {file} in {CVClass=}...")
 
@@ -24,7 +28,7 @@ class Command(BaseCommand):
         objs = []
 
         with open(file) as csv_file:
-            csv_reader = csv.DictReader(csv_file, delimiter=';', fieldnames=fieldnames)
+            csv_reader = csv.DictReader(csv_file, delimiter=";", fieldnames=fieldnames)
             _first_line = next(csv_reader)
             _header_line = next(csv_reader)
             for row in csv_reader:
@@ -44,4 +48,5 @@ class Command(BaseCommand):
                 objs.append(obj)
 
             from pprint import pprint
+
             self.stdout.write(self.style.SUCCESS(f"Imported csv data for {CVClass}"))

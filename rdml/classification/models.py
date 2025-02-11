@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Thomas Breitner
+#
+# SPDX-License-Identifier: EUPL-1.2
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -14,9 +18,11 @@ class License(models.TextChoices):
     CC_BY_NC_ND = "CC_BY_NC_ND", _("CC BY-NC-ND")
     CC_0 = "CC_0", _("CC0")
 
+
 #
 # New DDI- or ISO-based models / Controlled Vocabluaries
-# 
+#
+
 
 class CVGeographicArea(TimeStampedBaseModel, UUIDBaseModel):
     """
@@ -54,9 +60,9 @@ class CVGeographicArea(TimeStampedBaseModel, UUIDBaseModel):
         )
 
     class Meta:
-        ordering = ['country_code', 'subdivision_code', 'pk']
-        verbose_name = 'Geographic Area (ISO-3166)'
-        verbose_name_plural = 'Geographic Areas (ISO-3166)'
+        ordering = ["country_code", "subdivision_code", "pk"]
+        verbose_name = "Geographic Area (ISO-3166)"
+        verbose_name_plural = "Geographic Areas (ISO-3166)"
 
 
 class CVModeOfCollection(CVGesisBaseModel):
@@ -80,9 +86,11 @@ class CVSamplingProcedure(CVGesisBaseModel):
         verbose_name = "MD 16 Auswahlverfahren/SamplingProcedure"
         verbose_name_plural = "MD 16 Auswahlverfahren/SamplingProcedures"
 
+
 #
 # Common Vocabularies
 #
+
 
 class CVClassificationKeyword(CVKeywordBaseModel):
     class Meta(CVKeywordBaseModel.Meta):
@@ -94,6 +102,7 @@ class CVClassificationKeyword(CVKeywordBaseModel):
 # GESIS Vocabularies
 #
 
+
 class CVSubjectArea(CVBaseModel):
     def __str__(self):
         return f"{self.code}: {self.name_en}/{self.name_de}"
@@ -102,6 +111,8 @@ class CVSubjectArea(CVBaseModel):
         verbose_name = "MD 09 Fachgebiet/Subject area"
         verbose_name_plural = "MD 09 Fachgebiete/Subject areas"
         ordering = ["code"]
+
+
 #
 # Legal aspects
 #
@@ -111,23 +122,28 @@ class CVSubjectArea(CVBaseModel):
 #         verbose_name = "Data Protection Concept"
 #         verbose_name_plural = "Data Protection Concepts"
 
+
 class CVResearchFundingAgency(CVBaseModel):
     class Meta(CVBaseModel.Meta):
         verbose_name = "Research Funding Agency"
         verbose_name_plural = "Research Funding Agencies"
 
+
 #
 # Archiving and access
 #
+
 
 class CVArchivingAccessAvailability(CVBaseModel):
     class Meta(CVBaseModel.Meta):
         verbose_name = "Archiving and access: Availability"
         verbose_name_plural = "Archiving and access: Availabilities"
 
+
 #
 # Technical description of data files
 #
+
 
 class Filetype(TimeStampedBaseModel, UUIDBaseModel):
     extension = models.CharField(
@@ -135,11 +151,7 @@ class Filetype(TimeStampedBaseModel, UUIDBaseModel):
         blank=False,
         help_text="File extension, including the leading dot. E.g.: `.txt`.",
     )
-    software = models.CharField(
-        max_length=255,
-        blank=True,
-        help_text="Software used to create the file."
-    )
+    software = models.CharField(max_length=255, blank=True, help_text="Software used to create the file.")
 
     def __str__(self):
         return "{extension}{software}".format(
@@ -150,4 +162,3 @@ class Filetype(TimeStampedBaseModel, UUIDBaseModel):
     class Meta:
         verbose_name = "Filetype"
         verbose_name_plural = "Filetypes"
-
