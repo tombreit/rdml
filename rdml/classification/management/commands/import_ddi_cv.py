@@ -9,7 +9,7 @@ from django.apps import apps
 
 
 class Command(BaseCommand):
-    help = "CSV-Import: Populates DDI-compliant classifikation models from CSV file data."
+    help = "CSV-Import: Populates DDI-compliant classification models from CSV file data."
 
     def add_arguments(self, parser):
         parser.add_argument("model", type=str, help="Django model classname")

@@ -7,6 +7,7 @@ from django.core.management.base import BaseCommand
 from django.utils.text import slugify
 from django.apps import apps
 from rdml.core.helpers import get_orderable_representation
+from rdml.classification.abstracts import CVGesisBaseModel
 
 
 class Command(BaseCommand):
@@ -19,7 +20,27 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         file = options["file"]
         target_model_name = options["model"]
-        CVClass = apps.get_model(app_label="classification", model_name=target_model_name)
+
+        # Get possible model classes that are subclasses of CVGesisBaseModel
+        available_gesis_models = [model.__name__ for model in apps.get_models() if issubclass(model, CVGesisBaseModel)]
+        _available_models_str = "\n".join(f"- {model}" for model in available_gesis_models)
+        available_gesis_models_msg = f"Available GESIS models:\n{_available_models_str}"
+
+        try:
+            CVClass = apps.get_model(app_label="classification", model_name=target_model_name)
+        except LookupError:
+            self.stderr.write(self.style.ERROR(f"Model {target_model_name} not found."))
+            self.stderr.write(self.style.ERROR(available_gesis_models_msg))
+            return
+
+        if not CVClass:
+            self.stderr.write(self.style.ERROR(f"Model {target_model_name} not found."))
+            self.stderr.write(self.style.ERROR(available_gesis_models_msg))
+            return
+        if not issubclass(CVClass, CVGesisBaseModel):
+            self.stderr.write(self.style.ERROR(f"Model {target_model_name} is not a subclass of GVGesisBaseModel."))
+            self.stderr.write(self.style.ERROR(available_gesis_models_msg))
+            return
 
         print(f"Started importing data from {file} in {CVClass=}...")
 
@@ -46,6 +67,5 @@ class Command(BaseCommand):
                     slug=slugify(name_en),
                 )
                 objs.append(obj)
-
 
             self.stdout.write(self.style.SUCCESS(f"Imported csv data for {CVClass}"))

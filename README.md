@@ -143,6 +143,70 @@ project_id: myorg-crim-covid19
 
 ### Operation
 
+#### Classification
+
+Some classification models could be populated via a CSV/JSON import:
+
+- Subject areas:
+
+    ```csv
+    CODE;NAME_DE;NAME_EN
+    10000;Sozialwissenschaften;Social Sciences
+    10100;Grundlagen der Sozialwissenschaften;Basic Research in the Social Sciences
+    ```
+
+    ```bash
+    ./manage.py import_subject_areas path/to/subject_areas.csv
+    ```
+
+- ISO 3166-1 (Country code, JSON formatted) and 3166-2 (Country subdivision code, CSV formatted)
+
+    ```json
+    [
+        {
+            "Code": "SZ",
+            "Name": "Swaziland"
+        },
+        {
+            "Code": "SE",
+            "Name": "Sweden"
+        }
+    ]
+    ```
+
+    ```csv
+    "SZ","HH","Hhohho","Region"
+    "SZ","LU","Lubombo","Region"
+    "SE","AB","Stockholms län","County"
+    "SE","AC","Västerbottens län","County"
+    "SE","BD","Norrbottens län","County"
+    "SE","C","Uppsala län","County"
+    ```
+
+    ```bash
+    ./manage.py import_iso3166 path/to/iso31661.json path/to/iso31662.csv
+    ```
+
+- GESIS controlled vocalularies
+
+    ```csv
+    "Code List";"in American English";
+    "Code";"Term";"Definition"
+    "Interview";"Interview";"A pre-planned communication between two (or more) people..."
+    "Interview.FaceToFace";"Face-to-face interview";"Data collection method in which a live interviewer conducts a personal interview..."
+    "Interview.FaceToFace.CAPIorCAMI";"Face-to-face interview: Computer-assisted (CAPI/CAMI)";"Computer-assisted personal interviewing (CAPI), or..."
+    ```
+
+    ```bash
+    ./manage.py import_gesis_cv CVModeOfCollection path/to/gesis-mode-of-collection.csv
+    ```
+
+- DDI (Data Documentation Initiative Alliance) compliant classifications
+
+    ```bash
+    ./manage.py import_ddi_cv TargetModelName path/to/ddi.csv
+    ```
+
 ### Backup
 
 The backup of the following paths results in a complete backup:
@@ -167,6 +231,17 @@ npm install
 npm run build
 # or
 make assets
+```
+
+Run rdml:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements-dev.txt
+./manage.py migrate
+./manage.py createsueruser
+./manage.py runserver
 ```
 
 ### Usage
