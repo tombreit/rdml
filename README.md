@@ -12,19 +12,13 @@ SPDX-License-Identifier: EUPL-1.2
 
 ## Goals & Features
 
-- Project language: English
-- (Institutional) Branding (eg. Institut name, logo files) configurable
-- Stakeholders:
-   1. Data managers (Backend, authorized)
-   1. Data editors (Backend, authorized)
-   1. Users (Frontend, anonymus)
-- **Manage research projects**
+- **Manage research projects** (Django admin interface)
    1. Collect metadata for projects
    1. Assign valid, unique and "speaking" identifiers to projects
    1. Provide web based admin interface for research meta data
    1. Provide stripped down interface for researchers to maintain data for their projects
    1. Provide workflow for research data managers to verify/validate/publish dirty data from researchers
-- **Manage research-related metadata**
+- **Manage research-related metadata** (Django admin interface)
     - Persons
     - Organizational units
     - Controlled vocabularies
@@ -41,6 +35,8 @@ SPDX-License-Identifier: EUPL-1.2
    1. Ensure DOIs resolve to a persistent landing page
    1. Landing page must provide some data, some is optional
    1. Resolve DOIs to tombstone landing page if project gets cancelled
+- (Institutional) Branding (eg. Institut name, logo files) configurable
+- Project language: English
 - **[upcoming]**
     - Tombstone pages
     - Mobile friendlier public views
@@ -49,6 +45,12 @@ SPDX-License-Identifier: EUPL-1.2
     - Scheduled verification that current DOIs resolve to current project IDs
     - Versioning
     - Multilingualism
+
+- Stakeholders:
+   1. Data managers (Backend, authorized)
+   1. Data editors (Backend, authorized)
+   1. Users (Frontend, anonymous)
+   1. DOI registration agency (<https://datacite.org/>)
 
 ## User stories
 
@@ -64,19 +66,14 @@ SPDX-License-Identifier: EUPL-1.2
 
   *A project with an attached DOI will be discontinued:* The project metadata landing page should be unpublished and instead a placeholder page should be accessible for the given DOI. These projects must be marked in some way by a researcher.
 
-## Involved parties
-
-- Inhouse: ResearchData administrators and ResearchData editors, implemented as LDAP-Groups
-- https://datacite.org/ -> to get a DOI and to push metadata
-
 ## DOIs
 
 ### Goals
 
-* **F** INDABLE
-* **A** CCESSIBLE
-* **I** NTERPOPERABLE
-* **R** EUSABLE
+- **F** INDABLE
+- **A** CCESSIBLE
+- **I** NTERPOPERABLE
+- **R** EUSABLE
 
 - A once registered DOI should resolve to a landing page, even when the project/metadata is not available any more.
 - One resource can have 0 to n related resources (datasets etc)
@@ -112,11 +109,6 @@ stateDiagram-v2
 | 10 | ResourceType (with mandatory general type description sub-property) | M | [✓] |
 | 17 | Description (It is a best practice to supply a description.) | | [✓]|
 | 17.a | descriptionType (The type of the Description. If Description is used, descriptionType is mandatory. Controlled List Values: Abstract, Methods, SeriesInformation, TableOfContents, TechnicalInfo, Other | |[✓] (descriptionType = ”Abstract”)|
-
-### Citation snippet
-
-- https://citation.crosscite.org/
-- https://citation.crosscite.org/docs.html
 
 ## Project IDs
 
@@ -280,6 +272,9 @@ pip install -r requirements-dev.txt
 - https://www.ssoar.info/ssoar/bitstream/handle/document/54975/ssoar-2017-jensen_et_al-SowiDataNet_-_Metadatenschema_Version_1-0.pdf?sequence=3&isAllowed=y&lnkname=ssoar-2017-jensen_et_al-SowiDataNet_-_Metadatenschema_Version_1-0.pdf
 - Klassifikation Fachgebiete: https://www.bonn.iz-soz.de/information/databases/classification/klass2.html
 - Get bibtex from DataCite, generate formatted citation via pybtex (https://bitbucket.org/pybtex-devs/pybtex/src/master/)
+- Citation snippets
+    - https://citation.crosscite.org/
+    - https://citation.crosscite.org/docs.html
 
 ### Existing platforms
 
