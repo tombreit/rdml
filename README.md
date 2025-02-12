@@ -60,20 +60,46 @@ SPDX-License-Identifier: EUPL-1.2
 
 - **Assign DOI to a project**
 
-  *A project should receive a DOI:* A DOI is - automatically ~~or via human intervention~~ - assigned to a project. The DOI links to the project id. Researcher updates project metadata with the given DOI. From now on, the DOI resolves to a automatically generated landing page for this project metadata.
+  A DOI could be assigned to a project. The DOI links to the project ID. Researcher triggers DOI registration/update process. From now on, the DOI resolves to a automatically generated landing page for this project metadata.
 
 - **Orphaned projects/identifiers**
 
-  *A project with an attached DOI will be discontinued:* The project metadata landing page should be unpublished and instead a placeholder page should be accessible for the given DOI. These projects must be marked in some way by a researcher.
+  *A project with an attached DOI will be discontinued:* The project metadata landing page should be unpublished and instead a placeholder page (*tombstone page*) should be accessible for the given DOI. These projects must be marked in some way by a researcher.
+
+## Screenshots
+
+<details>
+<summary>
+Public resource listing
+</summary>
+
+<img src="./docs/rdml-public-listing.png" alt="Public resource listing" width="300" />
+</details>
+
+<details>
+<summary>
+Public resource landing page
+</summary>
+
+<img src="./docs/rdml-public-detail.png" alt="Public resource landing page" width="300" />
+</details>
+
+<details>
+<summary>
+Backend DOI manager
+</summary>
+
+<img src="./docs/rdml-backend-doi.png" alt="Backend: DOI" width="300" />
+</details>
 
 ## DOIs
 
 ### Goals
 
-- **F** INDABLE
-- **A** CCESSIBLE
-- **I** NTERPOPERABLE
-- **R** EUSABLE
+**F** INDABLE  
+**A** CCESSIBLE  
+**I** NTERPOPERABLE  
+**R** EUSABLE
 
 - A once registered DOI should resolve to a landing page, even when the project/metadata is not available any more.
 - One resource can have 0 to n related resources (datasets etc)
