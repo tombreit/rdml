@@ -48,14 +48,17 @@ class Organization(OrganizationBaseModel):
     abbr = models.CharField(
         max_length=255,
         blank=True,
+        verbose_name="Abbreviation",
         help_text="Abbreviation for this Organization",
     )
     url = models.URLField(
         blank=True,
+        verbose_name="URL",
     )
     ror_id = models.CharField(
         max_length=255,
         blank=True,
+        verbose_name="ROR ID",
     )
 
     def __str__(self):
@@ -76,10 +79,12 @@ class OrganizationalUnit(OrganizationBaseModel):
     abbr = models.CharField(
         max_length=255,
         blank=True,
+        verbose_name="Abbreviation",
         help_text="Abbreviation for this Organizational Unit.",
     )
     url = models.URLField(
         blank=True,
+        verbose_name="URL",
     )
 
     def __str__(self):
@@ -185,14 +190,17 @@ class Publisher(OrganizationBaseModel):
     abbr_en = models.CharField(
         max_length=255,
         blank=True,
+        verbose_name="Abbreviation (EN)",
         help_text="Abbreviation for this publisher",
     )
     url = models.URLField(
         blank=True,
+        verbose_name="URL",
     )
     ror_id = models.CharField(
         max_length=255,
         blank=True,
+        verbose_name="ROR ID",
     )
 
     def __str__(self):
