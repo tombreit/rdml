@@ -2,7 +2,6 @@
 #
 # SPDX-License-Identifier: EUPL-1.2
 
-from django.conf import settings
 from django.contrib import admin
 from django.utils.html import format_html
 from django.templatetags.static import static
@@ -370,14 +369,7 @@ class ResourceBaseAdmin(admin.ModelAdmin):
 
     def has_change_permission(self, request, obj=None):
         if obj:
-            if any(
-                [
-                    request.user.is_superuser,
-                    settings.RDML_ADMIN_GROUP in request.user.groups.values_list("name", flat=True),
-                    request.user in obj.curators.all(),
-                ]
-            ):
-                return True
+            return super().has_change_permission(request, obj) or obj.curators.filter(id=request.user.id).exists()
 
     def has_delete_permission(self, request, obj=None):
         if obj and request.user.is_superuser:

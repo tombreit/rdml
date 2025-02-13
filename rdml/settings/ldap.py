@@ -52,11 +52,6 @@ if env.bool("DEBUG"):
 
 
 AUTH_LDAP_USER_SEARCH = LDAPSearchUnion(
-    # LDAPSearch(
-    #     f"{env.str('AUTH_LDAP_USERS_DN')}",
-    #     ldap.SCOPE_SUBTREE,
-    #     "(sAMAccountName=%(user)s)",
-    # ),
     LDAPSearch(
         f"{env.str('AUTH_LDAP_USERS_DN')}",
         ldap.SCOPE_SUBTREE,
@@ -66,11 +61,6 @@ AUTH_LDAP_USER_SEARCH = LDAPSearchUnion(
 
 AUTH_LDAP_GROUP_SEARCH = LDAPSearchUnion(
     LDAPSearch(f"{env.str('AUTH_LDAP_USERS_DN')}", ldap.SCOPE_SUBTREE, "(objectClass=group)"),
-    # LDAPSearch(
-    #    f"{env.str('AUTH_LDAP_GROUP_SEARCH_DN')}",
-    #    ldap.SCOPE_SUBTREE,
-    #    "(objectClass=group)"
-    # ),
 )
 
 AUTH_LDAP_GROUP_TYPE = ActiveDirectoryGroupType()

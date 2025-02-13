@@ -264,8 +264,11 @@ pip install -r requirements-dev.txt
 
 ### Usage
 
-- Login
-    - Users must be in one of the groups `rd_admins` `rd_editors` (see `.env`)
+- Authentification
+    - RDML authenticates users against the local Django user database and a configured LDAP instance (see `env-template`)
+- Permissions and authorization
+    - Set the groups in your `.env` file. If authenticate against a LDAP, set the groups that should be mirrored to the RDML group database.
+    - Configure the permissions via the Django permission framework by assigning permissions to eg.a group `rdml-admins` and `rdml-editors`.
 - Users must be set as `curators` for a given `Research Resource` (eg. a project) to be able to edit this resource.
 
 ## Links

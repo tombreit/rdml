@@ -14,7 +14,6 @@ import requests
 
 from idutils import normalize_doi
 
-
 from .errors import DataCiteError
 from .request import DataCiteRequest
 

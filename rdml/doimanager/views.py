@@ -2,9 +2,8 @@
 #
 # SPDX-License-Identifier: EUPL-1.2
 
-from django.conf import settings
 from django.views.decorators.http import require_GET
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 
@@ -16,18 +15,8 @@ from .metadata import get_rdml_metadata
 from .utils import get_citation_snippet
 
 
-def datacite_permission_check(user):
-    if any(
-        [
-            user.is_superuser,
-            settings.RDML_ADMIN_GROUP in user.groups.values_list("name", flat=True),
-        ]
-    ):
-        return True
-
-
 @login_required
-@user_passes_test(datacite_permission_check)
+@permission_required("doimanager.register_or_update_dois", raise_exception=True)
 @require_GET
 def datacite_manager(request, resource_id, transition_to=None):
     print(80 * "-")

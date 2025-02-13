@@ -36,13 +36,14 @@ dev = [
     "ruff",
     "pip-tools",
 ]
+test = [
+    "pytest",
+    "pytest-django",
+]
 
-[build-system]
-requires = ["setuptools >= 61.0"]
-build-backend = "setuptools.build_meta"
-
-[tool.setuptools.packages.find]
-where = ["rdml/"]
+[tool.setuptools]
+py-modules = []
+package-dir = {}
 
 [project.urls]
 Homepage = "https://gitlab.gwdg.de/t.breitner/rdml"
@@ -54,3 +55,6 @@ Issues = "https://gitlab.gwdg.de/t.breitner/rdml/-/issues"
 line-length = 120
 target-version = "py311"
 extend-exclude = ["migrations"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "rdml.settings"

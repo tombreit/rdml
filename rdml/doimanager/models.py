@@ -169,9 +169,12 @@ class DataCiteResource(TimeStampedBaseModel, UUIDBaseModel):
     class Meta:
         constraints = [
             models.CheckConstraint(
-                check=Q(resource__isnull=False, doi=None) | Q(resource__isnull=False, doi__isnull=False),
+                condition=Q(resource__isnull=False, doi=None) | Q(resource__isnull=False, doi__isnull=False),
                 name="%(app_label)s_%(class)s_resource_and_doi_cannot_be_null",
             )
+        ]
+        permissions = [
+            ("register_or_update_dois", "Can register and update DOI records"),
         ]
 
 
