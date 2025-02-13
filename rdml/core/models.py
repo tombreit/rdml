@@ -11,8 +11,8 @@ class SingletonBaseModel(models.Model):
         self.pk = 1
         super().save(*args, **kwargs)
 
-    def delete(self, *args, **kwargs):
-        pass
+    # def delete(self, *args, **kwargs):
+    #     pass
 
     @classmethod
     def load(cls):
