@@ -219,6 +219,4 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 ### RDML settings
 #######################################################################
 
-INSTITUTION_FQDN = env.str("INSTITUTION_FQDN")
-
 RDML_ADMIN_GROUP = env.str("RDML_ADMIN_GROUP")

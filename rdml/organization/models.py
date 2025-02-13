@@ -4,7 +4,6 @@
 
 import re
 
-from django.conf import settings
 from django.db import models
 from django.db.models.functions import Lower
 from django.core.exceptions import ValidationError
@@ -58,11 +57,6 @@ class Organization(OrganizationBaseModel):
         max_length=255,
         blank=True,
     )
-
-    @classmethod
-    def get_default_organization_pk(cls):
-        organization, _created = cls.objects.get_or_create(name=f"{settings.INSTITUTION_FQDN}")
-        return organization.pk
 
     def __str__(self):
         return self.name
@@ -200,11 +194,6 @@ class Publisher(OrganizationBaseModel):
         max_length=255,
         blank=True,
     )
-
-    @classmethod
-    def get_default_publisher_pk(cls):
-        publisher, _created = cls.objects.get_or_create(name_en=f"{settings.INSTITUTION_FQDN}")
-        return publisher.pk
 
     def __str__(self):
         return f"{self.name_en}"

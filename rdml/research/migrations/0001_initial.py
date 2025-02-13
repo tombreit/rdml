@@ -129,7 +129,7 @@ class Migration(migrations.Migration):
                 ('cv_time_dimension', models.ManyToManyField(blank=True, help_text='Controlled vocabulary. Choose from list.', to='classification.cvtimedimension', verbose_name='Time Dimension (CV)')),
                 ('keywords', models.ManyToManyField(blank=True, help_text='You may choose from existing list of keywords or add new keywords', to='classification.cvclassificationkeyword')),
                 ('organizational_unit', models.ForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, to='organization.organizationalunit')),
-                ('publisher', models.ForeignKey(default=rdml.organization.models.Organization.get_default_organization_pk, null=True, on_delete=django.db.models.deletion.PROTECT, to='organization.organization')),
+                ('publisher', models.ForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, to='organization.organization')),
                 ('research_funding_agency', models.ManyToManyField(blank=True, to='classification.cvresearchfundingagency')),
             ],
             options={

@@ -8,7 +8,6 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 
-from ...organization.models import Organization
 from ...doimanager.models import DataCiteContributorType, DataCiteResourceTypeGeneral
 from ...classification.models import License
 from ...core.models import TimeStampedBaseModel, UUIDBaseModel
@@ -317,7 +316,6 @@ class Resource(ResourceBaseModel):
         blank=False,
         null=True,
         on_delete=models.PROTECT,
-        default=Organization.get_default_organization_pk,
     )
     language = models.CharField(
         max_length=2,
