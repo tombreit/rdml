@@ -107,6 +107,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "rdml.organization.context_processors.branding",
+                "rdml.doimanager.context_processors.doimanager",
             ],
         },
     },

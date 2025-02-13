@@ -236,5 +236,9 @@ class DataCiteConfiguration(TimeStampedBaseModel, UUIDBaseModel):
     def __str__(self):
         return f"{'✓' if self.is_active else '❌'} {self.get_datacite_instance_display()} instance: {self.doi_prefix}"
 
+    class Meta:
+        verbose_name = "DataCite Configuration"
+        verbose_name_plural = "DataCite Configurations"
+
 
 auditlog.register(DataCiteConfiguration)
