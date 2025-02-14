@@ -8,7 +8,6 @@ SPDX-License-Identifier: EUPL-1.2
 
 - Web based research metadata managment tool & DOI manager & DOI landing pages generator
 - Project slug/internal identifier for this project: **`rdml`** (**R**esearch**D**ata**M**anagement**L**ight)
-- Metadata is data about data. It is stored in a structured way so that it can be read by both humans and machines.
 
 ## Goals & Features
 
@@ -31,9 +30,8 @@ SPDX-License-Identifier: EUPL-1.2
     - Manage DOIs for other "DOI eligible" data (datasets etc.)
     - Logs DataCite operations
 - **Provide public landing page for a DOI**
-   1. Resolve DOIs to a landing page
    1. Ensure DOIs resolve to a persistent landing page
-   1. Landing page must provide some data, some is optional
+   1. Landing page must provide metadata, not the project/data itself
    1. Resolve DOIs to tombstone landing page if project gets cancelled
 - (Institutional) Branding (eg. Institut name, logo files) configurable
 - Project language: English
@@ -148,20 +146,62 @@ suffix: covid19
 project_id: myorg-crim-covid19
 ```
 
-## Architecture
-
-- Build with the [Django](https://www.djangoproject.com/) webframework
-- Database: SQlite
-- UI: [Bootstrap](https://getbootstrap.com/)
-- Some [htmx](https://htmx.org/)
-
 ## Setup
+
+- A [DataCite](https://datacite.org/) account is required to use the built-in functionality for registering and updating DOIs.
+- RDML is tested to run on Debian GNU/Linux 12 and newer.
+- For a production setup, see e.g. [Django deployment](https://docs.djangoproject.com/en/dev/howto/deployment/).
+- The following steps describe a development setup.
 
 ### Installation
 
+Prepare project:
+
+```bash
+git clone git@github.com:tombreit/rdml.git
+cd rdml
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements-dev.txt
+./manage.py migrate
+./manage.py createsueruser
+```
+
+Generate static assets:
+
+```bash
+npm install
+npm run build
+# or
+make assets
+```
+
 ### Operation
 
-#### Classification
+Run RDML:
+
+```bash
+./manage.py runserver
+```
+
+### Configuration
+
+- Deployment specific configuration
+    - Copy `env.template` to `.env` and set your environment variables
+    - Set the LDAP groups you'd like to use in RDML in your `.env` file: `AUTH_LDAP_MIRROR_GROUPS_LIST`
+- Authentification
+    - RDML authenticates users against the local Django user database and a configured LDAP instance (see `env-template`)
+- Runtime specific configuration (Login with your created superuser account)
+    - Site: *Home > Sites*
+        - Set a Django sites instance that fits your environment
+    - Branding: *Home > Organization > Branding*
+        - Set the organization name, logo etc.
+    - Permissions: *Home > Accounts > Groups/Users*
+        - Configure the permissions via the Django permission framework by assigning permissions to eg.a group `rdml-admins` and `rdml-editors`.
+        - The RDML backend is a customized Django admin instance, so the user field `is_staff` must be true.
+        - Users must be set as `curators` for a given `Research Resource` (eg. a project) to be able to edit this resource.
+
+### Classification
 
 Some classification models could be populated via a CSV/JSON import:
 
@@ -236,42 +276,23 @@ The backup of the following paths results in a complete backup:
 
 ### Development
 
-Update Pyhton requirements:
+Update Python requirements:
 
 ```bash
 make requirements
 ```
 
-Generate static assets:
+Run tests:
 
 ```bash
-npm install
-npm run build
-# or
-make assets
+pip install .[test]
+pytest
 ```
-
-Run rdml:
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements-dev.txt
-./manage.py migrate
-./manage.py createsueruser
-./manage.py runserver
-```
-
-### Usage
-
-- Authentification
-    - RDML authenticates users against the local Django user database and a configured LDAP instance (see `env-template`)
-- Permissions and authorization
-    - Set the groups in your `.env` file. If authenticate against a LDAP, set the groups that should be mirrored to the RDML group database.
-    - Configure the permissions via the Django permission framework by assigning permissions to eg.a group `rdml-admins` and `rdml-editors`.
-- Users must be set as `curators` for a given `Research Resource` (eg. a project) to be able to edit this resource.
 
 ## Links
+
+<details>
+<summary>References</summary>
 
 ### References
 
@@ -279,12 +300,16 @@ pip install -r requirements-dev.txt
 - https://support.datacite.org/docs/landing-pages
 - https://blog.datacite.org/cool-dois/
 - https://support.datacite.org/docs/what-characters-should-i-use-in-the-suffix-of-my-doi
-- https://mpdl.zendesk.com/hc/en-us/articles/360010502479-Digital-Object-Identifier-DOI-
+- https://mpdl.zendesk.com/hc/en-us/articles/360010502479-Digital-Object-Identifier-DOI
 - https://www.da-ra.de/media/pages/downloads/best-practice/guide/55a6047c79-1610971972/TechnicalReport_2014-18.pdf
 - `curl -s --head https://doi.org/10.1000/182`
 - https://support.datacite.org/docs/api-error-codes
 
-### LandingPages
+</details>
+<details>
+<summary>Landing pages</summary>
+
+### Landing pages
 
 - https://support.datacite.org/docs/landing-pages
 - https://www.nature.com/articles/s41597-019-0031-8
@@ -296,6 +321,10 @@ pip install -r requirements-dev.txt
 - https://data.gesis.org/sharing/#!Detail/10.7802/2371
 - https://dare.uva.nl/search?identifier=d8d1a8f7-8ab9-4a2b-9576-a3a7a9ba78c6
 
+</details>
+<details>
+<summary>Metadata</summary>
+
 ### Metadata
 
 - https://www.ssoar.info/ssoar/bitstream/handle/document/54975/ssoar-2017-jensen_et_al-SowiDataNet_-_Metadatenschema_Version_1-0.pdf?sequence=3&isAllowed=y&lnkname=ssoar-2017-jensen_et_al-SowiDataNet_-_Metadatenschema_Version_1-0.pdf
@@ -305,9 +334,24 @@ pip install -r requirements-dev.txt
     - https://citation.crosscite.org/
     - https://citation.crosscite.org/docs.html
 
+</details>
+<details>
+<summary>Existing platforms</summary>
+
 ### Existing platforms
 
 - SowiDataNet|datorium: https://data.gesis.org/sharing/
 - DataCite: https://datacite.org/
 - re3data.org: https://www.re3data.org/search?query=&subjects%5B%5D=11305%20Criminology
-- https://rdmorganiser.github.io/
+- RDMO: https://rdmorganiser.github.io/
+
+</details>
+
+## Credits
+
+- Build with the [Django](https://www.djangoproject.com/) webframework
+- Database: [SQlite](https://www.sqlite.org/)
+- UI: [Bootstrap](https://getbootstrap.com/)
+- Some [htmx](https://htmx.org/)
+- The Datacite Python rest client code (BSD licensed) is taken from https://github.com/inveniosoftware/datacite
+- …and countless other Open Source and Free Software components: see `requirements.txt` and `package-lock.json`
