@@ -8,7 +8,7 @@ SPDX-License-Identifier: EUPL-1.2
 
 `````{dropdown} Where is the admin interface?
 
-Admin/Backend URL: {{ '[{base_url}/admin/]({base_url}/admin)'.format(base_url=base_url) }}
+Admin/Backend URL: {{ '[{base_url}/dashboard/]({base_url}/dashboard/)'.format(base_url=base_url) }}
 `````
 
 `````{dropdown} What credentials can I use to log in?
