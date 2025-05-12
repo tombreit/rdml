@@ -1,11 +1,11 @@
 <abbr 
     title="Persistent identifier: {{ resource.id }}"
-    class="badge bg-success text-monospace"
+    class="badge text-bg-success text-monospace"
 >{{ resource.id }}</abbr> 
 <br>
 {% for identifier in resource.identifiers.all %}
     <a 
-        class="badge bg-info text-monospace" 
+        class="badge text-bg-info text-monospace" 
         href="{% url 'doiresolver:landing-page' identifier=identifier.identifier %}"
     >
         {{ identifier.identifier }}

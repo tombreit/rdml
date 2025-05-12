@@ -104,7 +104,7 @@ document.getElementById('copy-doi').addEventListener('click', function() {
             </th>
             <td>
                 <h1 class="h6">
-                    <span class="badge rounded-pill bg-secondary text-monospace">
+                    <span class="badge rounded-pill text-bg-secondary text-monospace">
                         {{ resource.slug }}
                     </span>
                 </h1>
@@ -124,7 +124,7 @@ document.getElementById('copy-doi').addEventListener('click', function() {
                     {{ resource.dataciteresource.doi }}
                     <i class="fa-regular fa-copy"></i>
                 </span>
-                <span class="badge rounded-pill bg-warning mx-2" title="DOI state">
+                <span class="badge rounded-pill text-bg-warning mx-2" title="DOI state">
                     {{ resource.dataciteresource.get_datacite_doi_state|title }}
                 </span>
                 <span class="text-muted fade-out" id="copy-doi-status"></span>
@@ -136,7 +136,7 @@ document.getElementById('copy-doi').addEventListener('click', function() {
         <tr>
             <th class="text-nowrap">Resource type</th>
             <td>
-                <span class="badge rounded-pill bg-secondary" title="Resource type">
+                <span class="badge rounded-pill text-bg-secondary" title="Resource type">
                     {{ resource.get_datacite_resource_type_general_display }}
                     {% if resource.datacite_resource_type_general and resource.datacite_resource_type %} / {% endif %}
                     {{ resource.datacite_resource_type }}
