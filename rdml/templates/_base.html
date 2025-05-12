@@ -42,19 +42,19 @@
                         <img src="{% get_media_prefix %}{{ branding_figurative_mark }}" alt="{{ branding_affiliation|default:'' }}">
                         {{ branding_affiliation|default:'' }}
                     </div>
-                    <div class="col-6 col-md-8 text-right">
-                        <span class="d-inline-block mr-4">
+                    <div class="col-6 col-md-8 text-end">
+                        <span class="d-inline-block me-4">
                         {% if user.is_authenticated %}
 
                             {% block footer_resource_tools %}
                             {% endblock footer_resource_tools %}
 
-                            <a class="text-white mr-2" href="{% url 'dashboard:dashboard' %}">
+                            <a class="text-white me-2" href="{% url 'dashboard:dashboard' %}">
                                 <i class="fa-solid fa-house"></i>
                                 Dashboard
                             </a>
                             
-                            <a class="text-white mr-2" href="
+                            <a class="text-white me-2" href="
                             {% block footer_backend_link %}
                                 {% url 'admin:research_researchresource_changelist' %}
                             {% endblock footer_backend_link %}

@@ -8,37 +8,37 @@ asgiref==3.8.1
     # via
     #   django
     #   django-htmx
-certifi==2025.1.31
+certifi==2025.4.26
     # via requests
-charset-normalizer==3.4.1
+charset-normalizer==3.4.2
     # via requests
-crispy-bootstrap4==2024.10
+crispy-bootstrap5==2025.4
     # via rdml (pyproject.toml)
-django==5.1.6
+django==5.2.1
     # via
-    #   crispy-bootstrap4
+    #   crispy-bootstrap5
     #   django-auditlog
     #   django-auth-ldap
     #   django-crispy-forms
     #   django-htmx
     #   rdml (pyproject.toml)
-django-auditlog==3.0.0
+django-auditlog==3.1.2
     # via rdml (pyproject.toml)
-django-auth-ldap==5.1.0
+django-auth-ldap==5.2.0
     # via rdml (pyproject.toml)
-django-crispy-forms==2.3
+django-crispy-forms==2.4
     # via
-    #   crispy-bootstrap4
+    #   crispy-bootstrap5
     #   rdml (pyproject.toml)
 django-environ==0.12.0
     # via rdml (pyproject.toml)
-django-htmx==1.22.0
+django-htmx==1.23.0
     # via rdml (pyproject.toml)
 idna==3.10
     # via requests
 idutils==1.4.2
     # via rdml (pyproject.toml)
-importlib-metadata==8.6.1
+importlib-metadata==8.7.0
     # via idutils
 isbnlib==3.10.14
     # via idutils
@@ -46,7 +46,7 @@ pyasn1==0.6.1
     # via
     #   pyasn1-modules
     #   python-ldap
-pyasn1-modules==0.4.1
+pyasn1-modules==0.4.2
     # via python-ldap
 pygments==2.19.1
     # via rdml (pyproject.toml)
@@ -60,7 +60,7 @@ six==1.17.0
     # via python-dateutil
 sqlparse==0.5.3
     # via django
-urllib3==2.3.0
+urllib3==2.4.0
     # via requests
 whitenoise==6.9.0
     # via rdml (pyproject.toml)

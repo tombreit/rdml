@@ -2,7 +2,8 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import 'jquery';
-import 'popper.js/dist/umd/popper.min.js';
-import 'bootstrap/dist/js/bootstrap.min.js';
-import 'htmx.org/dist/htmx.min.js';
+import Popper from '@popperjs/core';
+
+import * as bootstrap from 'bootstrap'
+
+import htmx from 'htmx.org';

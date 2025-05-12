@@ -4,16 +4,22 @@
  * SPDX-License-Identifier: EUPL-1.2
  */
 
-@import "npm:bootstrap/scss/functions";
+@import "bootstrap/scss/functions";
+
 
 $mpg-green: rgb(0,108,102);
 $mpg-gray: rgb(102,102,102);
 $mpg-bg-gray: rgb(238,238,238);
 $mpg-light-gray: rgb(246,246,246);
 
-$theme-colors: (
-  "primary": $mpg-green,
-);
+$primary: $mpg-green;
+
+// $theme-colors: map-merge(
+//   (
+//     "primary": $mpg-green
+//   ),
+//   $theme-colors
+// );
 
 $link-decoration: underline;
 
@@ -26,7 +32,7 @@ $fa-font-path: "npm:@fortawesome/fontawesome-free/webfonts";
 @import "npm:@fontsource/merriweather/400.css";
 
 /*--- Bootstrap ---------------------------------------------------- */
-@import "npm:bootstrap/scss/variables";
+@import "bootstrap/scss/variables";
 
 // Bootstrap: Include any default map overrides here
 @import "_bootstrap_custom";

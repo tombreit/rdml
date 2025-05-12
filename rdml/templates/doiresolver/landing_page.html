@@ -20,7 +20,7 @@
 {% block footer_resource_tools %}
 {% if request.user.is_authenticated %}
 <a
-    class="btn btn-sm btn-warning"
+    class="btn btn-sm btn-warning me-2"
     href="{{ resource.get_proxyadmin_change_url }}"
 >
     <i class="fa-solid fa-pen-to-square"></i>
@@ -104,7 +104,7 @@ document.getElementById('copy-doi').addEventListener('click', function() {
             </th>
             <td>
                 <h1 class="h6">
-                    <span class="badge badge-pill badge-secondary text-monospace">
+                    <span class="badge rounded-pill bg-secondary text-monospace">
                         {{ resource.slug }}
                     </span>
                 </h1>
@@ -124,7 +124,7 @@ document.getElementById('copy-doi').addEventListener('click', function() {
                     {{ resource.dataciteresource.doi }}
                     <i class="fa-regular fa-copy"></i>
                 </span>
-                <span class="badge badge-pill badge-warning mx-2" title="DOI state">
+                <span class="badge rounded-pill bg-warning mx-2" title="DOI state">
                     {{ resource.dataciteresource.get_datacite_doi_state|title }}
                 </span>
                 <span class="text-muted fade-out" id="copy-doi-status"></span>
@@ -136,7 +136,7 @@ document.getElementById('copy-doi').addEventListener('click', function() {
         <tr>
             <th class="text-nowrap">Resource type</th>
             <td>
-                <span class="badge badge-pill badge-secondary" title="Resource type">
+                <span class="badge rounded-pill bg-secondary" title="Resource type">
                     {{ resource.get_datacite_resource_type_general_display }}
                     {% if resource.datacite_resource_type_general and resource.datacite_resource_type %} / {% endif %}
                     {{ resource.datacite_resource_type }}
@@ -151,9 +151,9 @@ document.getElementById('copy-doi').addEventListener('click', function() {
             </td>
         </tr>
         {% endif %}
-        <tr class="bg-info text-white bg-opacity-75">
-            <th>Website</th>
-            <td>
+        <tr class="">
+            <th class="bg-primary text-white rounded-start">Website</th>
+            <td class="bg-primary text-white rounded-end">
             {% if resource.website %}
                 <i class="fa-solid fa-globe"></i>
                 <a class="text-white" href="{{ resource.website }}">{{ resource.website }}</a>

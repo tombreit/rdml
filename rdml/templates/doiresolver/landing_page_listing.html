@@ -21,7 +21,7 @@ tr:hover .reveal { visibility: visible; }
     </h2>
 
     {% comment %}
-    <p class="text-muted d-inline-block ml-4" style="font-size: x-small;">
+    <p class="text-muted d-inline-block ms-4" style="font-size: x-small;">
         <i class="fa-solid fa-circle-question"></i> Only resources with an assigned DOI listed.
     </p>
     {% endcomment %}
@@ -71,7 +71,7 @@ tr:hover .reveal { visibility: visible; }
         </td>
         <td>
             {% if resource.dataciteresource.doi %}
-                <span class="badge badge-light text-monospace">
+                <span class="badge bg-light text-monospace">
                     <img style="height: 1.2em;" src="{% static 'img/doi-logo.svg' %}">
                     {{ resource.dataciteresource.doi }}
                 </span>
