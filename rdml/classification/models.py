@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: EUPL-1.2
 
 from django.db import models
+from django.db.models.functions import Lower
 from django.utils.translation import gettext_lazy as _
 
 from ..core.models import TimeStampedBaseModel, UUIDBaseModel
@@ -153,12 +154,20 @@ class Filetype(TimeStampedBaseModel, UUIDBaseModel):
     )
     software = models.CharField(max_length=255, blank=True, help_text="Software used to create the file.")
 
+    class Meta:
+        verbose_name = "Filetype"
+        verbose_name_plural = "Filetypes"
+        constraints = [
+            models.UniqueConstraint(
+                Lower("extension"),
+                Lower("software"),
+                name="unique_lower_extension_software",
+                violation_error_message="This combination of file extension and software already exists (case-insensitive).",
+            )
+        ]
+
     def __str__(self):
         return "{extension}{software}".format(
             extension=self.extension,
             software=f" ({self.software})" if self.software else "",
         )
-
-    class Meta:
-        verbose_name = "Filetype"
-        verbose_name_plural = "Filetypes"
