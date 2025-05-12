@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: EUPL-1.2
 
 
-.PHONY: requirements frontend
+.PHONY: requirements frontend docs
 
 help:
 	@echo "requirements - Updates requirements.txt and requirements-dev.txt"
