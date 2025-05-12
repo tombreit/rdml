@@ -27,6 +27,10 @@ dependencies = [
     "requests",
     "pygments",
     "idutils",
+    "Sphinx",
+    "sphinx-book-theme",
+    "myst_parser",  # currently not working: myst_parser[linkify]
+    "sphinx-design",
 ]
 
 [project.optional-dependencies]

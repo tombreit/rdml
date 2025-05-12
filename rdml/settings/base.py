@@ -87,6 +87,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "rdml.core.middleware.MoreWhiteNoiseMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
@@ -219,3 +220,14 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 #######################################################################
 ### RDML settings
 #######################################################################
+
+# WhiteNoise
+WHITENOISE_INDEX_FILE = True
+
+# Add extra output directories that WhiteNoise can serve as static files
+# *outside* of `staticfiles`.
+MORE_WHITENOISE = [
+    {"directory": BUILD_DIR / "docs" / "html", "prefix": "docs/"},
+]
+
+RDML_BASE_URL = env("RDML_BASE_URL", default="http://127.0.0.1:8000")

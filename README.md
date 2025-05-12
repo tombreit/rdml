@@ -42,7 +42,6 @@ SPDX-License-Identifier: EUPL-1.2
     - Basic reporting facilities (MS Excel or CSV export)
     - Scheduled verification that current DOIs resolve to current project IDs
     - Versioning
-    - Multilingualism
 
 - Stakeholders:
    1. Data managers (Backend, authorized)
@@ -71,7 +70,7 @@ SPDX-License-Identifier: EUPL-1.2
 Public resource listing
 </summary>
 
-<img src="./docs/rdml-public-listing.png" alt="Public resource listing" width="300" />
+<img src="./docs/_static/rdml-public-listing.png" alt="Public resource listing" width="300" />
 </details>
 
 <details>
@@ -79,7 +78,7 @@ Public resource listing
 Public resource landing page
 </summary>
 
-<img src="./docs/rdml-public-detail.png" alt="Public resource landing page" width="300" />
+<img src="./docs/_static/rdml-public-detail.png" alt="Public resource landing page" width="300" />
 </details>
 
 <details>
@@ -87,7 +86,7 @@ Public resource landing page
 Backend DOI manager
 </summary>
 
-<img src="./docs/rdml-backend-doi.png" alt="Backend: DOI" width="300" />
+<img src="./docs/_static/rdml-backend-doi.png" alt="Backend: DOI" width="300" />
 </details>
 
 ## DOIs

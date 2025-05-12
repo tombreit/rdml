@@ -8,6 +8,7 @@
 help:
 	@echo "requirements - Updates requirements.txt and requirements-dev.txt"
 	@echo "assets - Build frontend assets"
+	@echo "docs - generate Sphinx HTML documentation"
 
 requirements:
 	python3 -m pip install --upgrade pip-tools pip wheel setuptools
@@ -16,3 +17,7 @@ requirements:
 
 assets:
 	npm run build
+
+docs:
+	make --directory=docs clean
+	make --directory=docs html
