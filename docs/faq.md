@@ -15,7 +15,7 @@ Admin/Backend URL: {{ '[{base_url}/dashboard/]({base_url}/dashboard/)'.format(ba
 
 Provided that the necessary permissions and group memberships have been set:
 
-Admin/Backend URL: {{ '[{base_url}/admin/]({base_url}/admin/)'.format(base_url=base_url) }}
-Username: <your-institute-email>
-Password: <your-institute-password>
+Admin/Backend URL: {{ '[{base_url}/dashboard/]({base_url}/dashboard/)'.format(base_url=base_url) }}  
+Username: *your-institute-email*  
+Password: *your-institute-password*
 `````
