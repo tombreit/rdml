@@ -246,7 +246,7 @@ class Resource(ResourceBaseModel):
     curators = models.ManyToManyField(
         "accounts.customuser",
         blank=True,
-        help_text="Data curators are the persons who are responsible for maintaining and managing metadata.",
+        help_text="Data curators are the people within the research project who are responsible for maintaining and managing the metadata. There is usually only one, but there may be more.",
     )
 
     is_public = models.BooleanField(
@@ -269,9 +269,9 @@ class Resource(ResourceBaseModel):
         max_length=50,
         blank=True,
         choices=DataCiteResourceTypeGeneral.choices,
-        default=DataCiteResourceTypeGeneral.Other,
+        default=DataCiteResourceTypeGeneral.Dataset,
         verbose_name="DataCite ResourceTypeGeneral",
-        help_text="DataCite Metadata 10.a. For projects: use “Other” and set “Project” as the resource type.",
+        help_text="DataCite Metadata 10.a. Default value is `Dataset`",
     )
 
     # https://blog.datacite.org/cool-dois/

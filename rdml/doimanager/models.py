@@ -20,6 +20,7 @@ DataCiteResourceTypeGeneral = models.TextChoices(
     "DataCiteResourceTypeGeneral",
     """
     Audiovisual
+    Award
     Book
     BookChapter
     Collection
@@ -31,10 +32,12 @@ DataCiteResourceTypeGeneral = models.TextChoices(
     Dissertation
     Event
     Image
+    Instrument
     InteractiveResource
     Journal
     JournalArticle
     Model
+    Other
     OutputManagementPlan
     PeerReview
     PhysicalObject
@@ -45,9 +48,9 @@ DataCiteResourceTypeGeneral = models.TextChoices(
     Software
     Sound
     Standard
+    StudyRegistration
     Text
     Workflow
-    Other
     """,
 )
 
