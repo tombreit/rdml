@@ -6,7 +6,8 @@ SPDX-License-Identifier: EUPL-1.2
 
 # About
 
-Web based research metadata managment tool & DOI manager & DOI landing pages generator:  **`rdml`** (**R**esearch**D**ata**M**anagement**L**ight)
+Web based research metadata managment tool & DOI manager & DOI landing pages generator:  
+**`rdml`** (**R**esearch**D**ata**M**anagement**L**ight)
 
 ## Goals & Features
 
