@@ -43,45 +43,7 @@
                         {{ branding_affiliation|default:'' }}
                     </div>
                     <div class="col-6 col-md-8 text-end">
-                        <span class="d-inline-block me-3">
-                        {% if user.is_authenticated %}
-
-                            {% block footer_resource_tools %}
-                            {% endblock footer_resource_tools %}
-
-                            <a class="me-3 text-white" href="{% url 'dashboard:dashboard' %}">
-                                <i class="fa-solid fa-house"></i>
-                                Dashboard
-                            </a>
-                            
-                            <a class="me-3 text-white" href="
-                            {% block footer_backend_link %}
-                                {% url 'admin:research_researchresource_changelist' %}
-                            {% endblock footer_backend_link %}
-                            ">
-                                <i class="fa-solid fa-gear"></i>
-                                Backend
-                            </a>
-
-                            {% if request.user.is_authenticated %}
-                            <a class="me-3 text-white" href="/docs/">
-                                <i class="fa-regular fa-circle-question"></i>
-                                Docs
-                            </a>
-                            {% endif %}
-
-                            <a class="text-white" href="{% url 'admin:logout' %}">
-                                <i class="fa-solid fa-right-from-bracket"></i>
-                                Logout {{ request.user.username }}
-                            </a>
-                        {% else %}
-                            <a class="text-white" href="{% url 'admin:login' %}?next={% url 'admin:research_researchresource_changelist' %}">
-                                <i class="fa-solid fa-right-to-bracket"></i>
-                                Login
-                            </a>
-                        {% endif %}
-                        </span>
-                        &copy; {% now "Y" %}
+                        &copy; {% now "Y" %} {{ organization_abbr }}
                     </div>
                 </div>
             </div>

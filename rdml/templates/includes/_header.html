@@ -16,17 +16,57 @@
         <a class="navbar-brand" href="{% url 'doiresolver:doi-list' %}">
           {{ organization_abbr }} DOI Resolver
         </a>
-        {% comment %}
-        <button class="navbar-toggler" type="button" bs-data-toggle="collapse" bs-data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+
+        {% if request.ip_allowed %}
+        <button
+          class="navbar-toggler" type="button" 
+          data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+        >
           <span class="navbar-toggler-icon"></span>
         </button>
+        {% endif %}
       
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto">
+            <ul class="navbar-nav ms-auto">
+          {% if request.ip_allowed %}
+
+              <a class="nav-link" href="{% url 'dashboard:dashboard' %}">
+                  <i class="fa-solid fa-house"></i>
+                  Dashboard
+              </a>
+              
+              <a class="nav-link" href="
+                {% if resource and resource.get_proxyadmin_change_url %}
+                    {{ resource.get_proxyadmin_change_url }}
+                {% elif project and project.get_proxyadmin_change_url %}
+                    {{ project.get_proxyadmin_change_url }}
+                {% else %}
+                    {% url 'admin:research_researchresource_changelist' %}
+                {% endif %}
+              ">
+                  <i class="fa-solid fa-gear"></i>
+                  Backend
+              </a>
+
+              <a class="nav-link" href="/docs/">
+                  <i class="fa-regular fa-circle-question"></i>
+                  Docs
+              </a>
+              {% if user.is_authenticated %}
+                  <a class="nav-link" href="{% url 'admin:logout' %}">
+                      <i class="fa-solid fa-right-from-bracket"></i>
+                      Logout {{ request.user.username }}
+                  </a>
+              {% else %}
+                  <a class="nav-link" href="{% url 'admin:login' %}?next={% url 'admin:research_researchresource_changelist' %}">
+                      <i class="fa-solid fa-right-to-bracket"></i>
+                      Login
+                  </a>
+              {% endif %}
+            {% endif %}
           </ul>
         </div>
-        {% endcomment %}
-
       </nav>
 
     </div>

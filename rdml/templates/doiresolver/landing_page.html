@@ -12,22 +12,6 @@
 {% endif %}
 {% endblock meta_tags %}
 
-{% block footer_backend_link %}
-    {{ resource.get_proxyadmin_change_url }}
-{% endblock footer_backend_link %}
-
-
-{% block footer_resource_tools %}
-{% if request.user.is_authenticated %}
-<a
-    class="btn btn-sm btn-warning me-2"
-    href="{{ resource.get_proxyadmin_change_url }}"
->
-    <i class="fa-solid fa-pen-to-square"></i>
-    Edit resource
-</a>
-{% endif %}
-{% endblock footer_resource_tools %}
 
 {% block extra_css %}
 details {
@@ -86,6 +70,15 @@ document.getElementById('copy-doi').addEventListener('click', function() {
                 <h1 class="h3">
                     {# <span style="font-family: monospace; font-size: medium;">EN:</span> #}
                     {{ resource.title_en }}
+                    {% if request.user.is_authenticated %}
+                    <a
+                        class="btn btn-sm btn-warning ms-2"
+                        href="{{ resource.get_proxyadmin_change_url }}"
+                    >
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        Edit resource
+                    </a>
+                    {% endif %}
                 </h1>
                 {% comment %}
                 {% if resource.title_de %}

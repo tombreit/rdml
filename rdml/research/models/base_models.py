@@ -4,6 +4,8 @@
 
 import uuid
 from django.db import models
+from django.db.models import Q
+from django.db.models.functions import Lower
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
@@ -555,3 +557,26 @@ class Resource(ResourceBaseModel):
 
     def __str__(self):
         return f"{self.slug}: {self.title_en}"
+
+    class Meta:
+        verbose_name = "Research resource"
+        verbose_name_plural = "Research resources"
+        constraints = [
+            models.UniqueConstraint(
+                Lower("slug"),
+                name="unique_lower_slug",
+                violation_error_message="A research resource with this slug already exists. This validation is case-insensitive.",
+            ),
+            models.UniqueConstraint(
+                Lower("title_en"),
+                name="unique_lower_title_en",
+                violation_error_message="A research resource with this title (EN) already exists. This validation is case-insensitive.",
+                condition=~Q(title_en=""),
+            ),
+            models.UniqueConstraint(
+                Lower("title_de"),
+                name="unique_lower_title_de",
+                violation_error_message="A research resource with this title (DE) already exists. This validation is case-insensitive.",
+                condition=~Q(title_de=""),
+            ),
+        ]

@@ -102,8 +102,19 @@ html_title = "RDML Docs"
 # html_favicon = "path/to/favicon.ico"
 
 base_url = getattr(settings, "RDML_BASE_URL")
+
+_ip_ranges_allowed = getattr(settings, "RDML_EDIT_ALLOWED_IP_RANGES")
+print(f"IP ranges allowed: {_ip_ranges_allowed}")
+_ip_ranges_allowed_all = _ip_ranges_allowed == ["*"]
+
+if _ip_ranges_allowed_all:
+    ip_ranges_allowed = "All granted"
+elif _ip_ranges_allowed:
+    ip_ranges_allowed = ", ".join(_ip_ranges_allowed)
+
 myst_substitutions = {
     "base_url": base_url,
+    "ip_ranges_allowed": ip_ranges_allowed,
 }
 
 

@@ -2,6 +2,8 @@
 #
 # SPDX-License-Identifier: EUPL-1.2
 
+from ipaddress import ip_network
+
 from django.utils.safestring import mark_safe
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
@@ -141,3 +143,53 @@ def get_orderable_representation(code):
     orderable_code = "".join(orderable_code)
     # print(f'{code} -> {orderable_code}')
     return orderable_code
+
+
+def _convert_partial_ip_to_cidr(ip_range):
+    """
+    "10"       → "10.0.0.0/8"
+    "10.1"     → "10.1.0.0/16"
+    "10.1.2"   → "10.1.2.0/24"
+    "10.1.2.3" → "10.1.2.3/32"
+    """
+
+    if "/" in ip_range:
+        return ip_range
+
+    parts = ip_range.split(".")
+    if len(parts) == 1:
+        return f"{ip_range}.0.0.0/8"
+    if len(parts) == 2:
+        return f"{ip_range}.0.0/16"
+    if len(parts) == 3:
+        return f"{ip_range}.0/24"
+    if len(parts) == 4:
+        return f"{ip_range}/32"
+
+    raise ValueError(f"Invalid IP range: {ip_range}")
+
+
+def get_ips_from_ranges(ip_ranges):
+    """
+    Convert a list of IP ranges to a list of IP addresses.
+    """
+    ips = set()
+    for ip_range in ip_ranges:
+        try:
+            cidr = _convert_partial_ip_to_cidr(ip_range)
+            net = ip_network(cidr)
+            ips.update([str(ip) for ip in net])
+        except ValueError:
+            continue
+
+    return ips
+
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
+    if x_forwarded_for:
+        client_ip = x_forwarded_for.split(",")[0].strip()
+    else:
+        client_ip = request.META.get("REMOTE_ADDR")
+
+    return client_ip

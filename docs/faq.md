@@ -19,3 +19,10 @@ Admin/Backend URL: {{ '[{base_url}/dashboard/]({base_url}/dashboard/)'.format(ba
 Username: *your-institute-email*  
 Password: *your-institute-password*
 `````
+
+`````{dropdown} Why can't I log in even the provided credentials are correct?
+
+Login or using some parts of RDML are restricted based on the network (IP address) your request originates.
+
+Allowed IP address ranges: {{ ip_ranges_allowed }}
+`````

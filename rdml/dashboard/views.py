@@ -6,10 +6,12 @@ from django.urls import reverse
 from django.template.response import TemplateResponse
 from django.contrib.auth.decorators import login_required
 
+from rdml.core.decorators import restrict_to_ip_range
 from ..research.models import ResearchResource
 
 
 @login_required
+@restrict_to_ip_range
 def dashboard(request):
     navitems = [
         # {

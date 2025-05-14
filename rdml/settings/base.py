@@ -87,8 +87,10 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "rdml.core.middleware.MoreWhiteNoiseMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
+    "rdml.core.middleware.ip_allowed_middleware",
+    "rdml.core.middleware.admin_ip_restriction_middleware",
+    "rdml.core.middleware.more_whitenoise_middleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django_htmx.middleware.HtmxMiddleware",
     "auditlog.middleware.AuditlogMiddleware",
@@ -217,17 +219,25 @@ LOGGING["handlers"]["mail_admins"]["include_html"] = True
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
+# WhiteNoise
+WHITENOISE_INDEX_FILE = True
+
 #######################################################################
 ### RDML settings
 #######################################################################
 
-# WhiteNoise
-WHITENOISE_INDEX_FILE = True
-
 # Add extra output directories that WhiteNoise can serve as static files
 # *outside* of `staticfiles`.
-MORE_WHITENOISE = [
+RDML_MORE_WHITENOISE = [
     {"directory": BUILD_DIR / "docs" / "html", "prefix": "docs/"},
 ]
 
 RDML_BASE_URL = env("RDML_BASE_URL", default="http://127.0.0.1:8000")
+
+RDML_EDIT_ALLOWED_IP_RANGES = env.list("RDML_EDIT_ALLOWED_IP_RANGES", default=["*"])
+
+# If .env has `RDML_EDIT_ALLOWED_IP_RANGES=` (no value given),
+# it does not output the given default value.
+_raw = env.list("RDML_EDIT_ALLOWED_IP_RANGES", default=None)
+# if _raw is None (unset) or empty list (blank), fall back to ["*"]
+RDML_EDIT_ALLOWED_IP_RANGES = _raw or ["*"]
