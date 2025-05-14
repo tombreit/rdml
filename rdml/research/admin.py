@@ -7,7 +7,7 @@ from django.utils.html import format_html
 from django.templatetags.static import static
 from django.utils.translation import gettext_lazy as _
 
-from rdml.doimanager.datacite.rest_client import DataCiteRESTClient
+# from rdml.doimanager.datacite.rest_client import DataCiteRESTClient
 from .models import (
     Resource,
     CreatorPerson,
@@ -339,9 +339,18 @@ class ResourceBaseAdmin(admin.ModelAdmin):
         """
         if obj.dataciteresource.doi:
             doi_img_url = static("img/doi-logo.svg")
-            datacite_doi_state, datacite_found = DataCiteRESTClient().get_datacite_doi_state(
-                doi=obj.dataciteresource.doi
-            )
+            # datacite_doi_state, datacite_found = DataCiteRESTClient().get_datacite_doi_state(
+            #     doi=obj.dataciteresource.doi
+            # )
+            # <span style="background-color: #e0a800;
+            #     border-radius: 10px;
+            #     font-size: smaller;
+            #     color: black;
+            #     padding: 1px 2px;
+            #     margin: 0 4px;
+            # ">
+            #     {datacite_doi_state.title()}
+            # </span>
 
             return format_html(f'''
                 <span style="
@@ -355,15 +364,6 @@ class ResourceBaseAdmin(admin.ModelAdmin):
                     text-align: center;
                 ">
                     <img style="margin-right: 5px; height: 1.2em;" src="{doi_img_url}">
-                    <span style="background-color: #e0a800;
-                        border-radius: 10px;
-                        font-size: smaller;
-                        color: black;
-                        padding: 1px 2px;
-                        margin: 0 4px;
-                    ">
-                        {datacite_doi_state.title()}
-                    </span>
                     <br>
                     {obj.dataciteresource.doi}
                 </span>
