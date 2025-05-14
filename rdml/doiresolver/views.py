@@ -25,7 +25,7 @@ def landing_page_list(request):
 
 
 def landing_page(request, identifier=None, pk_uuid=None):
-    print(f"landing_page called with {identifier=}, {pk_uuid=}")
+    # print(f"landing_page called with {identifier=}, {pk_uuid=}")
     try:
         resource_qs = Resource.public_objects.select_related(
             "organizational_unit", "dataciteresource", "publisher"
@@ -40,7 +40,6 @@ def landing_page(request, identifier=None, pk_uuid=None):
         raise Http404(
             f"Resource with identifier `{identifier}` does not exist. Currently resolvable DOIs: <a href='{listing_url}'>{listing_url}</a>"
         )
-        # return HttpResponseNotFound("Here's the text of the web page.")
 
     context = {"resource": resource}
 
