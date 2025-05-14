@@ -292,6 +292,18 @@ class ResourceBaseAdmin(admin.ModelAdmin):
         ),
     )
 
+    def get_queryset(self, request):
+        """
+        For performance reasons, we use modify the initial queryset.
+        """
+        queryset = super().get_queryset(request)
+        queryset = queryset.select_related(
+            "organizational_unit",
+            "dataciteresource",
+        )
+
+        return queryset
+
     # @admin.display(description='Identifiers')
     # def get_identifiers(self, obj):
     #     if obj.identifiers.all():
@@ -321,6 +333,10 @@ class ResourceBaseAdmin(admin.ModelAdmin):
 
     @admin.display(description="DOI")
     def get_doi(self, obj):
+        """
+        TODO: Speed up getting the DOI state. The current DOI state should be saved
+        in the database and updated via a cron job.
+        """
         if obj.dataciteresource.doi:
             doi_img_url = static("img/doi-logo.svg")
             datacite_doi_state, datacite_found = DataCiteRESTClient().get_datacite_doi_state(
