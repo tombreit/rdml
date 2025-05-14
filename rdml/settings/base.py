@@ -212,6 +212,9 @@ SITE_ID = 1
 # https://docs.djangoproject.com/en/4.1/howto/logging/
 LOGGING["handlers"]["mail_admins"]["include_html"] = True
 
+# Message Framework
+MESSAGE_STORAGE = "rdml.core.messages.DedupSessionStorage"
+
 #######################################################################
 ### Third party extensions
 #######################################################################
