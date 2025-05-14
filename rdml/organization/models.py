@@ -161,6 +161,7 @@ class Person(OrganizationBaseModel):
         return f"{self.last_name}, {self.first_name}"
 
     class Meta:
+        ordering = ["name_slug", "last_name", "first_name"]
         constraints = [
             models.UniqueConstraint(
                 Lower("email"),
