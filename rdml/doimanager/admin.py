@@ -21,14 +21,13 @@ class DataCiteResourceAdmin(admin.ModelAdmin):
         "updated",
     ]
 
-    def get_list_display(self, request):
-        """
-        Return a sequence containing the fields to be displayed on the
-        changelist.
-        """
-        res = self.list_display
-        print(f"{res=}")
-        return res
+    # def get_list_display(self, request):
+    #     """
+    #     Return a sequence containing the fields to be displayed on the
+    #     changelist.
+    #     """
+    #     res = self.list_display
+    #     return res
 
     list_display = [
         "__str__",

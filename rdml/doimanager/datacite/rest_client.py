@@ -371,7 +371,7 @@ class DataCiteRESTClient(object):
         request = self._create_request()
         resp = request.get("dois/" + doi, headers=headers)
 
-        print(f"{resp.status_code=}")
+        # print(f"{resp.status_code=}")
 
         if resp.status_code == HTTP_OK:
             # try:
