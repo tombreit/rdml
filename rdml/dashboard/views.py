@@ -33,6 +33,8 @@ def dashboard(request):
         "research_resources": research_resources,
         "research_resources_with_doi": research_resources.filter(dataciteresource__doi__isnull=False).count(),
         "research_resources_without_doi": research_resources.filter(dataciteresource__doi__isnull=True).count(),
+        "public_landing_pages_count": research_resources.filter(is_public=True).count(),
+        "not_public_landing_pages_count": research_resources.filter(is_public=False).count(),
         "navitems": navitems,
     }
 

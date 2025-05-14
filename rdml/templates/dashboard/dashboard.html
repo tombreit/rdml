@@ -18,7 +18,7 @@
     gap: 2em;
 
 }
-.grid-item a {
+.grid-item > span {
         display: block; 
         line-height: 2em;
         text-align: center;
@@ -31,16 +31,42 @@
 <div class="grid-container">
 {% for navitem in navitems %}
     <div class="grid-item bg-primary rounded">
-        <a class="d-block text-white text-decoration-none" href="{{ navitem.url }}">
-            {{ navitem.title }}
+        <span class="d-block text-white text-decoration-none">
+            
+            <a href="{{ navitem.url }}" class="text-white">
+                {{ navitem.title }}
+            </a>
 
             {% if navitem.title == "Administration" %}
                 <br>
-                <span class="badge rounded-pill text-bg-success">{{ research_resources_with_doi }} w/ DOI</span>
-
-                <span class="badge rounded-pill text-bg-danger">{{ research_resources_without_doi }} w/o DOI</span>
+                <a
+                 href="{{ navitem.url }}?has_doi=True"
+                 class="badge rounded-pill text-bg-success"
+                >
+                    {{ research_resources_with_doi }} w/ DOI
+                </a>
+                <a
+                 href="{{ navitem.url }}?has_doi=False"
+                    class="badge rounded-pill text-bg-danger"
+                >
+                    {{ research_resources_without_doi }} w/o DOI
+                </a>
+            {% elif navitem.title == "Landing pages" %}
+                <br>
+                <a
+                 href="{{ navitem.url }}"
+                 class="badge rounded-pill text-bg-success"
+                >
+                    {{ public_landing_pages_count }} public
+                </a>
+                <a
+                    href="{% url 'admin:research_researchresource_changelist' %}?is_public=False"
+                    class="badge rounded-pill text-bg-danger"
+                >
+                    {{ not_public_landing_pages_count }} not public
+                </a>
             {% endif %}
-        </a>
+        </span>
     </div>
 {% endfor %}
 </div>
