@@ -10,7 +10,10 @@ from ..research.models.base_models import Resource
 
 
 def landing_page_list(request):
-    resources_public = Resource.public_objects.all()
+    resources_public = Resource.public_objects.select_related(
+        "organizational_unit",
+        "dataciteresource",
+    ).all()
     resources_all_count = Resource.objects.count()
     context = {
         "resources_all_count": resources_all_count,
@@ -24,10 +27,14 @@ def landing_page_list(request):
 def landing_page(request, identifier=None, pk_uuid=None):
     print(f"landing_page called with {identifier=}, {pk_uuid=}")
     try:
+        resource_qs = Resource.public_objects.select_related(
+            "organizational_unit", "dataciteresource", "publisher"
+        ).prefetch_related("keywords")
+
         if identifier:
-            resource = Resource.public_objects.get(slug__exact=identifier)
+            resource = resource_qs.get(slug__exact=identifier)
         elif pk_uuid:
-            resource = Resource.public_objects.get(id=str(pk_uuid))
+            resource = resource_qs.get(id=str(pk_uuid))
     except Resource.DoesNotExist:
         listing_url = reverse("doiresolver:doi-list")
         raise Http404(
