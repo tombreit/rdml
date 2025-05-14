@@ -77,8 +77,8 @@ LOCAL_APPS = [
     "rdml.dashboard",
 ]
 
-INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -244,3 +244,20 @@ RDML_EDIT_ALLOWED_IP_RANGES = env.list("RDML_EDIT_ALLOWED_IP_RANGES", default=["
 _raw = env.list("RDML_EDIT_ALLOWED_IP_RANGES", default=None)
 # if _raw is None (unset) or empty list (blank), fall back to ["*"]
 RDML_EDIT_ALLOWED_IP_RANGES = _raw or ["*"]
+
+
+### DEBUG SETTINGS
+
+if DEBUG:
+    DEV_APPS = [
+        "debug_toolbar",
+    ]
+    INSTALLED_APPS += DEV_APPS
+
+    MIDDLEWARE.insert(2, "debug_toolbar.middleware.DebugToolbarMiddleware")
+
+    INTERNAL_IPS = [
+        # ...
+        "127.0.0.1",
+        # ...
+    ]

@@ -39,6 +39,7 @@ dev = [
     "pre-commit",
     "ruff",
     "pip-tools",
+    "django-debug-toolbar",
 ]
 test = [
     "pytest",

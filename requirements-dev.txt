@@ -52,6 +52,7 @@ django==5.2.1
     #   django-auditlog
     #   django-auth-ldap
     #   django-crispy-forms
+    #   django-debug-toolbar
     #   django-htmx
     #   rdml (pyproject.toml)
 django-auditlog==3.1.2
@@ -62,6 +63,8 @@ django-crispy-forms==2.4
     # via
     #   crispy-bootstrap5
     #   rdml (pyproject.toml)
+django-debug-toolbar==5.2.0
+    # via rdml (pyproject.toml)
 django-environ==0.12.0
     # via rdml (pyproject.toml)
 django-htmx==1.23.0
@@ -185,7 +188,9 @@ sphinxcontrib-qthelp==2.0.0
 sphinxcontrib-serializinghtml==2.0.0
     # via sphinx
 sqlparse==0.5.3
-    # via django
+    # via
+    #   django
+    #   django-debug-toolbar
 tomlkit==0.13.2
     # via reuse
 typing-extensions==4.13.2
