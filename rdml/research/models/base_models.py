@@ -3,12 +3,15 @@
 # SPDX-License-Identifier: EUPL-1.2
 
 import uuid
+
 from django.db import models
 from django.db.models import Q
 from django.db.models.functions import Lower
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
+
+from auditlog.registry import auditlog
 
 from ...doimanager.models import DataCiteContributorType, DataCiteResourceTypeGeneral
 from ...classification.models import License
@@ -580,3 +583,13 @@ class Resource(ResourceBaseModel):
                 condition=~Q(title_de=""),
             ),
         ]
+
+
+auditlog.register(
+    Resource,
+    m2m_fields={
+        "keywords",
+        "curators",
+        "cv_geographic_areas",
+    },
+)
