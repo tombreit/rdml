@@ -60,6 +60,7 @@ document.getElementById('copy-doi').addEventListener('click', function() {
 
 {% block content %}
 
+<div class="table-responsive">
 <table class="table" style="width: 100%;">
     <tbody>
         <tr>
@@ -212,6 +213,7 @@ document.getElementById('copy-doi').addEventListener('click', function() {
         {% include 'doiresolver/includes/row_multiselect_multilang.html' with heading="Keywords" objects=resource.keywords.all %}
     </tbody>
 </table>
+</div>
 
 
 {% if request.user.is_authenticated %}
@@ -229,8 +231,9 @@ document.getElementById('copy-doi').addEventListener('click', function() {
 <details>
     <summary>Descriptions</summary>
 
+    <div class="table-responsive">
     <table class="table" style="width: 100%;">
-        <tbody>
+        <tbody><div class="table-responsive"></div>
             <tr>
                 <th class="text-nowrap">Resource type</th>
                 <td>
@@ -280,6 +283,7 @@ document.getElementById('copy-doi').addEventListener('click', function() {
                 </td>
         </tbody>
     </table>
+    </div>
 
 </details>
 
@@ -287,6 +291,7 @@ document.getElementById('copy-doi').addEventListener('click', function() {
 <details>
     <summary>Legal aspects</summary>
 
+    <div class="table-responsive">
     <table class="table" style="width: 100%;">
         <tbody>
             {% include 'doiresolver/includes/row_simplefield.html' with heading="Data Protection Concept" field=resource.data_protection_concept  %}
@@ -316,24 +321,28 @@ document.getElementById('copy-doi').addEventListener('click', function() {
             </tr>
         </tbody>
     </table>
+    </div>
 
 </details>
 
 <details>
     <summary>Geographic Area</summary>
 
+    <div class="table-responsive">
     <table class="table" style="width: 100%;">
         <tbody>
             {% include 'doiresolver/includes/row_m2m.html' with heading="Geographic Area" objs=resource.cv_geographic_areas.all %}
             {% include 'doiresolver/includes/row_simplefield.html' with heading="Geographic Area (specified)" field=resource.geographic_area_specified %}
         </tbody>
     </table>
+    </div>
 </details>
 
 
 <details>
     <summary>Methods</summary>
 
+    <div class="table-responsive">
     <table class="table" style="width: 100%;">
         <tbody>
             {% include 'doiresolver/includes/row_m2m.html' with heading="Time Dimension" objs=resource.cv_time_dimension.all %}
@@ -359,11 +368,13 @@ document.getElementById('copy-doi').addEventListener('click', function() {
             {% include 'doiresolver/includes/row_simplefield.html' with heading="Sample size (specified)" field=resource.sample_size_specified %}
         </tbody>
     </table>
+    </div>
 </details>
 
 <details>
     <summary>Archiving &amp; Access</summary>
 
+    <div class="table-responsive">
     <table class="table" style="width: 100%;">
         <tbody>
             {% include 'doiresolver/includes/row_simplefield.html' with heading="Availability" field=resource.archiving_access_availability %}
@@ -385,6 +396,7 @@ document.getElementById('copy-doi').addEventListener('click', function() {
             </tr>
         </tbody>
     </table>
+    </div>
 </details>
 
 </div>
