@@ -54,10 +54,7 @@
                   Docs
               </a>
               {% if user.is_authenticated %}
-                  <a class="nav-link" href="{% url 'admin:logout' %}">
-                      <i class="fa-solid fa-right-from-bracket"></i>
-                      Logout {{ request.user.username }}
-                  </a>
+                  {% include "includes/logout_link.html" %}
               {% else %}
                   <a class="nav-link" href="{% url 'admin:login' %}?next={% url 'admin:research_researchresource_changelist' %}">
                       <i class="fa-solid fa-right-to-bracket"></i>
