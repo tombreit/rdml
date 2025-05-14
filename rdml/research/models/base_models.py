@@ -239,7 +239,7 @@ class Resource(ResourceBaseModel):
     history = AuditlogHistoryField()
 
     # class ResourceType(models.TextChoices):
-    #     """
+    #     ""    "
     #     Upstream Datacite: A description of the resource
     #     https://schema.datacite.org/meta/kernel-4.4/doc/DataCite-MetadataKernel_v4.4.pdf#page=16
     #     """
@@ -588,11 +588,4 @@ class Resource(ResourceBaseModel):
         ]
 
 
-auditlog.register(
-    Resource,
-    m2m_fields={
-        "keywords",
-        "curators",
-        "cv_geographic_areas",
-    },
-)
+auditlog.register(Resource)
