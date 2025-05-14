@@ -155,8 +155,9 @@ class ResourceBaseAdmin(admin.ModelAdmin):
         # 'cv_subject_areas',
         # 'keywords',
         "is_public",
-        "datacite_resource_type_general",
+        # "datacite_resource_type_general",
         "updated",
+        "curators",
     ]
 
     search_fields = [

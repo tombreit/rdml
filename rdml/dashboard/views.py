@@ -13,6 +13,8 @@ from ..research.models import ResearchResource
 @login_required
 @restrict_to_ip_range
 def dashboard(request):
+    research_resources = ResearchResource.objects.all()
+
     navitems = [
         # {
         #     'url': reverse('admin:index'),
@@ -20,19 +22,22 @@ def dashboard(request):
         # },
         {
             "url": reverse("admin:research_researchresource_changelist"),
-            "title": "Administration",
+            "pretitle": "Backend",
+            "title": "Research resources",
+            "count": research_resources.count(),
         },
         {
             "url": reverse("doiresolver:doi-list"),
+            "pretitle": "Frontend",
             "title": "Landing pages",
+            "count": research_resources.filter(is_public=True).count(),
         },
     ]
 
-    research_resources = ResearchResource.objects.all()
     context = {
-        "research_resources": research_resources,
         "research_resources_with_doi": research_resources.filter(dataciteresource__doi__isnull=False).count(),
         "research_resources_without_doi": research_resources.filter(dataciteresource__doi__isnull=True).count(),
+        "research_resources_yours": research_resources.filter(curators=request.user).count(),
         "public_landing_pages_count": research_resources.filter(is_public=True).count(),
         "not_public_landing_pages_count": research_resources.filter(is_public=False).count(),
         "navitems": navitems,

@@ -31,14 +31,20 @@
 <div class="grid-container">
 {% for navitem in navitems %}
     <div class="grid-item bg-primary rounded">
-        <span class="d-block text-white text-decoration-none">
+        <span class="d-block text-white">
             
-            <a href="{{ navitem.url }}" class="text-white">
-                {{ navitem.title }}
+            <p class="mb-0">{{ navitem.pretitle }}</p>
+            <a href="{{ navitem.url }}" class="d-block text-white h4 mt-0 mb-4">
+                {{ navitem.count }} {{ navitem.title }}
             </a>
 
-            {% if navitem.title == "Administration" %}
-                <br>
+            {% if navitem.title == "Research resources" %}
+                <a
+                 href="{{ navitem.url }}?curators__id__exact={{ request.user.id }}"
+                 class="badge rounded-pill text-bg-info"
+                >
+                    {{ research_resources_yours }} yours
+                </a>
                 <a
                  href="{{ navitem.url }}?has_doi=True"
                  class="badge rounded-pill text-bg-success"
@@ -52,7 +58,6 @@
                     {{ research_resources_without_doi }} w/o DOI
                 </a>
             {% elif navitem.title == "Landing pages" %}
-                <br>
                 <a
                  href="{{ navitem.url }}"
                  class="badge rounded-pill text-bg-success"
