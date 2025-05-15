@@ -11,9 +11,6 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 
-from auditlog.models import AuditlogHistoryField
-from auditlog.registry import auditlog
-
 from ...doimanager.models import DataCiteContributorType, DataCiteResourceTypeGeneral
 from ...classification.models import License
 from ...core.models import TimeStampedBaseModel, UUIDBaseModel
@@ -235,8 +232,6 @@ class PublicResourceManager(models.Manager):
 class Resource(ResourceBaseModel):
     objects = models.Manager()
     public_objects = PublicResourceManager()
-
-    history = AuditlogHistoryField()
 
     # class ResourceType(models.TextChoices):
     #     ""    "
@@ -586,6 +581,3 @@ class Resource(ResourceBaseModel):
                 condition=~Q(title_de=""),
             ),
         ]
-
-
-auditlog.register(Resource)

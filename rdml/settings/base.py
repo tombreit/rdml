@@ -225,6 +225,9 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 # WhiteNoise
 WHITENOISE_INDEX_FILE = True
 
+# django-auditlog
+AUDITLOG_INCLUDE_ALL_MODELS = False
+
 #######################################################################
 ### RDML settings
 #######################################################################
