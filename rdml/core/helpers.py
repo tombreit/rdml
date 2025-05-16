@@ -2,6 +2,7 @@
 #
 # SPDX-License-Identifier: EUPL-1.2
 
+import urllib.request
 from ipaddress import ip_network
 
 from django.utils.safestring import mark_safe
@@ -193,3 +194,17 @@ def get_client_ip(request):
         client_ip = request.META.get("REMOTE_ADDR")
 
     return client_ip
+
+
+def linkchecker(url, timeout=5):
+    """
+    Checks if a fully qualified URL is reachable (HTTP status 200-399).
+    Returns True if the request succeeds, False otherwise.
+    """
+    try:
+        req = urllib.request.Request(url)
+        req.add_header("User-Agent", "RDML Link Checker")
+        with urllib.request.urlopen(req, timeout=timeout) as response:
+            return 200 <= response.status < 400
+    except Exception:
+        return False

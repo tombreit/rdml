@@ -17,6 +17,7 @@ from .models import (
     RelatedResource,
     FileInfo,
 )
+from .forms import ResearchResourceAdminForm
 
 
 @admin.register(RelatedResource)
@@ -396,25 +397,6 @@ class ResourceBaseAdmin(admin.ModelAdmin):
         css = {"all": ("research/admin/research_admin.css",)}
 
 
-# @admin.register(Project)
-# class ProjectAdmin(ResourceBaseAdmin):
-#     _readonly_fields = (
-#         'resource_type',
-#     )
-#     # def get_form(self, request, obj=None, **kwargs):
-#     #     form = super().get_form(request, obj, **kwargs)
-#     #     form.base_fields['resource_type'] = 'Dataset'
-#     #     return form
-
-
 @admin.register(ResearchResource)
 class ResourceAdmin(ResourceBaseAdmin):
-    pass
-
-    # def formfield_for_choice_field(self, db_field, request, **kwargs):
-    #     if db_field.name == "resource_type":
-    #         choices = db_field.get_choices()
-    #         to_remove = (Resource.ResourceType.PROJECT.value, Resource.ResourceType.PROJECT.label)
-    #         choices.remove(to_remove)
-    #         kwargs['choices'] = choices
-    #     return super().formfield_for_choice_field(db_field, request, **kwargs)
+    form = ResearchResourceAdminForm
