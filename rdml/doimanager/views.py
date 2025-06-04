@@ -41,7 +41,9 @@ def datacite_manager(request, resource_id, transition_to=None):
         # Setting DOI to a new proposed DOI
         doi = None
 
-    datacite_doi_state, datacite_found = DataCiteRESTClient().get_datacite_doi_state(doi=doi)
+    datacite_doi_state, datacite_found = DataCiteRESTClient().get_datacite_doi_state(
+        doi=doi, datacite_resource=datacite
+    )
     print(f"{datacite_doi_state=}; {transition_to=}")
 
     if datacite_found:
@@ -70,7 +72,7 @@ def datacite_manager(request, resource_id, transition_to=None):
                 # Create an identifier in Draft state -> event: None
                 transition_result = DataCiteRESTClient().draft_doi(
                     metadata=rdml_metadata,
-                    # doi=doi,
+                    datacite_resource=datacite,
                 )
                 # draft_doi() returns the validated and draft-saved DOI
                 datacite.doi = doi = transition_result
@@ -81,11 +83,13 @@ def datacite_manager(request, resource_id, transition_to=None):
                     doi=doi,
                     state="register",
                     metadata=rdml_metadata,
+                    datacite_resource=datacite,
                 )
             elif datacite_doi_state == "findable" and transition_to == "registered":
                 # Hide a previously findable DOI (state: registered; event: hide):
                 transition_result = DataCiteRESTClient().hide_doi(
                     doi=doi,
+                    datacite_resource=datacite,
                 )
             elif transition_to == "findable":
                 # Create a Findable DOI -> event: publish
@@ -93,6 +97,7 @@ def datacite_manager(request, resource_id, transition_to=None):
                     doi=doi,
                     state="publish",
                     metadata=rdml_metadata,
+                    datacite_resource=datacite,
                 )
 
                 # Only try to get a citation_snippet for findable DOIs
@@ -112,7 +117,9 @@ def datacite_manager(request, resource_id, transition_to=None):
 
             # datacite_after_transition = DataCiteResource.objects.get(resource__id=resource_id)
             datacite.refresh_from_db()
-            datacite_doi_state, datacite_found = DataCiteRESTClient().get_datacite_doi_state(doi=doi)
+            datacite_doi_state, datacite_found = DataCiteRESTClient().get_datacite_doi_state(
+                doi=doi, datacite_resource=datacite
+            )
             print(f"doi state after transition: {datacite_doi_state}")
 
             if sync_citation_snippet and datacite.doi:

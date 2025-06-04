@@ -162,18 +162,25 @@ class DataCiteResource(TimeStampedBaseModel, UUIDBaseModel):
     @property
     def get_datacite_metadata(self):
         if self.doi:
-            return DataCiteRESTClient().get_metadata(self.doi)
+            return DataCiteRESTClient().get_metadata(self.doi, datacite_resource=self)
 
     @property
     def get_datacite_doi_state(self):
         if self.doi:
-            datacite_doi_state, datacite_found = DataCiteRESTClient().get_datacite_doi_state(doi=self.doi)
+            datacite_doi_state, datacite_found = DataCiteRESTClient().get_datacite_doi_state(
+                doi=self.doi, datacite_resource=self
+            )
             return datacite_doi_state
+
+    def draft_doi_with_logging(self, metadata=None, doi=None):
+        """Call draft_doi and ensure API communication is logged to this instance."""
+        return DataCiteRESTClient().draft_doi(metadata=metadata, doi=doi, datacite_resource=self)
 
     def __str__(self):
         return f"DOI: {self.doi or 'n/a'} → {self.resource or 'n/a'}"
 
     class Meta:
+        ordering = ["-updated", "-created"]
         constraints = [
             models.CheckConstraint(
                 condition=Q(resource__isnull=False, doi=None) | Q(resource__isnull=False, doi__isnull=False),

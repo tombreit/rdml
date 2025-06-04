@@ -47,10 +47,9 @@ https://support.datacite.org/reference/introduction.
 
 import json
 import requests
-# import warnings
+from datetime import datetime
 
-from idutils import normalize_doi
-
+from ..utils import normalize_doi
 from .errors import DataCiteError
 from .request import DataCiteRequest
 
@@ -89,17 +88,50 @@ class DataCiteRESTClient(object):
         )
         return datacite_request
 
-    def get_doi(self, doi):
+    def _log_history(self, datacite_resource, method, url, request_data=None, response=None, error=None):
+        """Log API communication to datacite_history field of DataCiteResource, but skip GET requests."""
+        if datacite_resource is None:
+            return
+        if method.upper() == "GET":
+            return  # Skip logging for GET requests
+        entry = {
+            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "method": method,
+            "url": url,
+        }
+        if request_data is not None:
+            entry["request_data"] = request_data
+        if response is not None:
+            try:
+                entry["response_status"] = response.status_code
+                entry["response_body"] = response.json()
+            except Exception:
+                entry["response_body"] = getattr(response, "text", str(response))
+        if error is not None:
+            entry["error"] = str(error)
+        # Append to history
+        history = datacite_resource.datacite_history or []
+        history.append(entry)
+        datacite_resource.datacite_history = history
+        datacite_resource.save(update_fields=["datacite_history"])
+
+    def get_doi(self, doi, datacite_resource=None):
         """Get the URL where the resource pointed by the DOI is located.
 
         :param doi: DOI name of the resource.
         """
         request = self._create_request()
-        resp = request.get("dois/" + doi)
-        if resp.status_code == HTTP_OK:
-            return resp.json()["data"]["attributes"]["url"]
-        else:
-            raise DataCiteError.factory(resp.status_code, resp.text)
+        url = "dois/" + doi
+        try:
+            resp = request.get(url)
+            self._log_history(datacite_resource, "GET", url, response=resp)
+            if resp.status_code == HTTP_OK:
+                return resp.json()["data"]["attributes"]["url"]
+            else:
+                raise DataCiteError.factory(resp.status_code, resp.text)
+        except Exception as e:
+            self._log_history(datacite_resource, "GET", url, error=e)
+            raise
 
     def check_doi(self, doi):
         """Check doi structure.
@@ -122,7 +154,7 @@ class DataCiteRESTClient(object):
             doi = "{prefix}/{doi}".format(prefix=self.prefix, doi=doi)
         return normalize_doi(doi)
 
-    def post_doi(self, data):
+    def post_doi(self, data, datacite_resource=None):
         """Post a new JSON payload to DataCite."""
         headers = {
             "accept": "application/vnd.api+json",
@@ -131,29 +163,40 @@ class DataCiteRESTClient(object):
 
         data["type"] = "dois"
         body = {"data": data}
-        body = json.dumps(body)
-
+        body_json = json.dumps(body)
+        url = "dois"
         request = self._create_request()
-        resp = request.post("dois", body=body, headers=headers)
-        if resp.status_code == HTTP_CREATED:
-            return resp.json()["data"]["id"]
-        else:
-            raise DataCiteError.factory(resp.status_code, resp.text)
+        try:
+            resp = request.post(url, body=body_json, headers=headers)
+            self._log_history(datacite_resource, "POST", url, request_data=body, response=resp)
+            if resp.status_code == HTTP_CREATED:
+                return resp.json()["data"]["id"]
+            else:
+                raise DataCiteError.factory(resp.status_code, resp.text)
+        except Exception as e:
+            self._log_history(datacite_resource, "POST", url, request_data=body, error=e)
+            raise
 
-    def put_doi(self, doi, data):
+    def put_doi(self, doi, data, datacite_resource=None):
         """Put a JSON payload to DataCite for an existing DOI."""
         headers = {"content-type": "application/vnd.api+json"}
         data["type"] = "dois"
         body = {"data": data}
-        request = self._create_request()
+        body_json = json.dumps(body)
         url = "dois/" + doi
-        resp = request.put(url, body=json.dumps(body), headers=headers)
-        if resp.status_code == HTTP_OK:
-            return resp.json()["data"]["attributes"]
-        else:
-            raise DataCiteError.factory(resp.status_code, resp.text)
+        request = self._create_request()
+        try:
+            resp = request.put(url, body=body_json, headers=headers)
+            self._log_history(datacite_resource, "PUT", url, request_data=body, response=resp)
+            if resp.status_code == HTTP_OK:
+                return resp.json()["data"]["attributes"]
+            else:
+                raise DataCiteError.factory(resp.status_code, resp.text)
+        except Exception as e:
+            self._log_history(datacite_resource, "PUT", url, request_data=body, error=e)
+            raise
 
-    def draft_doi(self, metadata=None, doi=None):
+    def draft_doi(self, metadata=None, doi=None, datacite_resource=None):
         """Create a draft doi.
 
         A draft DOI can be deleted
@@ -166,20 +209,19 @@ class DataCiteRESTClient(object):
         :param doi: DOI (e.g. 10.123/456)
         :return:
         """
-        data = {"attributes": {}}
-        data["type"] = "dois"
+        data = {"type": "dois", "attributes": {}}
         data["attributes"]["prefix"] = self.prefix
 
         if metadata:
-            data["attributes"] = metadata
+            data["attributes"].update(metadata)
 
         if doi:
             doi = self.check_doi(doi)
             data["attributes"]["doi"] = doi
 
-        return self.post_doi(data)
+        return self.post_doi(data, datacite_resource)
 
-    def update_url(self, doi, url):
+    def update_url(self, doi, url, datacite_resource=None):
         """Update the url of a doi.
 
         :param url: URL where the doi will resolve.
@@ -189,10 +231,10 @@ class DataCiteRESTClient(object):
         doi = self.check_doi(doi)
         data = {"attributes": {"url": url}}
 
-        result = self.put_doi(doi, data)
+        result = self.put_doi(doi, data, datacite_resource)
         return result["url"]
 
-    def delete_doi(self, doi):
+    def delete_doi(self, doi, datacite_resource=None):
         """Delete a doi.
 
         This will only work for draft dois
@@ -201,12 +243,17 @@ class DataCiteRESTClient(object):
         :return:
         """
         request = self._create_request()
-        resp = request.delete("dois/" + doi)
+        url = "dois/" + doi
+        try:
+            resp = request.delete(url)
+            self._log_history(datacite_resource, "DELETE", url, response=resp)
+            if resp.status_code != 204:
+                raise DataCiteError.factory(resp.status_code, resp.text)
+        except Exception as e:
+            self._log_history(datacite_resource, "DELETE", url, error=e)
+            raise
 
-        if resp.status_code != 204:
-            raise DataCiteError.factory(resp.status_code, resp.text)
-
-    def public_doi(self, metadata, url, doi=None):
+    def public_doi(self, metadata, url, doi=None, datacite_resource=None):
         """Create a public doi.
 
         This DOI will be public and cannot be deleted
@@ -223,8 +270,8 @@ class DataCiteRESTClient(object):
         :param url: URL where the doi will resolve.
         :return:
         """
-        data = {"attributes": metadata}
-        data["type"] = "dois"
+        data = {"type": "dois", "attributes": {}}
+        data["attributes"].update(metadata)
         data["attributes"]["prefix"] = self.prefix
         data["attributes"]["event"] = "publish"
         data["attributes"]["url"] = url
@@ -232,28 +279,27 @@ class DataCiteRESTClient(object):
             doi = self.check_doi(doi)
             data["attributes"]["doi"] = doi
 
-        return self.post_doi(data)
+        return self.post_doi(data, datacite_resource)
 
-    def update_doi(self, doi, metadata=None, url=None):
+    def update_doi(self, doi, metadata=None, url=None, datacite_resource=None):
         """Update the metadata or url for a DOI.
 
         :param url: URL where the doi will resolve.
         :param metadata: JSON format of the metadata.
         :return:
         """
-        data = {"attributes": {}}
-        data.update({"type": "dois"})
+        data = {"type": "dois", "attributes": {}}
 
         doi = self.check_doi(doi)
         data["attributes"]["doi"] = doi
         if metadata:
-            data["attributes"] = metadata
+            data["attributes"].update(metadata)
         if url:
             data["attributes"]["url"] = url
 
-        return self.put_doi(doi, data)
+        return self.put_doi(doi, data, datacite_resource)
 
-    def private_doi(self, metadata, url, doi=None):
+    def private_doi(self, metadata, url, doi=None, datacite_resource=None):
         """Publish a doi in a registered state.
 
         A DOI generated by this method will
@@ -271,9 +317,8 @@ class DataCiteRESTClient(object):
         :param metadata: JSON format of the metadata.
         :return:
         """
-        data = {"attributes": metadata}
-        data.update({"type": "dois"})
-
+        data = {"type": "dois", "attributes": {}}
+        data["attributes"].update(metadata)
         data["attributes"]["prefix"] = self.prefix
         data["attributes"]["event"] = "register"
         data["attributes"]["url"] = url
@@ -281,9 +326,9 @@ class DataCiteRESTClient(object):
             doi = self.check_doi(doi)
             data["attributes"]["doi"] = doi
 
-        return self.post_doi(data)
+        return self.post_doi(data, datacite_resource)
 
-    def hide_doi(self, doi):
+    def hide_doi(self, doi, datacite_resource=None):
         """Hide a previously registered DOI.
 
         This DOI will no
@@ -292,16 +337,15 @@ class DataCiteRESTClient(object):
         :param doi: DOI to hide e.g. 10.12345/1.
         :return:
         """
-        data = {"attributes": {"event": "hide"}}
-        data.update({"type": "dois"})
+        data = {"type": "dois", "attributes": {"event": "hide"}}
 
         if doi:
             doi = self.check_doi(doi)
             data["attributes"]["doi"] = doi
 
-        return self.put_doi(doi, data)
+        return self.put_doi(doi, data, datacite_resource)
 
-    def show_doi(self, doi):
+    def show_doi(self, doi, datacite_resource=None):
         """Show a previously registered DOI.
 
         This DOI will be found in DataCite Search
@@ -309,22 +353,22 @@ class DataCiteRESTClient(object):
         :param doi: DOI to hide e.g. 10.12345/1.
         :return:
         """
-        data = {"attributes": {"event": "publish"}}
-        data.update({"type": "dois"})
+        data = {"type": "dois", "attributes": {"event": "publish"}}
 
         if doi:
             doi = self.check_doi(doi)
             data["attributes"]["doi"] = doi
 
-        return self.put_doi(doi, data)
+        return self.put_doi(doi, data, datacite_resource)
 
-    def change_doi_state(self, doi, state, metadata):
+    def change_doi_state(self, doi, state, metadata, datacite_resource=None):
         doi = self.check_doi(doi)
-        data = {"attributes": metadata}
+        data = {"type": "dois", "attributes": {}}
+        data["attributes"].update(metadata)
         data["attributes"]["event"] = state
-        return self.put_doi(doi, data)
+        return self.put_doi(doi, data, datacite_resource)
 
-    def get_metadata(self, doi):
+    def get_metadata(self, doi, datacite_resource=None):
         """Get the JSON metadata associated to a DOI name.
 
         :param doi: DOI name of the resource.
@@ -332,35 +376,38 @@ class DataCiteRESTClient(object):
         """Put a JSON payload to DataCite for an existing DOI."""
         headers = {"content-type": "application/vnd.api+json"}
         request = self._create_request()
-        resp = request.get("dois/" + doi, headers=headers)
+        url = "dois/" + doi
+        try:
+            resp = request.get(url, headers=headers)
+            self._log_history(datacite_resource, "GET", url, response=resp)
+            if resp.status_code == HTTP_OK:
+                return resp.json()["data"]["attributes"]
+            else:
+                raise DataCiteError.factory(resp.status_code, resp.text)
+        except Exception as e:
+            self._log_history(datacite_resource, "GET", url, error=e)
+            raise
 
-        if resp.status_code == HTTP_OK:
-            return resp.json()["data"]["attributes"]
-        else:
-            raise DataCiteError.factory(resp.status_code, resp.text)
-
-    def get_media(self, doi):
+    def get_media(self, doi, datacite_resource=None):
         """Get list of pairs of media type and URLs associated with a DOI.
 
         :param doi: DOI name of the resource.
         """
         headers = {"content-type": "application/vnd.api+json"}
         request = self._create_request()
-        resp = request.get("dois/" + doi, headers=headers)
+        url = "dois/" + doi
+        try:
+            resp = request.get(url, headers=headers)
+            self._log_history(datacite_resource, "GET", url, response=resp)
+            if resp.status_code == HTTP_OK:
+                return resp.json()["relationships"]["media"]
+            else:
+                raise DataCiteError.factory(resp.status_code, resp.text)
+        except Exception as e:
+            self._log_history(datacite_resource, "GET", url, error=e)
+            raise
 
-        if resp.status_code == HTTP_OK:
-            return resp.json()["relationships"]["media"]
-        else:
-            raise DataCiteError.factory(resp.status_code, resp.text)
-
-    # def get_datacite_doi_state(self):
-    #     state = "unset"
-    #     if self.doi:
-    #         print(f"{self.doi=}")
-    #         state = DataCiteRESTClient().get_datacite_doi_state(self.doi)
-    #     return state
-
-    def get_datacite_doi_state(self, doi=None):
+    def get_datacite_doi_state(self, doi=None, datacite_resource=None):
         UNSET_STATE = "unset"
         found = False
 
@@ -369,22 +416,18 @@ class DataCiteRESTClient(object):
 
         headers = {"content-type": "application/vnd.api+json"}
         request = self._create_request()
-        resp = request.get("dois/" + doi, headers=headers)
-
-        # print(f"{resp.status_code=}")
-
-        if resp.status_code == HTTP_OK:
-            # try:
-            state = resp.json()["data"]["attributes"]["state"]
-            found = True
-            print(f"get_dataciste_doi_state: {state=}")
-            # except KeyError as keyerror:
-            #     print(f"{keyerror=}")
-            #     # Draf dois do not have a state
-            #     return "draft"
-        else:
-            # No match found for given doi.
-            # raise DataCiteError.factory(resp.status_code, resp.text)
+        url = "dois/" + doi
+        try:
+            resp = request.get(url, headers=headers)
+            self._log_history(datacite_resource, "GET", url, response=resp)
+            if resp.status_code == HTTP_OK:
+                state = resp.json()["data"]["attributes"]["state"]
+                found = True
+            else:
+                state = UNSET_STATE
+                found = False
+        except Exception as e:
+            self._log_history(datacite_resource, "GET", url, error=e)
             state = UNSET_STATE
             found = False
 
