@@ -92,22 +92,30 @@ def get_rdml_metadata(resource_id, as_json=True):
     errors = []
 
     try:
-        # Some basic checks first
-        if not all(
-            [
-                resource.datacite_resource_type,
-                resource.datacite_resource_type_general,
-            ]
-        ):
-            raise ValueError(
-                "Datacite ResourceType or Datacite ResourceTypeGeneral not set. Both attributes are required."
-            )
+        # --- Basic checks for required attributes ---
+        missing_required_fields = []
 
-        if not get_creators(resource_id):
-            raise ValueError("No creators found.")
+        if not resource.datacite_resource_type:
+            missing_required_fields.append("Datacite ResourceType")
+        if not resource.datacite_resource_type_general:
+            missing_required_fields.append("Datacite ResourceTypeGeneral")
+
+        # Check for creators
+        creators_list = get_creators(resource_id)
+        if not creators_list:
+            missing_required_fields.append("Creators")
 
         if not resource.date_start:
-            raise ValueError("No start date found.")
+            missing_required_fields.append("Start Date (for publicationYear)")
+        if not resource.title_en:
+            missing_required_fields.append("Title (English)")
+        if not resource.publisher:
+            missing_required_fields.append("Publisher")
+        if not resource.language:
+            missing_required_fields.append("Language")
+
+        if missing_required_fields:
+            raise ValueError(f"Missing required metadata attributes: {', '.join(missing_required_fields)}.")
 
         # Construct metadata
         current_site = Site.objects.get_current()
@@ -124,10 +132,10 @@ def get_rdml_metadata(resource_id, as_json=True):
         metadata = {
             "url": redirect_url,
             "prefix": prefix,
-            "publisher": resource.publisher.name if resource.publisher else None,
-            "language": resource.language,
-            "publicationYear": resource.date_start.year,
-            "creators": get_creators(resource_id),
+            "publisher": resource.publisher.name,  # Already checked for existence
+            "language": resource.language,  # Already checked for existence
+            "publicationYear": resource.date_start.year,  # Already checked for existence
+            "creators": creators_list,  # Use the fetched list, already checked for non-emptiness
             # "contributors": self.get_contributors(),
             "types": {
                 "resourceType": resource.datacite_resource_type,
