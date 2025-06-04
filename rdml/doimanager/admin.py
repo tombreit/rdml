@@ -2,11 +2,11 @@
 #
 # SPDX-License-Identifier: EUPL-1.2
 
-import json
+# import json
 from django.contrib import admin
 
 from .models import DataCiteResource, DataCiteConfiguration
-from ..core.helpers import json_html_highlighter
+# from ..core.helpers import json_html_highlighter
 
 
 @admin.register(DataCiteResource)
@@ -44,11 +44,11 @@ class DataCiteResourceAdmin(admin.ModelAdmin):
     #     }),
     # )
 
-    @admin.display(description="DataCite Response History")
-    def datacite_history_formatted(self, instance):
-        """Function to display pretty version of our data"""
-        json_data = json.dumps(instance.datacite_history, sort_keys=True, indent=2)
-        return json_html_highlighter(json_data)
+    # @admin.display(description="DataCite Response History")
+    # def datacite_history_formatted(self, instance):
+    #     """Function to display pretty version of our data"""
+    #     json_data = json.dumps(instance.datacite_history, sort_keys=True, indent=2)
+    #     return json_html_highlighter(json_data)
 
     def response_change(self, request, obj):
         # if "_datacite_handler" in request.POST:
