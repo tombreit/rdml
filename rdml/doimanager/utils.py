@@ -2,8 +2,21 @@
 #
 # SPDX-License-Identifier: EUPL-1.2
 
+import re
 import requests
-import requests.exceptions
+
+
+def normalize_doi(doi):
+    """
+    See http://en.wikipedia.org/wiki/Digital_object_identifier.
+    """
+    if not doi:
+        raise ValueError("DOI must be given")
+    doi_regexp = re.compile(r"(doi:\s*|(?:https?://)?(?:dx\.)?doi\.org/)?(10\.\d+(\.\d+)*/.+)$", flags=re.I)
+    m = doi_regexp.match(doi)
+    if not m:
+        raise ValueError(f"Invalid DOI format: {doi}")
+    return m.group(2)
 
 
 def get_citation_snippet(doi):

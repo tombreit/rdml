@@ -26,7 +26,6 @@ dependencies = [
     "whitenoise",
     "requests",
     "pygments",
-    "idutils",
     "Sphinx",
     "sphinx-book-theme",
     "myst_parser",  # currently not working: myst_parser[linkify]
