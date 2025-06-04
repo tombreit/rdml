@@ -138,7 +138,11 @@ class DataCiteResource(TimeStampedBaseModel, UUIDBaseModel):
     citation_snippet = models.TextField(
         blank=True,
     )
-    datacite_history = models.JSONField(blank=True, default=list, help_text="Collects API responses from DataCite.")
+    datacite_history = models.JSONField(
+        blank=True,
+        default=list,
+        help_text="Collects API responses from DataCite.",
+    )
 
     @property
     def get_datacite_doi_url(self):
