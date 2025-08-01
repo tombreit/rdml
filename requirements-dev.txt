@@ -8,7 +8,7 @@ accessible-pygments==0.0.5
     # via pydata-sphinx-theme
 alabaster==1.0.0
     # via sphinx
-asgiref==3.8.1
+asgiref==3.9.1
     # via
     #   django
     #   django-htmx
@@ -28,7 +28,7 @@ boolean-py==5.0
     #   reuse
 build==1.2.2.post1
     # via pip-tools
-certifi==2025.4.26
+certifi==2025.7.14
     # via requests
 cfgv==3.4.0
     # via pre-commit
@@ -42,11 +42,11 @@ click==8.2.1
     # via
     #   pip-tools
     #   reuse
-crispy-bootstrap5==2025.4
+crispy-bootstrap5==2025.6
     # via rdml (pyproject.toml)
-distlib==0.3.9
+distlib==0.4.0
     # via virtualenv
-django==5.2.1
+django==5.2.4
     # via
     #   crispy-bootstrap5
     #   django-auditlog
@@ -55,7 +55,7 @@ django==5.2.1
     #   django-debug-toolbar
     #   django-htmx
     #   rdml (pyproject.toml)
-django-auditlog==3.1.2
+django-auditlog==3.2.1
     # via rdml (pyproject.toml)
 django-auth-ldap==5.2.0
     # via rdml (pyproject.toml)
@@ -63,11 +63,11 @@ django-crispy-forms==2.4
     # via
     #   crispy-bootstrap5
     #   rdml (pyproject.toml)
-django-debug-toolbar==5.2.0
+django-debug-toolbar==6.0.0
     # via rdml (pyproject.toml)
 django-environ==0.12.0
     # via rdml (pyproject.toml)
-django-htmx==1.23.0
+django-htmx==1.23.2
     # via rdml (pyproject.toml)
 docutils==0.21.2
     # via
@@ -87,7 +87,7 @@ jinja2==3.1.6
     #   myst-parser
     #   reuse
     #   sphinx
-license-expression==30.4.1
+license-expression==30.4.4
     # via reuse
 markdown-it-py==3.0.0
     # via
@@ -108,7 +108,7 @@ packaging==25.0
     #   build
     #   pydata-sphinx-theme
     #   sphinx
-pip-tools==7.4.1
+pip-tools==7.5.0
     # via rdml (pyproject.toml)
 platformdirs==4.3.8
     # via virtualenv
@@ -122,7 +122,7 @@ pyasn1-modules==0.4.2
     # via python-ldap
 pydata-sphinx-theme==0.15.4
     # via sphinx-book-theme
-pygments==2.19.1
+pygments==2.19.2
     # via
     #   accessible-pygments
     #   pydata-sphinx-theme
@@ -142,7 +142,7 @@ pyyaml==6.0.2
     # via
     #   myst-parser
     #   pre-commit
-requests==2.32.3
+requests==2.32.4
     # via
     #   rdml (pyproject.toml)
     #   sphinx
@@ -150,7 +150,7 @@ reuse==5.0.2
     # via rdml (pyproject.toml)
 roman-numerals-py==3.1.0
     # via sphinx
-ruff==0.11.12
+ruff==0.12.7
     # via rdml (pyproject.toml)
 six==1.17.0
     # via python-dateutil
@@ -185,15 +185,15 @@ sqlparse==0.5.3
     # via
     #   django
     #   django-debug-toolbar
-tomlkit==0.13.2
+tomlkit==0.13.3
     # via reuse
-typing-extensions==4.14.0
+typing-extensions==4.14.1
     # via
     #   beautifulsoup4
     #   pydata-sphinx-theme
-urllib3==2.4.0
+urllib3==2.5.0
     # via requests
-virtualenv==20.31.2
+virtualenv==20.32.0
     # via pre-commit
 wheel==0.45.1
     # via pip-tools
