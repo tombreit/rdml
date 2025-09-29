@@ -8,7 +8,7 @@ accessible-pygments==0.0.5
     # via pydata-sphinx-theme
 alabaster==1.0.0
     # via sphinx
-asgiref==3.9.1
+asgiref==3.9.2
     # via
     #   django
     #   django-htmx
@@ -18,7 +18,7 @@ babel==2.17.0
     # via
     #   pydata-sphinx-theme
     #   sphinx
-beautifulsoup4==4.13.4
+beautifulsoup4==4.14.2
     # via pydata-sphinx-theme
 binaryornot==0.4.4
     # via reuse
@@ -38,7 +38,7 @@ charset-normalizer==3.4.3
     # via
     #   python-debian
     #   requests
-click==8.2.1
+click==8.3.0
     # via
     #   pip-tools
     #   reuse
@@ -46,7 +46,7 @@ crispy-bootstrap5==2025.6
     # via rdml (pyproject.toml)
 distlib==0.4.0
     # via virtualenv
-django==5.2.5
+django==5.2.6
     # via
     #   crispy-bootstrap5
     #   django-auditlog
@@ -67,7 +67,7 @@ django-debug-toolbar==5.2.0
     # via rdml (pyproject.toml)
 django-environ==0.12.0
     # via rdml (pyproject.toml)
-django-htmx==1.23.2
+django-htmx==1.26.0
     # via rdml (pyproject.toml)
 docutils==0.21.2
     # via
@@ -76,7 +76,7 @@ docutils==0.21.2
     #   sphinx
 filelock==3.19.1
     # via virtualenv
-identify==2.6.13
+identify==2.6.14
     # via pre-commit
 idna==3.10
     # via requests
@@ -93,7 +93,7 @@ markdown-it-py==3.0.0
     # via
     #   mdit-py-plugins
     #   myst-parser
-markupsafe==3.0.2
+markupsafe==3.0.3
     # via jinja2
 mdit-py-plugins==0.5.0
     # via myst-parser
@@ -110,7 +110,7 @@ packaging==25.0
     #   sphinx
 pip-tools==7.5.0
     # via rdml (pyproject.toml)
-platformdirs==4.3.8
+platformdirs==4.4.0
     # via virtualenv
 pre-commit==4.3.0
     # via rdml (pyproject.toml)
@@ -138,7 +138,7 @@ python-debian==1.0.1
     # via reuse
 python-ldap==3.4.4
     # via django-auth-ldap
-pyyaml==6.0.2
+pyyaml==6.0.3
     # via
     #   myst-parser
     #   pre-commit
@@ -146,17 +146,17 @@ requests==2.32.5
     # via
     #   rdml (pyproject.toml)
     #   sphinx
-reuse==5.0.2
+reuse==5.1.1
     # via rdml (pyproject.toml)
 roman-numerals-py==3.1.0
     # via sphinx
-ruff==0.12.9
+ruff==0.13.2
     # via rdml (pyproject.toml)
 six==1.17.0
     # via python-dateutil
 snowballstemmer==3.0.1
     # via sphinx
-soupsieve==2.7
+soupsieve==2.8
     # via beautifulsoup4
 sphinx==8.2.3
     # via
@@ -187,7 +187,7 @@ sqlparse==0.5.3
     #   django-debug-toolbar
 tomlkit==0.13.3
     # via reuse
-typing-extensions==4.14.1
+typing-extensions==4.15.0
     # via
     #   beautifulsoup4
     #   pydata-sphinx-theme
@@ -197,7 +197,7 @@ virtualenv==20.34.0
     # via pre-commit
 wheel==0.45.1
     # via pip-tools
-whitenoise==6.9.0
+whitenoise==6.11.0
     # via rdml (pyproject.toml)
 
 # The following packages are considered to be unsafe in a requirements file:

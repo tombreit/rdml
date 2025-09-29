@@ -8,7 +8,7 @@ accessible-pygments==0.0.5
     # via pydata-sphinx-theme
 alabaster==1.0.0
     # via sphinx
-asgiref==3.9.1
+asgiref==3.9.2
     # via
     #   django
     #   django-htmx
@@ -16,7 +16,7 @@ babel==2.17.0
     # via
     #   pydata-sphinx-theme
     #   sphinx
-beautifulsoup4==4.13.4
+beautifulsoup4==4.14.2
     # via pydata-sphinx-theme
 certifi==2025.8.3
     # via requests
@@ -24,7 +24,7 @@ charset-normalizer==3.4.3
     # via requests
 crispy-bootstrap5==2025.6
     # via rdml (pyproject.toml)
-django==5.2.5
+django==5.2.6
     # via
     #   crispy-bootstrap5
     #   django-auditlog
@@ -42,7 +42,7 @@ django-crispy-forms==2.4
     #   rdml (pyproject.toml)
 django-environ==0.12.0
     # via rdml (pyproject.toml)
-django-htmx==1.23.2
+django-htmx==1.26.0
     # via rdml (pyproject.toml)
 docutils==0.21.2
     # via
@@ -61,7 +61,7 @@ markdown-it-py==3.0.0
     # via
     #   mdit-py-plugins
     #   myst-parser
-markupsafe==3.0.2
+markupsafe==3.0.3
     # via jinja2
 mdit-py-plugins==0.5.0
     # via myst-parser
@@ -91,7 +91,7 @@ python-dateutil==2.9.0.post0
     # via django-auditlog
 python-ldap==3.4.4
     # via django-auth-ldap
-pyyaml==6.0.2
+pyyaml==6.0.3
     # via myst-parser
 requests==2.32.5
     # via
@@ -103,7 +103,7 @@ six==1.17.0
     # via python-dateutil
 snowballstemmer==3.0.1
     # via sphinx
-soupsieve==2.7
+soupsieve==2.8
     # via beautifulsoup4
 sphinx==8.2.3
     # via
@@ -130,11 +130,11 @@ sphinxcontrib-serializinghtml==2.0.0
     # via sphinx
 sqlparse==0.5.3
     # via django
-typing-extensions==4.14.1
+typing-extensions==4.15.0
     # via
     #   beautifulsoup4
     #   pydata-sphinx-theme
 urllib3==2.5.0
     # via requests
-whitenoise==6.9.0
+whitenoise==6.11.0
     # via rdml (pyproject.toml)
