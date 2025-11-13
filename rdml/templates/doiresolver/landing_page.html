@@ -14,6 +14,16 @@
 
 
 {% block extra_css %}
+
+.row-detail {
+    padding-bottom: 0.5em;
+    padding-top: 0.5em;
+    border-bottom: 1px solid var(--bs-border-color);
+}
+.col-detail-head {
+    font-weight: bold;
+}
+
 details {
     margin-bottom: 0.5em;
     border: 1px solid silver; 
@@ -60,165 +70,178 @@ document.getElementById('copy-doi').addEventListener('click', function() {
 
 {% block content %}
 
-<div class="table-responsive">
-<table class="table" style="width: 100%;">
-    <tbody>
-        <tr>
-            <th style="width: 1%;" class="text-nowrap">
-                Project title
-            </th>
-            <td>
-                <h1 class="h3">
-                    {# <span style="font-family: monospace; font-size: medium;">EN:</span> #}
-                    {{ resource.title_en }}
-                    {% if request.user.is_authenticated %}
-                    <a
-                        class="btn btn-sm btn-warning ms-2"
-                        href="{{ resource.get_proxyadmin_change_url }}"
-                    >
-                        <i class="fa-solid fa-pen-to-square"></i>
-                        Edit resource
-                    </a>
-                    {% endif %}
-                </h1>
-                {% comment %}
-                {% if resource.title_de %}
-                    <hr>
-                    <h1 class="h3">
-                        <span style="font-family: monospace; font-size: medium;">DE:</span>
-                        {{ resource.title_de}}
-                    </h1>
-                {% endif %}
-                {% endcomment %}
-            </td>
-        </tr>
-        <tr>
-            <th style="width: 1%;" class="text-nowrap">
-                <abbr title="Public identifier/slug">ID</abbr>
-            </th>
-            <td>
-                <h1 class="h6">
-                    <span class="badge rounded-pill text-bg-secondary text-monospace">
-                        {{ resource.slug }}
-                    </span>
-                </h1>
-            </td>
-        </tr>
-        <tr>
-            <th><abbr title="Digital Object Identifier">DOI</abbr></th>
-            <td>
-                {% if resource.dataciteresource.doi %}
-                <span
-                    id="copy-doi"
-                    title="Copy DOI link to clipboard"
-                    class="text-monospace"
-                    data-href="{{ resource.dataciteresource.get_doi_resolver_url }}"
-                >
-                    <img style="height: 1.2em;" src="{% static 'img/doi-logo.svg' %}">
-                    {{ resource.dataciteresource.doi }}
-                    <i class="fa-regular fa-copy"></i>
-                </span>
-                <span class="badge rounded-pill text-bg-warning mx-2" title="DOI state">
-                    {{ resource.dataciteresource.get_datacite_doi_state|title }}
-                </span>
-                <span class="text-muted fade-out" id="copy-doi-status"></span>
-                {% else %}
-                    <i>Not registered yet</i>
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <th class="text-nowrap">Resource type</th>
-            <td>
-                <span class="badge rounded-pill text-bg-secondary" title="Resource type">
-                    {{ resource.get_datacite_resource_type_general_display }}
-                    {% if resource.datacite_resource_type_general and resource.datacite_resource_type %} / {% endif %}
-                    {{ resource.datacite_resource_type }}
-                </span>
-            </td>
-        </tr>
-        {% if resource.dataciteresource.citation_snippet %}
-        <tr>
-            <th>Citation</th>
-            <td>
-                {{ resource.dataciteresource.citation_snippet|safe }}
-            </td>
-        </tr>
-        {% endif %}
-        <tr class="">
-            <th class="bg-primary text-white rounded-start">Website</th>
-            <td class="bg-primary text-white rounded-end">
-            {% if resource.website %}
-                <i class="fa-solid fa-globe"></i>
-                <a class="text-white" href="{{ resource.website }}">{{ resource.website }}</a>
-            {% else %}
-                <i>n/a</i>
+<div class="container-fluid">
+
+<div class="row-detail row">
+    <div class="col-detail-head col-12 col-md-2">
+        Project title
+    </div>
+    <div class="col-detail-content col-12 col-md-10">
+        <h1 class="h3">
+            {# <span style="font-family: monospace; font-size: medium;">EN:</span> #}
+            {{ resource.title_en }}
+            {% if request.user.is_authenticated %}
+            <a
+                class="btn btn-sm btn-warning ms-2"
+                href="{{ resource.get_proxyadmin_change_url }}"
+            >
+                <i class="fa-solid fa-pen-to-square"></i>
+                Edit resource
+            </a>
             {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <th>Timeframe</th>
-            <td>
-                {{ resource.date_start|date:"Y" }} – 
-                {% if resource.date_completed %}
-                    {{ resource.date_completed|date:"Y" }}
-                {% else %}
-                    <i class="text-muted">ongoing</i>
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <th class="text-nowrap">Organization</th>
-            <td>
-                
-                {% include 'doiresolver/includes/organization.html' with organization=resource.publisher %}
-                <i class="fa-solid fa-angle-right mx-2"></i>
-                {% include 'doiresolver/includes/organization.html' with organization=resource.organizational_unit %}
-            </td>
-        </tr>
-        <tr>
-            <th>People</th>
-            <td>
-                {% include 'doiresolver/includes/contributors.html' with type="creators" persons=resource.creatorperson_set.all %}
-            </td>
-        </tr>
-        <tr>
-            <th>Abstract</th>
-            <td>
-                {{ resource.abstract_en|linebreaks|default:"<i>n/a</i>" }}
-                {% comment %}
-                <table>
-                    <tr>
-                        <td class="border-0">
-                            <span class="d-inline" style="font-family: monospace; font-size: medium;">EN:</span>
-                        </td>
-                        <td class="border-0">
-                            <p class="d-inline">{{ resource.abstract_en }}</p>
-                        </td>
-                    </tr>
-                    {% if resource.abstract_de %}
-                    <tr>
-                        <td>
-                            <span class="d-inline" style="font-family: monospace; font-size: medium;">DE:</span>
-                        </td>
-                        <td>
-                            <p class="d-inline">{{ resource.abstract_de}}</p>
-                        </td>
-                    </tr>
-                    {% endif %}
-                </table>
-                {% endcomment %}
-            </td>
-        </tr>
-        {% include 'doiresolver/includes/row_multiselect_multilang.html' with heading="Keywords" objects=resource.keywords.all %}
-    </tbody>
-</table>
+        </h1>
+        {% comment %}
+        {% if resource.title_de %}
+            <hr>
+            <h1 class="h3">
+                <span style="font-family: monospace; font-size: medium;">DE:</span>
+                {{ resource.title_de}}
+            </h1>
+        {% endif %}
+        {% endcomment %}
+    </div>
 </div>
+<div class="row-detail row">
+    <div class="col-detail-head col-12 col-md-2">
+        <abbr title="Public identifier/slug">ID</abbr>
+    </div>
+    <div class="col-detail-content col-12 col-md-10">
+        <h1 class="h6">
+            <span class="badge rounded-pill text-bg-secondary text-monospace">
+                {{ resource.slug }}
+            </span>
+        </h1>
+    </div>
+</div>
+<div class="row-detail row">
+    <div class="col-detail-head col-12 col-md-2">
+        <abbr title="Digital Object Identifier">DOI</abbr>
+    </div>
+    <div class="col-detail-content col-12 col-md-10">
+        {% if resource.dataciteresource.doi %}
+        <span
+            id="copy-doi"
+            title="Copy DOI link to clipboard"
+            class="text-monospace"
+            data-href="{{ resource.dataciteresource.get_doi_resolver_url }}"
+        >
+            <img style="height: 1.2em;" src="{% static 'img/doi-logo.svg' %}">
+            {{ resource.dataciteresource.doi }}
+            <i class="fa-regular fa-copy"></i>
+        </span>
+        <span class="badge rounded-pill text-bg-warning mx-2" title="DOI state">
+            {{ resource.dataciteresource.get_datacite_doi_state|title }}
+        </span>
+        <span class="text-muted fade-out" id="copy-doi-status"></span>
+        {% else %}
+            <i>Not registered yet</i>
+        {% endif %}
+    </div>
+</div>
+<div class="row-detail row">
+    <div class="col-detail-head col-12 col-md-2">
+        Resource type
+    </div>
+    <div class="col-detail-content col-12 col-md-10">
+        <span class="badge rounded-pill text-bg-secondary" title="Resource type">
+            {{ resource.get_datacite_resource_type_general_display }}
+            {% if resource.datacite_resource_type_general and resource.datacite_resource_type %} / {% endif %}
+            {{ resource.datacite_resource_type }}
+        </span>
+    </div>
+</div>
+{% if resource.dataciteresource.citation_snippet %}
+<div class="row-detail row">
+    <div class="col-detail-head col-12 col-md-2">
+        Citation
+    </div>
+    <div class="col-detail-content col-12 col-md-10">
+        {{ resource.dataciteresource.citation_snippet|safe }}
+    </div>
+</div>
+{% endif %}
+<div class="row-detail row bg-primary text-white rounded"">
+    <div class="col-detail-head col-12 col-md-2">
+        <span>Website</span>
+    </div> 
+    <div class="col-detail-content col-12 col-md-10">
+        {% if resource.website %}
+            <i class="fa-solid fa-globe"></i>
+            <a class="text-white" href="{{ resource.website }}">{{ resource.website }}</a>
+        {% else %}
+            <i>n/a</i>
+        {% endif %}
+    </div>
+</div>
+<div class="row-detail row">
+    <div class="col-detail-head col-12 col-md-2">
+        Timeframe
+    </div>
+    <div class="col-detail-content col-12 col-md-10">
+        {{ resource.date_start|date:"Y" }} – 
+        {% if resource.date_completed %}
+            {{ resource.date_completed|date:"Y" }}
+        {% else %}
+            <i class="text-muted">ongoing</i>
+        {% endif %}
+    </div>
+</div>
+<div class="row-detail row">
+    <div class="col-detail-head col-12 col-md-2">
+        Organization
+    </div>
+    <div class="col-detail-content col-12 col-md-10">
+        {% include 'doiresolver/includes/organization.html' with organization=resource.publisher %}
+        <i class="fa-solid fa-angle-right mx-2"></i>
+        {% include 'doiresolver/includes/organization.html' with organization=resource.organizational_unit %}
+    </div>
+</div>
+<div class="row-detail row">
+    <div class="col-detail-head col-12 col-md-2">
+        People
+    </div>
+    <div class="col-detail-content col-12 col-md-10">
+        {% include 'doiresolver/includes/contributors.html' with type="creators" persons=resource.creatorperson_set.all %}
+    </div>
+</div>
+<div class="row-detail row">
+    <div class="col-detail-head col-12 col-md-2">
+        Abstract
+    </div>
+    <div class="col-detail-content col-12 col-md-10">
+        {{ resource.abstract_en|linebreaks|default:"<i>n/a</i>" }}
+        {% comment %}
+        <table>
+            <tr>
+                <td class="border-0">
+                    <span class="d-inline" style="font-family: monospace; font-size: medium;">EN:</span>
+                </td>
+                <td class="border-0">
+                    <p class="d-inline">{{ resource.abstract_en }}</p>
+                </td>
+            </tr>
+            {% if resource.abstract_de %}
+            <tr>
+                <td>
+                    <span class="d-inline" style="font-family: monospace; font-size: medium;">DE:</span>
+                </td>
+                <td>
+                    <p class="d-inline">{{ resource.abstract_de}}</p>
+                </td>
+            </tr>
+            {% endif %}
+        </table>
+        {% endcomment %}
+    </div>
+</div>
+{% include 'doiresolver/includes/row_multiselect_multilang.html' with heading="Keywords" objects=resource.keywords.all %}
+
+
 
 
 {% if request.user.is_authenticated %}
 
-<div class="alert alert-warning">
+<div class="alert alert-warning mt-3">
     <p>
         Yellowish tinted information or function is displayed because you are logged in to the system.
         <a href="{% url 'admin:logout' %}">

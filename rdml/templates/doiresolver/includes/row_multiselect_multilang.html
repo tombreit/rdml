@@ -1,6 +1,8 @@
-<tr>
-    <th>{{ heading }}</th>
-    <td>
+<div class="row-detail row">
+    <div class="col-detail-head col-12 col-md-2">
+        {{ heading }}
+    </div>
+    <div class="col-detail-content col-12 col-md-10">
         {% for obj in objects %}
             <span class="badge text-bg-secondary">
                 {{ obj.name_en }}
@@ -34,5 +36,5 @@
             </tr>
         </table>
         {% endcomment %}
-    </td>
-</tr>
+    </div>
+</div>
