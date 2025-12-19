@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.urls import reverse
 from .models import DataCiteConfiguration
 from django.utils.html import format_html
+from django.core.exceptions import MultipleObjectsReturned
 
 
 def doimanager(request):
@@ -26,6 +27,17 @@ def doimanager(request):
                 ),
             )
 
+    except MultipleObjectsReturned:
+        messages.error(
+            request,
+            format_html(
+                'Multiple active DataCiteConfiguration instances found. Please ensure only one is active: <a href="{}">{} > {} > {}</a>.',
+                reverse("admin:doimanager_dataciteconfiguration_changelist"),
+                "Home",
+                datacite_configuration_meta.app_config.verbose_name,
+                datacite_configuration_meta.verbose_name,
+            ),
+        )
     except DataCiteConfiguration.DoesNotExist:
         messages.warning(
             request,

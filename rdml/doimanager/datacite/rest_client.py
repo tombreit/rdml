@@ -63,8 +63,17 @@ class DataCiteRESTClient(object):
 
     def __init__(self):
         from ..models import DataCiteConfiguration
+        from django.core.exceptions import ImproperlyConfigured
 
-        datacite_configuration = DataCiteConfiguration.objects.get(is_active=True)
+        try:
+            datacite_configuration = DataCiteConfiguration.objects.get(is_active=True)
+        except DataCiteConfiguration.DoesNotExist:
+            raise ImproperlyConfigured("No active DataCiteConfiguration found. Create one via the admin interface.")
+        except DataCiteConfiguration.MultipleObjectsReturned:
+            raise ImproperlyConfigured(
+                "Multiple active DataCiteConfiguration instances found; ensure only one is active."
+            )
+
         datacite_env = datacite_configuration.get_datacite_env()
 
         self.username = datacite_configuration.repo_id

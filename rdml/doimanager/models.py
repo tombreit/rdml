@@ -13,7 +13,6 @@ from auditlog.models import AuditlogHistoryField
 
 from ..core.models import UUIDBaseModel, TimeStampedBaseModel
 from .datacite.rest_client import DataCiteRESTClient
-from django.core.exceptions import ValidationError
 
 
 DataCiteResourceTypeGeneral = models.TextChoices(
@@ -196,7 +195,7 @@ class DataCiteConfiguration(TimeStampedBaseModel, UUIDBaseModel):
     history = AuditlogHistoryField()
 
     is_active = models.BooleanField(
-        default=False,
+        default=True,
         help_text="Only one DataCiteConfiguration can be active at a time.",
     )
     note = models.TextField(blank=True)
@@ -245,9 +244,11 @@ class DataCiteConfiguration(TimeStampedBaseModel, UUIDBaseModel):
         return DataCiteEnvironment(backend_url, api_url, doi_base_url)
 
     def save(self, *args, **kwargs):
-        # TODO: Move to form layer and trigger a Django message
-        if not self.is_active and not DataCiteConfiguration.objects.exclude(pk=self.pk).filter(is_active=True).exists():
-            raise ValidationError("At least one DataCiteConfiguration must be active")
+        """
+        Ensure only one instance is active.
+        """
+        if self.is_active:
+            DataCiteConfiguration.objects.exclude(pk=self.pk).update(is_active=False)
         super().save(*args, **kwargs)
 
     def __str__(self):
