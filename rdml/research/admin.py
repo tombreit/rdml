@@ -72,7 +72,7 @@ class CreatorPersonInline(admin.StackedInline):
     # fk_name = "related_resource"
     extra = 0
     classes = ["collapse"]
-    autocomplete_fields = ["contribution_position"]
+    autocomplete_fields = ["person", "contribution_position", "person_organization"]
 
 
 class RelatedResourceInline(admin.TabularInline):
@@ -170,6 +170,7 @@ class ResourceBaseAdmin(admin.ModelAdmin):
     ]
 
     autocomplete_fields = [
+        "publisher",
         "curators",
         "keywords",
         "cv_geographic_areas",

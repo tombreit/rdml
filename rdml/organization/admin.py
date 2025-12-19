@@ -13,6 +13,11 @@ class OrganizationAdmin(admin.ModelAdmin):
         "abbr",
         "slug",
     ]
+    search_fields = [
+        "name",
+        "slug",
+        "abbr",
+    ]
 
     prepopulated_fields = {"slug": ("name",)}
 
