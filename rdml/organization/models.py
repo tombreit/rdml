@@ -62,7 +62,10 @@ class Organization(OrganizationBaseModel):
     )
 
     def __str__(self):
-        return self.name
+        return f"{self.name}{f' ({self.abbr})' if self.abbr else ''}"
+
+    class Meta:
+        ordering = [Lower("name")]
 
 
 class OrganizationalUnit(OrganizationBaseModel):
@@ -88,9 +91,10 @@ class OrganizationalUnit(OrganizationBaseModel):
     )
 
     def __str__(self):
-        return self.name
+        return f"{self.name}{f' ({self.abbr})' if self.abbr else ''}"
 
     class Meta:
+        ordering = [Lower("name")]
         constraints = [
             models.UniqueConstraint(
                 Lower("name"),
