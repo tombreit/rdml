@@ -144,6 +144,7 @@ def get_rdml_metadata(resource_id, as_json=True):
             "titles": [
                 {"lang": "en", "title": resource.title_en},
             ],
+            "descriptions": [],  # Initialize descriptions as empty list
         }
 
         if resource.abstract_en:
