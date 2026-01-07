@@ -116,7 +116,8 @@ class DataCiteResource(TimeStampedBaseModel, UUIDBaseModel):
         "unset": ["draft"],
         "draft": ["registered", "findable"],
         "registered": ["findable"],
-        "findable": ["registered"],
+        # "findable": ["registered"],  # We will not support this transition
+        "findable": [],
     }
 
     resource = models.OneToOneField(
