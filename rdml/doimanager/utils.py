@@ -42,7 +42,8 @@ def get_citation_snippet(doi):
         doi_state = DataCiteRESTClient().get_metadata(doi)
         print(f"{doi_state['state']=}")
 
-        url = f"{datacite_configuration.get_datacite_env.doi_base_url}{doi}"
+        env = datacite_configuration.get_datacite_env()
+        url = f"{env.doi_base_url}{doi}"
         print(f"{url=}")
 
         headers = {"Accept": "text/x-bibliography", "style": "apa"}
@@ -52,6 +53,9 @@ def get_citation_snippet(doi):
         print(f"{http_status_code=}")
         response_as_utf8 = response.content.decode("utf-8")
         return response_as_utf8
+    except DataCiteConfiguration.DoesNotExist:
+        print("get_citation_snippet: no active DataCiteConfiguration found")
+        return ""
     except requests.exceptions.HTTPError as httperror:
         print(f"get_citation_snippet error for {url}: {httperror}")
         return ""
