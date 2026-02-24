@@ -12,3 +12,7 @@ repos:
     hooks:
       - id: ruff
       - id: ruff-format
+  - repo: https://github.com/adamchainz/django-upgrade
+    rev: "1.29.1"  # replace with latest tag on GitHub
+    hooks:
+      - id: django-upgrade

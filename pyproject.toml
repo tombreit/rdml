@@ -16,7 +16,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
 ]
 dependencies = [
-    "django==5.2.9",
+    "django==6.0.2",
     "django-environ",
     "django-crispy-forms",
     "crispy-bootstrap5",
@@ -40,6 +40,7 @@ dev = [
     "ruff",
     "pip-tools",
     "django-debug-toolbar<6",
+    "django-upgrade",
 ]
 test = [
     "pytest",
