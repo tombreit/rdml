@@ -355,8 +355,8 @@ class ResourceBaseAdmin(admin.ModelAdmin):
             #     {datacite_doi_state.title()}
             # </span>
 
-            return format_html(f'''
-                <span style="
+            return format_html(
+                """<span style="
                     background-color: var(--object-tools-hover-bg); 
                     border-radius: 10px;
                     font-size: smaller;
@@ -366,11 +366,13 @@ class ResourceBaseAdmin(admin.ModelAdmin):
                     display: block; 
                     text-align: center;
                 ">
-                    <img style="margin-right: 5px; height: 1.2em;" src="{doi_img_url}">
+                    <img style="margin-right: 5px; height: 1.2em;" src="{}">
                     <br>
-                    {obj.dataciteresource.doi}
-                </span>
-            ''')
+                    {}
+                </span>""",
+                doi_img_url,
+                obj.dataciteresource.doi,
+            )
 
     @admin.display(
         description="Started",
