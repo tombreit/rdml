@@ -372,19 +372,21 @@ class ResourceBaseAdmin(admin.ModelAdmin):
                 </span>
             ''')
 
+    @admin.display(
+        description="Started",
+        ordering="date_start",
+    )
     def get_year_start(self, obj):
         if obj.date_start:
             return f"{obj.date_start:%Y}"
 
-    get_year_start.short_description = "Started"
-    get_year_start.admin_order_field = "date_start"
-
+    @admin.display(
+        description="Completed",
+        ordering="date_completed",
+    )
     def get_year_completed(self, obj):
         if obj.date_completed:
             return f"{obj.date_completed:%Y}"
-
-    get_year_completed.short_description = "Completed"
-    get_year_completed.admin_order_field = "date_completed"
 
     def has_change_permission(self, request, obj=None):
         if obj:

@@ -187,7 +187,7 @@ def get_ips_from_ranges(ip_ranges):
 
 
 def get_client_ip(request):
-    x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
+    x_forwarded_for = request.headers.get("x-forwarded-for")
     if x_forwarded_for:
         client_ip = x_forwarded_for.split(",")[0].strip()
     else:
