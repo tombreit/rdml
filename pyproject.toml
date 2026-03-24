@@ -16,7 +16,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
 ]
 dependencies = [
-    "django==6.0.2",
+    "django==6.0.3",
     "django-environ",
     "django-crispy-forms",
     "crispy-bootstrap5",
@@ -30,7 +30,6 @@ dependencies = [
     "sphinx-book-theme",
     "myst_parser",  # currently not working: myst_parser[linkify]
     "sphinx-design",
-    "roman-numerals-py==3.1",
 ]
 
 [project.optional-dependencies]
@@ -39,7 +38,7 @@ dev = [
     "pre-commit",
     "ruff",
     "pip-tools",
-    "django-debug-toolbar<6",
+    "django-debug-toolbar",
     "django-upgrade",
 ]
 test = [

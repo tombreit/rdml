@@ -228,6 +228,15 @@ WHITENOISE_INDEX_FILE = True
 AUDITLOG_INCLUDE_ALL_MODELS = False
 
 #######################################################################
+### General dev settings
+#######################################################################
+
+# Do not add migrations for debug_toolbar
+# https://docs.djangoproject.com/en/6.0/ref/settings/#migration-modules
+MIGRATION_MODULES = {"debug_toolbar": None}
+TOOLBAR_STORE_CLASS = "debug_toolbar.store.MemoryStore"
+
+#######################################################################
 ### RDML settings
 #######################################################################
 

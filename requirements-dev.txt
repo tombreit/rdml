@@ -12,7 +12,7 @@ asgiref==3.11.1
     # via
     #   django
     #   django-htmx
-attrs==25.4.0
+attrs==26.1.0
     # via reuse
 babel==2.18.0
     # via
@@ -24,11 +24,11 @@ boolean-py==5.0
     # via license-expression
 build==1.4.0
     # via pip-tools
-certifi==2026.1.4
+certifi==2026.2.25
     # via requests
 cfgv==3.5.0
     # via pre-commit
-charset-normalizer==3.4.4
+charset-normalizer==3.4.6
     # via
     #   python-debian
     #   requests
@@ -36,11 +36,11 @@ click==8.3.1
     # via
     #   pip-tools
     #   reuse
-crispy-bootstrap5==2025.6
+crispy-bootstrap5==2026.3
     # via rdml (pyproject.toml)
 distlib==0.4.0
     # via virtualenv
-django==6.0.2
+django==6.0.3
     # via
     #   crispy-bootstrap5
     #   django-auditlog
@@ -53,30 +53,32 @@ django-auditlog==3.4.1
     # via rdml (pyproject.toml)
 django-auth-ldap==5.3.0
     # via rdml (pyproject.toml)
-django-crispy-forms==2.5
+django-crispy-forms==2.6
     # via
     #   crispy-bootstrap5
     #   rdml (pyproject.toml)
-django-debug-toolbar==5.2.0
+django-debug-toolbar==6.2.0
     # via rdml (pyproject.toml)
 django-environ==0.13.0
     # via rdml (pyproject.toml)
 django-htmx==1.27.0
     # via rdml (pyproject.toml)
-django-upgrade==1.29.1
+django-upgrade==1.30.0
     # via rdml (pyproject.toml)
 docutils==0.22.4
     # via
     #   myst-parser
     #   pydata-sphinx-theme
     #   sphinx
-filelock==3.24.3
-    # via virtualenv
-identify==2.6.16
+filelock==3.25.2
+    # via
+    #   python-discovery
+    #   virtualenv
+identify==2.6.18
     # via pre-commit
 idna==3.11
     # via requests
-imagesize==1.4.1
+imagesize==2.0.0
     # via sphinx
 jinja2==3.1.6
     # via
@@ -102,22 +104,23 @@ nodeenv==1.10.0
 packaging==26.0
     # via
     #   build
-    #   pydata-sphinx-theme
     #   sphinx
     #   wheel
 pip-tools==7.5.3
     # via rdml (pyproject.toml)
-platformdirs==4.9.2
-    # via virtualenv
+platformdirs==4.9.4
+    # via
+    #   python-discovery
+    #   virtualenv
 pre-commit==4.5.1
     # via rdml (pyproject.toml)
-pyasn1==0.6.2
+pyasn1==0.6.3
     # via
     #   pyasn1-modules
     #   python-ldap
 pyasn1-modules==0.4.2
     # via python-ldap
-pydata-sphinx-theme==0.15.4
+pydata-sphinx-theme==0.16.1
     # via sphinx-book-theme
 pygments==2.19.2
     # via
@@ -133,6 +136,8 @@ python-dateutil==2.9.0.post0
     # via django-auditlog
 python-debian==1.1.0
     # via reuse
+python-discovery==1.2.0
+    # via virtualenv
 python-ldap==3.4.5
     # via django-auth-ldap
 python-magic==0.4.27
@@ -149,9 +154,7 @@ reuse==6.2.0
     # via rdml (pyproject.toml)
 roman-numerals==4.1.0
     # via sphinx
-roman-numerals-py==3.1.0
-    # via rdml (pyproject.toml)
-ruff==0.15.2
+ruff==0.15.7
     # via rdml (pyproject.toml)
 six==1.17.0
     # via python-dateutil
@@ -166,7 +169,7 @@ sphinx==9.1.0
     #   rdml (pyproject.toml)
     #   sphinx-book-theme
     #   sphinx-design
-sphinx-book-theme==1.1.4
+sphinx-book-theme==1.2.0
     # via rdml (pyproject.toml)
 sphinx-design==0.7.0
     # via rdml (pyproject.toml)
@@ -196,11 +199,11 @@ typing-extensions==4.15.0
     #   pydata-sphinx-theme
 urllib3==2.6.3
     # via requests
-virtualenv==20.39.0
+virtualenv==21.2.0
     # via pre-commit
 wheel==0.46.3
     # via pip-tools
-whitenoise==6.11.0
+whitenoise==6.12.0
     # via rdml (pyproject.toml)
 
 # The following packages are considered to be unsafe in a requirements file:
