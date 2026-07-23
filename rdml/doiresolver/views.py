@@ -2,7 +2,6 @@
 #
 # SPDX-License-Identifier: EUPL-1.2
 
-from django.urls import reverse
 from django.http import Http404
 from django.template.response import TemplateResponse
 
@@ -36,10 +35,10 @@ def landing_page(request, identifier=None, pk_uuid=None):
         elif pk_uuid:
             resource = resource_qs.get(id=str(pk_uuid))
     except Resource.DoesNotExist:
-        listing_url = reverse("doiresolver:doi-list")
-        raise Http404(
-            f"Resource with identifier `{identifier}` does not exist. Currently resolvable DOIs: <a href='{listing_url}'>{listing_url}</a>"
-        )
+        # Do not interpolate the requested identifier into the message: it is
+        # user supplied and is rendered by the 404 template. The link to the
+        # listing of resolvable DOIs lives in that template.
+        raise Http404("The requested resource does not exist.")
 
     context = {"resource": resource}
 

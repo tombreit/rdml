@@ -260,4 +260,6 @@ class DataCiteConfiguration(TimeStampedBaseModel, UUIDBaseModel):
         verbose_name_plural = "DataCite Configurations"
 
 
-auditlog.register(DataCiteConfiguration)
+# `backend_password` is excluded so the DataCite credential is never written to
+# the audit log in cleartext. Changes to the object are still recorded.
+auditlog.register(DataCiteConfiguration, exclude_fields=["backend_password"])

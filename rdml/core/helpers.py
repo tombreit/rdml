@@ -2,8 +2,11 @@
 #
 # SPDX-License-Identifier: EUPL-1.2
 
+import socket
+import urllib.error
 import urllib.request
-from ipaddress import ip_network
+from ipaddress import ip_address, ip_network
+from urllib.parse import urlsplit
 
 from django.utils.safestring import mark_safe
 from django.core.validators import URLValidator
@@ -196,15 +199,82 @@ def get_client_ip(request):
     return client_ip
 
 
+def _is_public_hostname(hostname):
+    """
+    Resolve `hostname` and return True only if every address it resolves to is
+    routable on the public internet.
+
+    This keeps `linkchecker` from being used to probe the internal network from
+    the application server (SSRF) via a URL entered in the admin.
+    """
+    if not hostname:
+        return False
+
+    try:
+        addrinfo = socket.getaddrinfo(hostname, None)
+    except socket.gaierror:
+        return False
+
+    for *_, sockaddr in addrinfo:
+        try:
+            address = ip_address(sockaddr[0])
+        except ValueError:
+            return False
+        if (
+            address.is_loopback
+            or address.is_private
+            or address.is_link_local
+            or address.is_reserved
+            or address.is_unspecified
+            or address.is_multicast
+        ):
+            return False
+
+    return True
+
+
+class _NoRedirectHandler(urllib.request.HTTPRedirectHandler):
+    """
+    Refuse to follow redirects.
+
+    Returning None makes urllib raise `HTTPError` with the original 3xx code
+    instead of following the hop. Without this, a public URL could redirect the
+    reachability probe into the internal network, bypassing `_is_public_hostname`.
+    """
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
+
+
 def linkchecker(url, timeout=5):
     """
     Checks if a fully qualified URL is reachable (HTTP status 200-399).
     Returns True if the request succeeds, False otherwise.
+
+    URLs that do not point at a public HTTP(S) host are reported as unreachable
+    rather than fetched.
     """
     try:
+        parsed = urlsplit(url)
+        if parsed.scheme not in ("http", "https"):
+            return False
+        if not _is_public_hostname(parsed.hostname):
+            return False
+
+        # `_NoRedirectHandler` keeps a public URL from redirecting us into the
+        # internal network.
+        # Note: the address checked above is resolved again for the request
+        # itself, leaving a small DNS rebinding window. Closing it would require
+        # pinning the connection to the resolved address, which is not worth the
+        # complexity for a reachability probe.
+        opener = urllib.request.build_opener(_NoRedirectHandler)
         req = urllib.request.Request(url)
         req.add_header("User-Agent", "RDML Link Checker")
-        with urllib.request.urlopen(req, timeout=timeout) as response:
+        with opener.open(req, timeout=timeout) as response:
             return 200 <= response.status < 400
+    except urllib.error.HTTPError as error:
+        # Any non-2xx response arrives here, including the redirects we refuse
+        # to follow. A 3xx still counts as reachable, 4xx/5xx do not.
+        return 200 <= error.code < 400
     except Exception:
         return False

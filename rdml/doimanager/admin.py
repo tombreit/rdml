@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: EUPL-1.2
 
 # import json
+from django import forms
 from django.contrib import admin
 
 from .models import DataCiteResource, DataCiteConfiguration
@@ -60,6 +61,28 @@ class DataCiteResourceAdmin(admin.ModelAdmin):
         return super().response_change(request, obj)
 
 
+class DataCiteConfigurationForm(forms.ModelForm):
+    """
+    Never render the stored DataCite password back to the browser.
+
+    The field is submitted empty and left untouched unless a new value is
+    entered, so editing any other field does not wipe the credential.
+    """
+
+    backend_password = forms.CharField(
+        widget=forms.PasswordInput(render_value=False),
+        required=False,
+        help_text="Leave empty to keep the current password.",
+    )
+
+    class Meta:
+        model = DataCiteConfiguration
+        fields = "__all__"
+
+    def clean_backend_password(self):
+        return self.cleaned_data.get("backend_password") or self.instance.backend_password
+
+
 @admin.register(DataCiteConfiguration)
 class DataCiteConfigurationAdmin(admin.ModelAdmin):
-    pass
+    form = DataCiteConfigurationForm

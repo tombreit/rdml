@@ -2,12 +2,17 @@
 #
 # SPDX-License-Identifier: EUPL-1.2
 
+import logging
+
 from django.conf import settings
 from whitenoise.middleware import WhiteNoiseMiddleware
 
 from django.core.exceptions import PermissionDenied
 
 from .helpers import get_ips_from_ranges, get_client_ip
+
+
+logger = logging.getLogger(__name__)
 
 
 def more_whitenoise_middleware(get_response):
@@ -54,8 +59,11 @@ def admin_ip_restriction_middleware(get_response):
     def middleware(request):
         admin_prefix = getattr(settings, "ADMIN_URL_PREFIX", "/admin/")
         if request.path.startswith(admin_prefix) and not getattr(request, "ip_allowed", False):
-            client_ip = get_client_ip(request)
-            raise PermissionDenied(f"Admin interface access denied: IP {client_ip} not in allowed range")
+            # Never interpolate the client IP into the exception message: it is
+            # derived from the client-supplied `X-Forwarded-For` header and ends
+            # up in the 403 template, the logs and the admin mails.
+            logger.warning("Admin interface access denied for IP %s on path %s", get_client_ip(request), request.path)
+            raise PermissionDenied("Admin interface access denied: your IP address is not in the allowed range.")
 
         response = get_response(request)
 

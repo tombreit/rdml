@@ -13,7 +13,12 @@
     <p>{% translate 'We’re sorry, but the requested page could not be found.' %}</p>
 
     <p>
-        {{ exception|safe }}
+        {{ exception }}
+    </p>
+
+    <p>
+        {% url 'doiresolver:doi-list' as doi_list_url %}
+        <a href="{{ doi_list_url }}">{% translate 'Currently resolvable DOIs' %}</a>
     </p>
 
 </body>

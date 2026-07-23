@@ -47,7 +47,7 @@ def get_citation_snippet(doi):
         print(f"{url=}")
 
         headers = {"Accept": "text/x-bibliography", "style": "apa"}
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, timeout=10)
         response.raise_for_status()
         http_status_code = response.status_code
         print(f"{http_status_code=}")

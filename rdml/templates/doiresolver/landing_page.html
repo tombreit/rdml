@@ -156,7 +156,9 @@ document.getElementById('copy-doi').addEventListener('click', function() {
         Citation
     </div>
     <div class="col-detail-content col-12 col-md-10">
-        {{ resource.dataciteresource.citation_snippet|safe }}
+        {# Rendered escaped: the snippet is the verbatim response body of a #}
+        {# third party service (crosscite/doi.org) and is not sanitised. #}
+        {{ resource.dataciteresource.citation_snippet }}
     </div>
 </div>
 {% endif %}
