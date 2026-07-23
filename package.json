@@ -25,5 +25,11 @@
     "url": "https://gitlab.gwdg.de/t.breitner/rdml"
   },
   "author": "Thomas Breitner",
-  "license": "ISC"
+  "license": "ISC",
+  "allowScripts": {
+    "@parcel/watcher@2.6.0": true,
+    "@swc/core@1.15.46": true,
+    "lmdb@2.8.5": true,
+    "msgpackr-extract@3.0.4": true
+  }
 }
