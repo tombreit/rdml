@@ -38,7 +38,7 @@ summary {
 
 
 {% block extra_js %}
-<script>
+<script nonce="{{ csp_nonce }}">
 function fadeOut(elem) {
     let opacity = 1; // Initial opacity
     let interval = setInterval(function() {

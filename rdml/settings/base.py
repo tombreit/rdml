@@ -18,6 +18,7 @@ See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 from pathlib import Path
 import environ
+from django.utils.csp import CSP
 from django.utils.log import DEFAULT_LOGGING as LOGGING
 
 
@@ -42,8 +43,55 @@ SECRET_KEY = env("SECRET_KEY")
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS")
 
-CSRF_COOKIE_SECURE = False if DEBUG else True
-SESSION_COOKIE_SECURE = False if DEBUG else True
+#######################################################################
+### Transport security
+#######################################################################
+
+# TLS is terminated at the reverse proxy, so Django only ever sees plain HTTP
+# on the loopback connection. Enabling this makes `request.is_secure()` trust
+# the proxy's `X-Forwarded-Proto` header.
+#
+# Only enable this once the proxy is verified to *overwrite* (not append to)
+# that header on every request; see the deployment section of the README.
+# Enabling SECURE_SSL_REDIRECT without it results in an infinite redirect loop.
+RDML_BEHIND_TLS_PROXY = env.bool("RDML_BEHIND_TLS_PROXY", default=False)
+if RDML_BEHIND_TLS_PROXY:
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+# Deliberately gated on RDML_BEHIND_TLS_PROXY rather than on `not DEBUG`:
+# redirecting to HTTPS while Django still believes every request is plain HTTP
+# is an infinite loop, so this must not switch itself on before the proxy trust
+# is established. `manage.py check --deploy` keeps reporting security.W008
+# until both flags are set.
+SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", default=RDML_BEHIND_TLS_PROXY and not DEBUG)
+
+# Secure by default, with an escape hatch for a plain-HTTP dev workflow. Not
+# derived from DEBUG: a production deploy that accidentally has DEBUG=True
+# should not silently lose its cookie flags too.
+CSRF_COOKIE_SECURE = env.bool("CSRF_COOKIE_SECURE", default=True)
+SESSION_COOKIE_SECURE = env.bool("SESSION_COOKIE_SECURE", default=True)
+
+# Content-Security-Policy
+# https://docs.djangoproject.com/en/6.0/ref/settings/#secure-csp
+#
+# `style-src` still needs 'unsafe-inline': inline `style="…"` attributes cannot
+# carry a nonce. Removing them from the templates is a follow-up.
+_CSP_DIRECTIVES = {
+    "default-src": [CSP.SELF],
+    "script-src": [CSP.SELF, CSP.NONCE],
+    "style-src": [CSP.SELF, CSP.UNSAFE_INLINE],
+    "img-src": [CSP.SELF, "data:"],
+    "font-src": [CSP.SELF],
+    "connect-src": [CSP.SELF],
+    "frame-ancestors": [CSP.NONE],
+    "base-uri": [CSP.SELF],
+    "form-action": [CSP.SELF],
+    "object-src": [CSP.NONE],
+}
+
+# Report-only for now: violations show up in the browser console without
+# breaking anything. Rename to SECURE_CSP to enforce.
+SECURE_CSP_REPORT_ONLY = {} if DEBUG else _CSP_DIRECTIVES
 
 AUTH_USER_MODEL = "accounts.CustomUser"
 LOGOUT_REDIRECT_URL = "/"
@@ -82,6 +130,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "django.middleware.csp.ContentSecurityPolicyMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -105,6 +154,7 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
+                "django.template.context_processors.csp",
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
@@ -265,7 +315,11 @@ if DEBUG:
     ]
     INSTALLED_APPS += DEV_APPS
 
-    MIDDLEWARE.insert(2, "debug_toolbar.middleware.DebugToolbarMiddleware")
+    # Directly after WhiteNoiseMiddleware.
+    MIDDLEWARE.insert(
+        MIDDLEWARE.index("whitenoise.middleware.WhiteNoiseMiddleware") + 1,
+        "debug_toolbar.middleware.DebugToolbarMiddleware",
+    )
 
     INTERNAL_IPS = [
         # ...

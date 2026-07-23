@@ -18,7 +18,7 @@
         {% block meta_tags %}
         {% endblock meta_tags %}
 
-        <style>
+        <style nonce="{{ csp_nonce }}">
         {% block extra_css %}
         {% endblock extra_css %}
         </style>

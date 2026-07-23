@@ -200,6 +200,50 @@ Run RDML:
         - The RDML backend is a customized Django admin instance, so the user field `is_staff` must be true.
         - Users must be set as `curators` for a given `Research Resource` (eg. a project) to be able to edit this resource.
 
+### Reverse proxy
+
+In production RDML runs behind a reverse proxy that terminates TLS. Two headers
+must be handled explicitly, because RDML relies on both:
+
+- `X-Forwarded-Proto` tells Django the original request was HTTPS. Without it
+  `request.is_secure()` is always false and `SECURE_SSL_REDIRECT` would redirect
+  forever. Set `RDML_BEHIND_TLS_PROXY=True` in `.env` *only* once the proxy is
+  confirmed to send it.
+- `X-Forwarded-For` carries the real client IP, which gates
+  `RDML_EDIT_ALLOWED_IP_RANGES` and access to `/admin/`. Apache's `mod_proxy`
+  *appends* to a client-supplied value, so the header must be discarded on the
+  way in — otherwise a client can prepend an allowed IP and bypass the
+  restriction.
+
+Example Apache 2.4 vhost (requires `mod_proxy`, `mod_proxy_http`, `mod_headers`,
+`mod_ssl`):
+
+```apache
+<VirtualHost *:80>
+    ServerName rd.example.org
+    RedirectPermanent / https://rd.example.org/
+</VirtualHost>
+
+<VirtualHost *:443>
+    ServerName rd.example.org
+    SSLEngine on
+    # ... certificate directives ...
+
+    # Pass the original Host through, so ALLOWED_HOSTS and
+    # CSRF_TRUSTED_ORIGINS match.
+    ProxyPreserveHost On
+
+    # Drop anything the client sent, then set the values ourselves.
+    RequestHeader unset X-Forwarded-For
+    RequestHeader unset X-Forwarded-Proto
+    RequestHeader unset X-Forwarded-Host
+    RequestHeader set X-Forwarded-Proto "https"
+
+    ProxyPass        / http://127.0.0.1:8000/
+    ProxyPassReverse / http://127.0.0.1:8000/
+</VirtualHost>
+```
+
 ### Classification
 
 Some classification models could be populated via a CSV/JSON import:
