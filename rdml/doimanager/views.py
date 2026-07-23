@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 
+from rdml.core.decorators import restrict_to_ip_range
 from ..research.models import Resource
 from .datacite.rest_client import DataCiteRESTClient
 from .datacite import errors as datacite_errors
@@ -15,6 +16,7 @@ from .metadata import get_rdml_metadata
 from .utils import get_citation_snippet
 
 
+@restrict_to_ip_range
 @login_required
 @permission_required("doimanager.register_or_update_dois", raise_exception=True)
 @require_GET
