@@ -47,23 +47,12 @@ CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS")
 ### Transport security
 #######################################################################
 
-# TLS is terminated at the reverse proxy, so Django only ever sees plain HTTP
-# on the loopback connection. Enabling this makes `request.is_secure()` trust
-# the proxy's `X-Forwarded-Proto` header.
-#
-# Only enable this once the proxy is verified to *overwrite* (not append to)
-# that header on every request; see the deployment section of the README.
-# Enabling SECURE_SSL_REDIRECT without it results in an infinite redirect loop.
-RDML_BEHIND_TLS_PROXY = env.bool("RDML_BEHIND_TLS_PROXY", default=False)
-if RDML_BEHIND_TLS_PROXY:
-    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-
-# Deliberately gated on RDML_BEHIND_TLS_PROXY rather than on `not DEBUG`:
-# redirecting to HTTPS while Django still believes every request is plain HTTP
-# is an infinite loop, so this must not switch itself on before the proxy trust
-# is established. `manage.py check --deploy` keeps reporting security.W008
-# until both flags are set.
-SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", default=RDML_BEHIND_TLS_PROXY and not DEBUG)
+# RDML is served by mod_wsgi inside an HTTPS vhost, so `request.is_secure()`
+# already reflects the real connection and no SECURE_PROXY_SSL_HEADER is needed.
+# Do not add one: once set, Django trusts `X-Forwarded-Proto` *instead of* the
+# actual scheme, and a request carrying `X-Forwarded-Proto: http` would make the
+# redirect below loop forever.
+SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", default=not DEBUG)
 
 # Secure by default, with an escape hatch for a plain-HTTP dev workflow. Not
 # derived from DEBUG: a production deploy that accidentally has DEBUG=True

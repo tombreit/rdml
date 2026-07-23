@@ -202,20 +202,24 @@ Run RDML:
 
 ### Reverse proxy
 
-In production RDML runs behind a reverse proxy that terminates TLS. Two headers
-must be handled explicitly, because RDML relies on both:
+In production RDML is served by two Apache instances, HTTPS on both legs:
 
-- `X-Forwarded-Proto` tells Django the original request was HTTPS. Without it
-  `request.is_secure()` is always false and `SECURE_SSL_REDIRECT` would redirect
-  forever. Set `RDML_BEHIND_TLS_PROXY=True` in `.env` *only* once the proxy is
-  confirmed to send it.
-- `X-Forwarded-For` carries the real client IP, which gates
-  `RDML_EDIT_ALLOWED_IP_RANGES` and access to `/admin/`. Apache's `mod_proxy`
-  *appends* to a client-supplied value, so the header must be discarded on the
-  way in — otherwise a client can prepend an allowed IP and bypass the
-  restriction.
+```
+client --https--> rd.example.org        (reverse proxy)
+                  --https--> app.example.org   (mod_wsgi, runs RDML)
+```
 
-Example Apache 2.4 vhost (requires `mod_proxy`, `mod_proxy_http`, `mod_headers`,
+Because the app server terminates TLS itself, Django already sees the correct
+scheme and `SECURE_PROXY_SSL_HEADER` is neither needed nor wanted — it would make
+Django trust a client-supplied `X-Forwarded-Proto` over the real connection.
+
+The one header that does need care is `X-Forwarded-For`: it carries the real
+client IP, which gates `RDML_EDIT_ALLOWED_IP_RANGES` and access to `/admin/`.
+`mod_proxy` *appends* to a client-supplied value, so the reverse proxy must
+discard it first — otherwise a client can prepend an allowed IP and bypass the
+restriction.
+
+Reverse proxy vhost (requires `mod_proxy`, `mod_proxy_http`, `mod_headers`,
 `mod_ssl`):
 
 ```apache
@@ -229,20 +233,22 @@ Example Apache 2.4 vhost (requires `mod_proxy`, `mod_proxy_http`, `mod_headers`,
     SSLEngine on
     # ... certificate directives ...
 
-    # Pass the original Host through, so ALLOWED_HOSTS and
-    # CSRF_TRUSTED_ORIGINS match.
-    ProxyPreserveHost On
-
-    # Drop anything the client sent, then set the values ourselves.
+    # Drop anything the client sent; mod_proxy then sets X-Forwarded-For
+    # to the real client address.
     RequestHeader unset X-Forwarded-For
-    RequestHeader unset X-Forwarded-Proto
     RequestHeader unset X-Forwarded-Host
-    RequestHeader set X-Forwarded-Proto "https"
 
-    ProxyPass        / http://127.0.0.1:8000/
-    ProxyPassReverse / http://127.0.0.1:8000/
+    SSLProxyEngine on
+    ProxyPass        / https://app.example.org/
+    ProxyPassReverse / https://app.example.org/
 </VirtualHost>
 ```
+
+Leave `ProxyPreserveHost` at its default (`Off`). Turning it on makes Apache use
+the public hostname for the backend TLS connection, which no longer matches the
+app server's certificate — the result is `Proxy Error / Error during SSL
+Handshake with remote server`. Consequently Django sees the *app server's*
+hostname, so both names belong in `ALLOWED_HOSTS` and `CSRF_TRUSTED_ORIGINS`.
 
 ### Classification
 
