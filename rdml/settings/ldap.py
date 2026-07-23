@@ -74,5 +74,5 @@ AUTH_LDAP_USER_FLAGS_BY_GROUP = {
 }
 
 if env.bool("DEBUG"):
-    ldap.set_option(ldap.OPT_X_TLS_REQUIRE_CERT, ldap.OPT_X_TLS_NEVER)
+    # ldap.set_option(ldap.OPT_X_TLS_REQUIRE_CERT, ldap.OPT_X_TLS_NEVER)
     ldap.set_option(ldap.OPT_DEBUG_LEVEL, 255)
