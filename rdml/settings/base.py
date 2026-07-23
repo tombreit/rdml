@@ -38,9 +38,9 @@ BUILD_DIR.mkdir(parents=True, exist_ok=True)
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 DEBUG = env("DEBUG")
-SECRET_KEY = env("SECRET_KEY", default="django-insecure-asdfasdfasdf")
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
-CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
+SECRET_KEY = env("SECRET_KEY")
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
+CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS")
 
 CSRF_COOKIE_SECURE = False if DEBUG else True
 SESSION_COOKIE_SECURE = False if DEBUG else True
