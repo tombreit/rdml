@@ -22,23 +22,23 @@ beautifulsoup4==4.15.0
     # via pydata-sphinx-theme
 boolean-py==5.0
     # via license-expression
-build==1.5.0
+build==1.6.1
     # via pip-tools
 certifi==2026.7.22
     # via requests
 cfgv==3.5.0
     # via pre-commit
-charset-normalizer==3.4.9
+charset-normalizer==3.5.1
     # via requests
-click==8.4.2
+click==8.5.0
     # via
     #   pip-tools
     #   reuse
-crispy-bootstrap5==2026.3
+crispy-bootstrap5==2026.9
     # via rdml (pyproject.toml)
 distlib==0.4.3
     # via virtualenv
-django==6.0.7
+django==6.1.1
     # via
     #   crispy-bootstrap5
     #   django-auditlog
@@ -51,32 +51,32 @@ django-auditlog==3.4.1
     # via rdml (pyproject.toml)
 django-auth-ldap==5.3.0
     # via rdml (pyproject.toml)
-django-crispy-forms==2.6
+django-crispy-forms==2.7
     # via
     #   crispy-bootstrap5
     #   rdml (pyproject.toml)
-django-debug-toolbar==7.0.0
+django-debug-toolbar==8.0.0
     # via rdml (pyproject.toml)
 django-environ==0.14.0
     # via rdml (pyproject.toml)
-django-htmx==1.28.0
+django-htmx==1.29.0
     # via rdml (pyproject.toml)
-django-upgrade==1.31.1
+django-upgrade==1.32.0
     # via rdml (pyproject.toml)
 docutils==0.22.4
     # via
     #   myst-parser
     #   pydata-sphinx-theme
     #   sphinx
-filelock==3.32.0
+filelock==3.32.6
     # via
     #   python-discovery
     #   virtualenv
 identify==2.6.19
     # via pre-commit
-idna==3.18
+idna==3.19
     # via requests
-imagesize==2.0.0
+imagesize==2.0.1
     # via sphinx
 jinja2==3.1.6
     # via
@@ -100,18 +100,16 @@ myst-parser==5.1.0
     # via rdml (pyproject.toml)
 nodeenv==1.10.0
     # via pre-commit
-packaging==26.2
+packaging==26.3
     # via
     #   build
     #   sphinx
     #   wheel
-pip-tools==7.6.0
+pip-tools==7.6.1
     # via rdml (pyproject.toml)
-platformdirs==4.11.0
-    # via
-    #   python-discovery
-    #   virtualenv
-pre-commit==4.6.1
+platformdirs==4.11.8
+    # via virtualenv
+pre-commit==4.6.2
     # via rdml (pyproject.toml)
 pyasn1==0.6.4
     # via
@@ -121,7 +119,7 @@ pyasn1-modules==0.4.2
     # via python-ldap
 pydata-sphinx-theme==0.20.0
     # via sphinx-book-theme
-pygments==2.20.0
+pygments==2.21.0
     # via
     #   accessible-pygments
     #   pydata-sphinx-theme
@@ -135,7 +133,7 @@ python-dateutil==2.9.0.post0
     # via django-auditlog
 python-debian==1.1.1
     # via reuse
-python-discovery==1.5.0
+python-discovery==1.6.0
     # via virtualenv
 python-ldap==3.4.7
     # via django-auth-ldap
@@ -154,13 +152,13 @@ reuse==6.2.0
     # via rdml (pyproject.toml)
 roman-numerals==4.1.0
     # via sphinx
-ruff==0.15.22
+ruff==0.16.7
     # via rdml (pyproject.toml)
 six==1.17.0
     # via python-dateutil
 snowballstemmer==3.1.1
     # via sphinx
-soupsieve==2.9.1
+soupsieve==2.9.2
     # via beautifulsoup4
 sphinx==9.1.0
     # via
@@ -185,7 +183,7 @@ sphinxcontrib-qthelp==2.0.0
     # via sphinx
 sphinxcontrib-serializinghtml==2.0.0
     # via sphinx
-sqlparse==0.5.5
+sqlparse==0.6.0
     # via
     #   django
     #   django-debug-toolbar
@@ -197,9 +195,9 @@ typing-extensions==4.16.0
     # via beautifulsoup4
 urllib3==2.7.0
     # via requests
-virtualenv==21.7.0
+virtualenv==21.7.9
     # via pre-commit
-wheel==0.47.0
+wheel==0.48.0
     # via pip-tools
 whitenoise==6.12.0
     # via rdml (pyproject.toml)
