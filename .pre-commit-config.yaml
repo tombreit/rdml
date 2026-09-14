@@ -4,15 +4,15 @@
 
 repos:
   - repo: https://github.com/fsfe/reuse-tool
-    rev: v5.0.2
+    rev: v6.2.0
     hooks:
      - id: reuse
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.9.6
+    rev: v0.16.7
     hooks:
       - id: ruff
       - id: ruff-format
   - repo: https://github.com/adamchainz/django-upgrade
-    rev: "1.29.1"  # replace with latest tag on GitHub
+    rev: "1.32.0"  # replace with latest tag on GitHub
     hooks:
       - id: django-upgrade
