@@ -25,4 +25,6 @@ Password: *your-institute-password*
 Login or using some parts of RDML are restricted based on the network (IP address) your request originates.
 
 Allowed IP address ranges: {{ ip_ranges_allowed }}
+
+See also: [Onboarding › Get access](onboarding.md#get-access)
 `````

@@ -188,6 +188,7 @@ Run RDML:
 - Deployment specific configuration
     - Copy `env.template` to `.env` and set your environment variables
     - Set the LDAP groups you'd like to use in RDML in your `.env` file: `AUTH_LDAP_MIRROR_GROUPS_LIST`
+    - `AUTH_LDAP_GROUP_STAFF` and `AUTH_LDAP_GROUP_SUPERUSERS` are required
 - Authentification
     - RDML authenticates users against the local Django user database and a configured LDAP instance (see `env-template`)
 - Runtime specific configuration (Login with your created superuser account)
@@ -195,10 +196,8 @@ Run RDML:
         - Set a Django sites instance that fits your environment
     - Branding: *Home > Organization > Branding*
         - Set the organization name, logo etc.
-    - Permissions: *Home > Accounts > Groups/Users*
-        - Configure the permissions via the Django permission framework by assigning permissions to eg.a group `rdml-admins` and `rdml-editors`.
-        - The RDML backend is a customized Django admin instance, so the user field `is_staff` must be true.
-        - Users must be set as `curators` for a given `Research Resource` (eg. a project) to be able to edit this resource.
+    - Permissions: *Home > Accounts > Groups*
+        - See [docs/administration.md](docs/administration.md): access layers, roles, group permissions, onboarding of users
 
 ### Reverse proxy
 

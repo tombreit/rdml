@@ -29,6 +29,16 @@ Get started with RDML
 [Onboarding »](onboarding)
 :::
 
+:::{grid-item-card} {octicon}`gear;1.5em;sd-me-1` Administration
+:link: administration
+:link-type: doc
+
+Access, permissions, onboard users
+
++++
+[Administration »](administration)
+:::
+
 :::{grid-item-card} {octicon}`heart;1.5em;sd-me-1` FAQ
 :link: faq
 :link-type: doc
@@ -59,5 +69,6 @@ Suggestions for improvement, found a bug, or have comments?
 Home <self>
 about
 onboarding
+administration
 faq
 ```
