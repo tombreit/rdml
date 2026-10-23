@@ -12,8 +12,8 @@ help:
 
 requirements:
 	python3 -m pip install --upgrade pip-tools pip wheel setuptools
-	python3 -m piptools compile --upgrade --strip-extras              -o requirements.txt      pyproject.toml
-	python3 -m piptools compile --upgrade --strip-extras --extra dev  -o requirements-dev.txt  pyproject.toml
+	python3 -m piptools compile --generate-hashes --allow-unsafe --upgrade --strip-extras              -o requirements.txt      pyproject.toml
+	python3 -m piptools compile --generate-hashes --allow-unsafe --upgrade --strip-extras --extra dev  -o requirements-dev.txt  pyproject.toml
 
 assets:
 	npm run build
